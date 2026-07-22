@@ -1,0 +1,42 @@
+import { Injectable } from '@angular/core';
+import { AppConfig } from './app-config.model';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AppConfigService {
+
+
+  private config!: AppConfig;
+
+
+  load(config: AppConfig) {
+
+    this.config = config;
+
+  }
+
+
+  get apiUrl(): string {
+
+    return this.config.apiUrl;
+
+  }
+
+
+  get salonSerial(): string {
+
+    return this.config.salonSerial;
+
+  }
+
+
+  get production(): boolean {
+
+    return this.config.production;
+
+  }
+
+
+}

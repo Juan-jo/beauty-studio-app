@@ -1,0 +1,7 @@
+{
+    "apiUrl": "http://localhost:8080",
+    "salonSerial": "ECA92",
+    "production": true,
+    "timezone": "America/Mexico_City",
+    "currency": "MXN"
+}
