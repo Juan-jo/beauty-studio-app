@@ -1,0 +1,82 @@
+<section class="min-h-screen bg-pink-50">
+
+    <div class="mx-auto max-w-7xl px-6 py-10 lg:px-8 lg:py-16">
+
+        <div class="grid items-center gap-10 lg:min-h-[calc(100vh-8rem)] lg:grid-cols-2 lg:gap-16">
+
+            <!-- Información -->
+
+            <div>
+
+                <span
+                    class="inline-flex rounded-full bg-pink-100 px-4 py-2 text-sm font-semibold text-pink-600">
+
+                    Agenda profesional
+
+                </span>
+
+                <h1
+                    class="mt-6 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
+
+                    Tu salón siempre al alcance
+                    de tus clientes.
+
+                </h1>
+
+                <p
+                    class="mt-6 text-base leading-8 text-gray-600 sm:text-lg">
+
+                    Reserva citas, recibe recordatorios automáticos,
+                    administra horarios y ofrece una experiencia
+                    moderna a tus clientes.
+
+                </p>
+
+                <div
+                    class="mt-8 flex flex-col gap-4 sm:flex-row">
+
+                    <a
+                        routerLink="/services"
+                        class="rounded-xl bg-pink-500 px-6 py-4 text-center font-semibold text-white transition hover:bg-pink-600">
+
+                        Reservar cita
+
+                    </a>
+
+                    <a
+                        routerLink="/login"
+                        class="rounded-xl border-2 border-pink-500 px-6 py-4 text-center font-semibold text-pink-600 transition hover:bg-pink-100">
+
+                        Iniciar sesión
+
+                    </a>
+
+                </div>
+
+                <div class="mt-8">
+
+                    <app-install-pwa
+                        title="Instala la aplicación"
+                        description="Accede con un toque y recibe recordatorios automáticos."
+                        buttonText="Instalar">
+                    </app-install-pwa>
+
+                </div>
+
+            </div>
+
+            <!-- Imagen -->
+
+            <div class="order-first lg:order-last">
+
+                <img
+                    src="assets/cover.webp"
+                    class="mx-auto w-full max-w-md rounded-3xl object-cover shadow-2xl lg:max-w-lg">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

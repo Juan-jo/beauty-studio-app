@@ -1,0 +1,131 @@
+<section class="min-h-screen bg-pink-50">
+
+    <div
+        class="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-6 py-10">
+
+        <!-- Logo -->
+
+        <div class="text-center">
+
+            <div
+                class="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-pink-500 text-5xl shadow-lg">
+
+                💅
+
+            </div>
+
+            <h1
+                class="mt-6 text-3xl font-bold text-gray-900">
+
+                Beauty Studio
+
+            </h1>
+
+            <p
+                class="mt-2 text-gray-500">
+
+                Bienvenida nuevamente.
+
+            </p>
+
+        </div>
+
+        <!-- Formulario -->
+
+        <div
+            class="mt-10 rounded-3xl bg-white p-6 shadow-xl">
+
+            <div class="space-y-5">
+
+                <div>
+
+                    <label
+                        class="mb-2 block text-sm font-medium text-gray-700">
+
+                        Correo electrónico
+
+                    </label>
+
+                    <input
+                        type="email"
+                        placeholder="correo@ejemplo.com"
+                        class="w-full rounded-xl border border-gray-300 px-4 py-4 transition focus:border-pink-500 focus:ring-4 focus:ring-pink-200 outline-none">
+
+                </div>
+
+                <div>
+
+                    <div
+                        class="mb-2 flex items-center justify-between">
+
+                        <label
+                            class="text-sm font-medium text-gray-700">
+
+                            Contraseña
+
+                        </label>
+
+                        <a
+                            href="#"
+                            class="text-sm text-pink-500 hover:underline">
+
+                            ¿Olvidaste tu contraseña?
+
+                        </a>
+
+                    </div>
+
+                    <input
+                        type="password"
+                        placeholder="••••••••"
+                        class="w-full rounded-xl border border-gray-300 px-4 py-4 transition focus:border-pink-500 focus:ring-4 focus:ring-pink-200 outline-none">
+
+                </div>
+
+                <button
+                    class="w-full rounded-xl bg-pink-500 py-4 font-semibold text-white transition hover:bg-pink-600 active:scale-95">
+
+                    Iniciar sesión
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Instalar -->
+
+        <div class="mt-8">
+
+            <app-install-pwa
+                title="Instala la aplicación"
+                description="Recibe recordatorios y accede con un solo toque."
+                buttonText="Instalar">
+            </app-install-pwa>
+
+        </div>
+
+        <!-- Registro -->
+
+        <div
+            class="mt-8 text-center">
+
+            <span class="text-gray-500">
+
+                ¿No tienes cuenta?
+
+            </span>
+
+            <a
+                routerLink="/register"
+                class="ml-2 font-semibold text-pink-600 hover:underline">
+
+                Crear cuenta
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>

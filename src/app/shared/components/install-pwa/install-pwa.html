@@ -1,0 +1,56 @@
+@if (!pwa.isInstalled()) {
+
+    @if (pwa.canInstall()) {
+
+        <div
+            class="rounded-3xl border border-pink-200 bg-gradient-to-r from-pink-500 to-pink-400 p-6 text-white shadow-xl">
+
+            <div class="flex items-center gap-4">
+
+                <div
+                    class="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-4xl">
+
+                    💅
+
+                </div>
+
+                <div class="flex-1">
+
+                    <h2 class="text-xl font-bold">
+
+                        {{ title() }}
+
+                    </h2>
+
+                    <p class="mt-2 text-pink-50">
+
+                        {{ description() }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <button
+                (click)="install()"
+                [disabled]="loading"
+                class="mt-6 w-full rounded-xl bg-white py-3 font-semibold text-pink-600 transition hover:bg-pink-100 disabled:opacity-60">
+
+                @if (loading) {
+
+                    Instalando...
+
+                } @else {
+
+                    📲 {{ buttonText() }}
+
+                }
+
+            </button>
+
+        </div>
+
+    }
+
+}
