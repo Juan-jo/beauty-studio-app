@@ -10,5 +10,8 @@ export interface EmployeeSlot {
     date: string;
     serviceId: number;
     duration: number;
+    name: string,
+    pictureUrl: string,
+    price: number
     employees: EmployeeSlot[];
   }   
