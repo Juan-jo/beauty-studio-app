@@ -1,8 +1,7 @@
-<section class="min-h-screen bg-pink-50">
+<!--<section class="min-h-screen bg-pink-50">
 
     <div class="mx-auto max-w-7xl px-6 py-10 lg:px-8 lg:py-16">
 
-        <!-- Encabezado -->
 
         <div class="text-center">
 
@@ -29,7 +28,6 @@
 
         </div>
 
-        <!-- Banner PWA -->
 
         <div class="mt-8">
 
@@ -41,7 +39,6 @@
 
         </div>
 
-        <!-- Tarjetas -->
 
         <div
             class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -80,6 +77,7 @@
                         </p>
 
                         <button
+                            [routerLink]="['/booking', service.id]"
                             class="mt-6 w-full rounded-xl bg-pink-500 py-4 font-semibold text-white transition hover:bg-pink-600 active:scale-95">
 
                             Reservar cita
@@ -96,4 +94,113 @@
 
     </div>
 
-</section>
+</section>-->
+
+<section class="min-h-screen bg-pink-50">
+    <div class="mx-auto max-w-7xl px-6 py-10 lg:px-8 lg:py-16">
+  
+      <!-- Encabezado -->
+      <div class="text-center">
+        <span class="inline-flex rounded-full bg-pink-100 px-4 py-2 text-sm font-semibold text-pink-600">
+          Beauty Studio
+        </span>
+        <h1 class="mt-5 text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
+          Nuestros Servicios
+        </h1>
+        <p class="mx-auto mt-4 max-w-xl text-base leading-7 text-gray-500 sm:text-lg">
+          Elige el servicio ideal y reserva tu cita en pocos segundos.
+        </p>
+      </div>
+  
+      <!-- Banner PWA -->
+      <div class="mt-8">
+        <app-install-pwa
+          [title]="'No olvides tu cita'"
+          [description]="'Instala la aplicación y recibe recordatorios automáticos.'"
+          [buttonText]="'Instalar ahora'">
+        </app-install-pwa>
+      </div>
+  
+      <!-- ESTADO 1: SKELETON LOADER (Mientras carga) -->
+      @if (isLoading()) {
+        <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+            <div class="overflow-hidden rounded-3xl bg-white shadow-lg animate-pulse flex flex-col justify-between">
+              <div>
+                <!-- Skeleton Imagen -->
+                <div class="h-52 w-full bg-gray-200 sm:h-60 lg:h-72"></div>
+                
+                <div class="p-6">
+                  <!-- Skeleton Título -->
+                  <div class="h-7 w-2/3 rounded-lg bg-gray-200"></div>
+                  
+                  <!-- Skeleton Descripción (2 líneas) -->
+                  <div class="mt-3 space-y-2">
+                    <div class="h-4 w-full rounded bg-gray-200"></div>
+                    <div class="h-4 w-4/5 rounded bg-gray-200"></div>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="p-6 pt-0">
+                <!-- Skeleton Precio -->
+                <div class="h-8 w-1/3 rounded-lg bg-gray-200"></div>
+                
+                <!-- Skeleton Botón -->
+                <div class="mt-4 h-14 w-full rounded-xl bg-gray-200"></div>
+              </div>
+            </div>
+          }
+        </div>
+      } 
+      <!-- ESTADO 2: TARJETAS REALES -->
+      @else {
+        <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          @for (service of services(); track service.id) {
+            <article class="flex flex-col justify-between overflow-hidden rounded-3xl bg-white shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+              
+              <div>
+                <!-- Imagen del Servicio -->
+                <div class="relative h-52 w-full bg-gray-100 sm:h-60 lg:h-72">
+                  <img
+                    [src]="service.pictureUrl"
+                    [alt]="service.name"
+                    loading="lazy"
+                    class="h-full w-full object-cover">
+                </div>
+  
+                <!-- Contenido Superior -->
+                <div class="p-6">
+                  <h2 class="text-2xl font-bold text-gray-900">
+                    {{ service.name }}
+                  </h2>
+  
+                  <p class="mt-2 text-sm leading-relaxed text-gray-500 line-clamp-3">
+                    {{ service.description }}
+                  </p>
+                </div>
+              </div>
+  
+              <!-- Contenido Inferior (Precio + Botón) -->
+              <div class="p-6 pt-0">
+                <div class="flex items-baseline gap-1">
+                  <span class="text-3xl font-bold text-pink-600">
+                    ${{ service.price }}
+                  </span>
+                  <span class="text-sm text-gray-400">MXN</span>
+                </div>
+  
+                <button
+                  [routerLink]="['/booking', service.id]"
+                  class="mt-4 w-full rounded-xl bg-pink-500 py-3.5 font-semibold text-white shadow-md transition hover:bg-pink-600 active:scale-95">
+                  Reservar cita
+                </button>
+              </div>
+  
+            </article>
+          }
+        </div>
+      }
+  
+    </div>
+  </section>

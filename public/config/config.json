@@ -1,5 +1,5 @@
 {
-    "apiUrl": "http://localhost:8080",
+    "apiUrl": "http://192.168.101.100:8080",
     "salonSerial": "ECA92",
     "production": true,
     "timezone": "America/Mexico_City",
