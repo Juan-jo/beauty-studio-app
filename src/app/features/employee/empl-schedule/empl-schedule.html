@@ -41,152 +41,118 @@
   
     <!-- Lista de Días de la Semana -->
     <div class="space-y-3">
-  
-      <!-- DÍA DENTRO DEL HORARIO (Ej: Lunes) -->
-      <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-xs hover:border-brand-200 transition-all">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          
-          <!-- Estado y Día -->
-          <div class="flex items-center gap-3 min-w-[140px]">
-            <!-- Switch / Toggle Activo -->
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" checked class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
-            </label>
-            <span class="text-sm font-bold text-gray-900">Lunes</span>
-          </div>
-  
-          <!-- Selector de Horario (Entrada / Salida) -->
-          <div class="flex items-center gap-2 sm:gap-3">
-            <div class="flex items-center gap-1.5 bg-brand-50/50 border border-brand-100 px-3 py-1.5 rounded-xl">
-              <span class="text-[10px] font-bold text-brand-400 uppercase">Inicio</span>
-              <input type="time" value="10:00" class="bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
-            </div>
-  
-            <span class="text-xs text-gray-400 font-medium">a</span>
-  
-            <div class="flex items-center gap-1.5 bg-brand-50/50 border border-brand-100 px-3 py-1.5 rounded-xl">
-              <span class="text-[10px] font-bold text-brand-400 uppercase">Fin</span>
-              <input type="time" value="18:00" class="bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
+
+      @if(isLoading()) {
+        @for (item of [1, 2, 3, 4, 5, 6, 7 ]; track $index) {
+          <div class="bg-white rounded-2xl p-4 border border-brand-200/60 shadow-xs animate-pulse">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <div class="w-11 h-6 bg-gray-200 rounded-full shrink-0"></div>
+                <div class="space-y-2 w-full max-w-[200px] md:max-w-[300px]">
+                  <div class="h-4 bg-gray-200 rounded-md w-3/4"></div>
+                  <div class="h-3 bg-gray-100 rounded-md w-full"></div>
+                </div>
+              </div>
+              <div class="flex items-center justify-between md:justify-end gap-2 pt-3 md:pt-0 border-t md:border-t-0 border-gray-100">
+                <div class="h-8 w-24 bg-gray-100 border border-gray-200/50 rounded-xl"></div>
+                <div class="h-8 w-20 bg-gray-100 border border-gray-200/50 rounded-xl"></div>
+              </div>
             </div>
           </div>
-  
-          <!-- Acciones secundarias (Descanso / Pausa) -->
-          <div class="flex items-center justify-between sm:justify-end gap-3 text-xs border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-100">
-            <span class="inline-flex items-center gap-1 text-[11px] text-gray-500 font-medium bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-100">
-              <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              Descanso: 14:00 - 15:00
-            </span>
-            <span class="text-xs font-bold text-brand-600">8 hrs</span>
-          </div>
-  
-        </div>
-      </div>
-  
-      <!-- DÍA DENTRO DEL HORARIO (Ej: Martes a Viernes) -->
-      <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-xs hover:border-brand-200 transition-all">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          
-          <div class="flex items-center gap-3 min-w-[140px]">
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" checked class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
-            </label>
-            <span class="text-sm font-bold text-gray-900">Martes</span>
-          </div>
-  
-          <div class="flex items-center gap-2 sm:gap-3">
-            <div class="flex items-center gap-1.5 bg-brand-50/50 border border-brand-100 px-3 py-1.5 rounded-xl">
-              <span class="text-[10px] font-bold text-brand-400 uppercase">Inicio</span>
-              <input type="time" value="10:00" class="bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
+        }
+      }
+      @else {
+
+        @for (item of schedules(); track item.id) {
+
+          @if (item.enabled) {
+            <!-- TARJETA DÍA LABORAL -->
+            <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-xs hover:border-brand-200 transition-all">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                
+                <!-- Estado y Día -->
+                <div class="flex items-center gap-3 min-w-[140px]">
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" [checked]="item.enabled" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
+                  </label>
+                  <span class="text-sm font-bold text-gray-900">{{item.dayOfWeek | mxDayOfWeek}}</span>
+                </div>
+        
+                <!-- Selector de Horario (Entrada / Salida) -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                  <div class="flex items-center gap-1.5 bg-brand-50/50 border border-brand-100 px-3 py-1.5 rounded-xl">
+                    <span class="text-[10px] font-bold text-brand-400 uppercase">Inicio</span>
+                    <input disabled type="text" [value]="item.startTime" class="max-w-[100px] bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
+                  </div>
+        
+                  <span class="text-xs text-gray-400 font-medium">a</span>
+        
+                  <div class="flex items-center gap-1.5 bg-brand-50/50 border border-brand-100 px-3 py-1.5 rounded-xl">
+                    <span class="text-[10px] font-bold text-brand-400 uppercase">Fin</span>
+                    <input disabled type="text" [value]="item.endTime" class="max-w-[100px] bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
+                  </div>
+                </div>
+        
+                <!-- Acciones secundarias (Descansos) -->
+                <div class="flex items-center justify-between sm:justify-end gap-3 text-xs border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-100">
+                  <div class="flex flex-wrap gap-1.5">
+                    @for (itemBreak of item.breaks; track $index) {
+                      <span class="inline-flex items-center gap-1 text-[11px] text-gray-500 font-medium bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-100">
+                        <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Descanso: {{itemBreak.startTime}} - {{itemBreak.endTime}}
+                      </span>
+                    }
+                    @empty {
+                      <span class="text-[11px] text-gray-400 italic">Sin descanso programado</span>
+                    }
+                  </div>
+                  
+                  <span class="text-xs font-bold text-brand-600 shrink-0">{{item.workingMinutes |duration}}</span>
+                </div>
+        
+              </div>
             </div>
-            <span class="text-xs text-gray-400 font-medium">a</span>
-            <div class="flex items-center gap-1.5 bg-brand-50/50 border border-brand-100 px-3 py-1.5 rounded-xl">
-              <span class="text-[10px] font-bold text-brand-400 uppercase">Fin</span>
-              <input type="time" value="18:00" class="bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
+          }
+          @else {
+            <!-- TARJETA DÍA NO LABORABLE (Día Libre) -->
+            <div class="bg-gray-50/70 rounded-2xl p-4 border border-dashed border-gray-200 transition-all opacity-75 hover:opacity-100">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                
+                <!-- Toggle y Día Desactivado -->
+                <div class="flex items-center gap-3 min-w-[140px]">
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" [checked]="item.enabled" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
+                  </label>
+                  <span class="text-sm font-bold text-gray-400">{{item.dayOfWeek | mxDayOfWeek}}</span>
+                </div>
+        
+                <!-- Mensaje de Día Libre -->
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-semibold text-gray-400 bg-gray-100/80 border border-gray-200/50 px-3 py-1.5 rounded-xl">
+                    Día Libre / No Laborable
+                  </span>
+                </div>
+        
+                <!-- Horas Totales -->
+                <div class="text-right">
+                  <span class="text-xs font-bold text-gray-400">0 hrs</span>
+                </div>
+        
+              </div>
             </div>
-          </div>
+          }
+        
+        }
+
+
+      }
+
   
-          <div class="flex items-center justify-between sm:justify-end gap-3 text-xs border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-100">
-            <span class="inline-flex items-center gap-1 text-[11px] text-gray-500 font-medium bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-100">
-              <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              Descanso: 14:00 - 15:00
-            </span>
-            <span class="text-xs font-bold text-brand-600">8 hrs</span>
-          </div>
-  
-        </div>
-      </div>
-  
-      <!-- SÁBADO (Jornada Corta) -->
-      <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-xs hover:border-brand-200 transition-all">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          
-          <div class="flex items-center gap-3 min-w-[140px]">
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" checked class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
-            </label>
-            <span class="text-sm font-bold text-gray-900">Sábado</span>
-          </div>
-  
-          <div class="flex items-center gap-2 sm:gap-3">
-            <div class="flex items-center gap-1.5 bg-brand-50/50 border border-brand-100 px-3 py-1.5 rounded-xl">
-              <span class="text-[10px] font-bold text-brand-400 uppercase">Inicio</span>
-              <input type="time" value="09:00" class="bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
-            </div>
-            <span class="text-xs text-gray-400 font-medium">a</span>
-            <div class="flex items-center gap-1.5 bg-brand-50/50 border border-brand-100 px-3 py-1.5 rounded-xl">
-              <span class="text-[10px] font-bold text-brand-400 uppercase">Fin</span>
-              <input type="time" value="14:00" class="bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
-            </div>
-          </div>
-  
-          <div class="flex items-center justify-between sm:justify-end gap-3 text-xs border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-100">
-            <span class="text-[11px] text-gray-400 italic">Sin descanso programado</span>
-            <span class="text-xs font-bold text-brand-600">5 hrs</span>
-          </div>
-  
-        </div>
-      </div>
-  
-      <!-- DÍA NO LABORABLE / DESCANSO (Ej: Domingo) -->
-      <div class="bg-gray-50/70 rounded-2xl p-4 border border-dashed border-gray-200 transition-all opacity-75">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          
-          <div class="flex items-center gap-3 min-w-[140px]">
-            <!-- Switch Apagado -->
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
-            </label>
-            <span class="text-sm font-bold text-gray-400">Domingo</span>
-          </div>
-  
-          <!-- Mensaje de Libre -->
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-xl">
-              Día Libre / No Laborable
-            </span>
-          </div>
-  
-          <div class="text-right">
-            <span class="text-xs font-bold text-gray-400">0 hrs</span>
-          </div>
-  
-        </div>
-      </div>
-  
-      <!-- Ejemplo con Directiva Angular (*ngFor para Horarios Dinámicos) -->
-      <!-- 
-        <div *ngFor="let dia of horarios" class="bg-white rounded-2xl p-4 border border-gray-100 shadow-xs">
-          <div class="flex justify-between items-center">
-            <span>{{ dia.nombre }}</span>
-            <input type="time" [value]="dia.inicio">
-            <input type="time" [value]="dia.fin">
-          </div>
-        </div>
-      -->
-  
+
+
     </div>
   </main>
