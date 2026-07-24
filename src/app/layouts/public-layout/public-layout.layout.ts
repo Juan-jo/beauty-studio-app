@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-public-layout',
-  imports: [],
+  imports: [RouterOutlet],
   templateUrl: './public-layout.layout.html',
   styles: ``,
 })

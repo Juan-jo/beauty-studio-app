@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { InstallPwa } from "../../../../shared/components/install-pwa/install-pwa";
+import { InstallPwa } from '../../components/install-pwa/install-pwa';
 
 @Component({
   selector: 'app-home',

@@ -1,34 +1,83 @@
-import { Routes } from '@angular/router';
+import { Router, Routes } from '@angular/router';
+import { getHomeRouteForRole, roleGuard } from './core/guards/role.guard';
+import { inject } from '@angular/core';
+import { AuthService } from './core/services/auth';
 
 export const routes: Routes = [
 
     {
         path: '',
-        loadComponent: () =>
-            import('./features/home/pages/home/home')
-                .then(c => c.Home)
+        pathMatch: 'full',
+        canActivate: [
+          () => {
+            const auth = inject(AuthService);
+            const router = inject(Router);
+            return router.createUrlTree([getHomeRouteForRole(auth.getRole())]);
+          }
+        ],
+        children: []
+      },
+
+    // Rutas PUBLIC
+    {
+        path: 'public',
+        loadComponent: () => import('./layouts/public-layout/public-layout.layout').then(c => c.PublicLayoutLayout),
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./shared/pages/home/home')
+                    .then(c => c.Home)
+            },
+
+            {
+                path: 'services',
+                loadComponent: () => import('./features/services/pages/services/services')
+                    .then(c => c.Services)
+            },
+
+            {
+                path: 'booking/:serviceId',
+                loadComponent: () =>
+                    import('./features/booking/page/booking/booking')
+                        .then(c => c.Booking)
+            },
+
+            {
+                path: 'login',
+                loadComponent: () =>
+                    import('./features/auth/pages/login/login')
+                        .then(c => c.Login)
+            },
+
+        ]
     },
 
+
+    // Rutas CUSTOMER
     {
-        path: 'login',
-        loadComponent: () =>
-            import('./features/auth/pages/login/login')
-                .then(c => c.Login)
+        path: 'employee',
+        loadComponent: () => import('./layouts/employee-layout/employee-layout.layout').then(c => c.EmployeeLayoutLayout),
+        canActivate: [roleGuard],
+        data: { roles: ['EMPLOYEE'] },
+        children: [
+            {
+                path: 'agenda',
+                loadComponent: () => import('./features/employee/empl-agenda/empl-agenda').then(c => c.EmplAgenda)
+            },
+            {
+                path: 'schedule',
+                loadComponent: () => import('./features/employee/empl-schedule/empl-schedule').then(c => c.EmplSchedule)
+            },
+            {
+                path: 'services',
+                loadComponent: () => import('./features/employee/empl-services/empl-services').then(c => c.EmplServices)
+            }
+        ]
     },
 
-    {
-        path: 'services',
-        loadComponent: () =>
-            import('./features/services/pages/services/services')
-                .then(c => c.Services)
-    },
 
-    {
-        path: 'booking/:serviceId',
-        loadComponent: () =>
-            import('./features/booking/page/booking/booking')
-                .then(c => c.Booking)
-    },
+
+
 
     {
         path: '**',

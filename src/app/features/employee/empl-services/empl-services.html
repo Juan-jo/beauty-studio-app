@@ -1,0 +1,207 @@
+<!-- Subheader de Configuración de Servicios -->
+<div class="bg-white/80 backdrop-blur-md border-b border-pink-100 px-4 py-3 shadow-xs">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-pink-100 text-pink-600">
+          <svg class="w-3.5 h-3.5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 0L4 4m5.121 5.121L4 14.121"/></svg>
+          Especialidades
+        </span>
+        <h2 class="text-base font-bold text-gray-900 mt-1">Servicios del Profesional</h2>
+      </div>
+  
+      <div class="text-right">
+        <p class="text-xs text-gray-500 font-medium">Servicios habilitados</p>
+        <p class="text-sm font-bold text-gray-900">
+          <span class="text-pink-600">5</span> / 8 disponibles
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Contenido Principal: Habilitar Servicios -->
+  <main class="max-w-5xl mx-auto p-4 md:p-6 bg-pink-50/30 min-h-screen">
+  
+    <!-- Tarjeta Perfil y Búsqueda -->
+    <div class="bg-white rounded-2xl p-4 border border-pink-100 shadow-xs mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <img class="w-12 h-12 rounded-full object-cover border-2 border-pink-200" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150" alt="Profesional">
+        <div>
+          <h3 class="text-sm font-bold text-gray-900">Valeria Morales</h3>
+          <p class="text-xs text-pink-600 font-medium">Selecciona qué servicios de la sucursal realizas</p>
+        </div>
+      </div>
+  
+      <!-- Buscador rápido dentro del catálogo -->
+      <div class="relative min-w-[240px]">
+        <input type="text" placeholder="Buscar servicio..." class="w-full bg-pink-50/50 border border-pink-100 rounded-xl pl-9 pr-4 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-pink-300">
+        <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+    </div>
+  
+    <!-- Lista de Categorías y Servicios -->
+    <div class="space-y-6">
+  
+      <!-- CATEGORÍA 1: Uñas -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2 px-1">
+          <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+          <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider">Manicura & Pedicura</h3>
+        </div>
+  
+        <!-- Servicio 1: HABILITADO -->
+        <div class="bg-white rounded-2xl p-4 border border-pink-200 shadow-xs hover:shadow-md transition-all">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            
+            <!-- Info básica del servicio -->
+            <div class="flex items-center gap-3">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+              </label>
+              <div>
+                <h4 class="text-sm font-bold text-gray-900">Manicura Rusa + GelX</h4>
+                <p class="text-xs text-gray-400">Limpieza profunda de cutícula con torno y extensión en gel</p>
+              </div>
+            </div>
+  
+            <!-- Opciones personalizables del empleado -->
+            <div class="flex items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-gray-100">
+              <!-- Selector Duración -->
+              <div class="flex items-center gap-1.5 bg-pink-50/50 border border-pink-100 px-3 py-1.5 rounded-xl">
+                <span class="text-[10px] font-bold text-pink-400 uppercase">Tiempo</span>
+                <select class="bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
+                  <option value="45">45 min</option>
+                  <option value="60" selected>60 min</option>
+                  <option value="90">90 min</option>
+                </select>
+              </div>
+  
+              <!-- Precio asignado -->
+              <div class="flex items-center gap-1.5 bg-pink-50/50 border border-pink-100 px-3 py-1.5 rounded-xl min-w-[100px]">
+                <span class="text-[10px] font-bold text-pink-400 uppercase">$</span>
+                <input type="number" value="45.00" class="w-full bg-transparent text-xs font-bold text-gray-800 focus:outline-none">
+              </div>
+            </div>
+  
+          </div>
+        </div>
+  
+        <!-- Servicio 2: HABILITADO -->
+        <div class="bg-white rounded-2xl p-4 border border-pink-200 shadow-xs hover:shadow-md transition-all">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            
+            <div class="flex items-center gap-3">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+              </label>
+              <div>
+                <h4 class="text-sm font-bold text-gray-900">Pedicura Spa Premium</h4>
+                <p class="text-xs text-gray-400">Exfoliación, hidratación profunda y esmaltado en gel</p>
+              </div>
+            </div>
+  
+            <div class="flex items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-gray-100">
+              <div class="flex items-center gap-1.5 bg-pink-50/50 border border-pink-100 px-3 py-1.5 rounded-xl">
+                <span class="text-[10px] font-bold text-pink-400 uppercase">Tiempo</span>
+                <select class="bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
+                  <option value="45" selected>45 min</option>
+                  <option value="60">60 min</option>
+                </select>
+              </div>
+  
+              <div class="flex items-center gap-1.5 bg-pink-50/50 border border-pink-100 px-3 py-1.5 rounded-xl min-w-[100px]">
+                <span class="text-[10px] font-bold text-pink-400 uppercase">$</span>
+                <input type="number" value="35.00" class="w-full bg-transparent text-xs font-bold text-gray-800 focus:outline-none">
+              </div>
+            </div>
+  
+          </div>
+        </div>
+  
+      </div>
+  
+      <!-- CATEGORÍA 2: Pestañas & Cejas -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2 px-1">
+          <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+          <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider">Mirada & Cejas</h3>
+        </div>
+  
+        <!-- Servicio 3: HABILITADO -->
+        <div class="bg-white rounded-2xl p-4 border border-pink-200 shadow-xs hover:shadow-md transition-all">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            
+            <div class="flex items-center gap-3">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+              </label>
+              <div>
+                <h4 class="text-sm font-bold text-gray-900">Lifting de Pestañas + Visagismo</h4>
+                <p class="text-xs text-gray-400">Curvatura natural con queratina y tinte</p>
+              </div>
+            </div>
+  
+            <div class="flex items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-gray-100">
+              <div class="flex items-center gap-1.5 bg-pink-50/50 border border-pink-100 px-3 py-1.5 rounded-xl">
+                <span class="text-[10px] font-bold text-pink-400 uppercase">Tiempo</span>
+                <select class="bg-transparent text-xs font-bold text-gray-800 focus:outline-none cursor-pointer">
+                  <option value="60">60 min</option>
+                  <option value="90" selected>90 min</option>
+                </select>
+              </div>
+  
+              <div class="flex items-center gap-1.5 bg-pink-50/50 border border-pink-100 px-3 py-1.5 rounded-xl min-w-[100px]">
+                <span class="text-[10px] font-bold text-pink-400 uppercase">$</span>
+                <input type="number" value="65.00" class="w-full bg-transparent text-xs font-bold text-gray-800 focus:outline-none">
+              </div>
+            </div>
+  
+          </div>
+        </div>
+  
+        <!-- Servicio 4: DESHABILITADO (El profesional NO realiza este servicio) -->
+        <div class="bg-gray-50/70 rounded-2xl p-4 border border-dashed border-gray-200 opacity-75 transition-all">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            
+            <div class="flex items-center gap-3">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+              </label>
+              <div>
+                <h4 class="text-sm font-bold text-gray-500">Microblading 3D / Microshading</h4>
+                <p class="text-xs text-gray-400">Técnica semipermanente pelo a pelo</p>
+              </div>
+            </div>
+  
+            <div class="flex items-center justify-between md:justify-end gap-3">
+              <span class="text-xs font-medium text-gray-400 bg-gray-100 px-3 py-1.5 rounded-xl">
+                No ofrecido por el empleado
+              </span>
+            </div>
+  
+          </div>
+        </div>
+  
+      </div>
+  
+      <!-- Ejemplo con Directiva Angular (*ngFor para Iterar Servicios del Salón) -->
+      <!-- 
+        <div *ngFor="let servicio of catalogoSalon" [ngClass]="{'opacity-75 bg-gray-50': !servicio.realizadoPorEmpleado}" class="rounded-2xl p-4 border">
+          ...
+        </div>
+      -->
+  
+    </div>
+  
+    <!-- Botón Guardar Flotante / Sticky en Móvil -->
+    <div class="mt-8 flex justify-end">
+      <button class="w-full sm:w-auto px-6 py-3 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        Guardar Servicios Seleccionados
+      </button>
+    </div>
+  
+  </main>
