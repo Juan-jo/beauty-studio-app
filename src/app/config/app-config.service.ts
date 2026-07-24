@@ -45,4 +45,17 @@ export class AppConfigService {
     return this.config.theme;
 
   }
+
+  get currency(): string {
+
+    return this.config.currency;
+
+  }
+
+  get timezone(): string {
+
+    return this.config.timezone;
+
+  }
+
 }

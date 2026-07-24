@@ -33,13 +33,14 @@
                     <div class="mt-1 flex items-center gap-2.5 text-xs text-gray-500">
                         <span
                             class="inline-flex items-center gap-1 font-medium bg-white px-2 py-0.5 rounded-md border border-gray-100 shadow-2xs">
-                            ⏱️ {{ formatDuration(beautyService()?.duration ?? 0) }}
+                            {{ beautyService()?.duration | duration }}
                         </span>
 
                         <span>•</span>
 
                         <span class="font-bold text-brand-600 text-sm">
-                            ${{ beautyService()?.price }} <span class="text-xs font-normal text-gray-400">MXN</span>
+                            {{beautyService()?.price || 0 | bscurrency}}
+                            <!--${{ beautyService()?.price }} <span class="text-xs font-normal text-gray-400">MXN</span>-->
                         </span>
                     </div>
                 </div>

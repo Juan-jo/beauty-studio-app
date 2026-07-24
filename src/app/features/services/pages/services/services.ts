@@ -4,13 +4,15 @@ import { CommonModule } from '@angular/common';
 import { InstallPwa } from "../../../../shared/components/install-pwa/install-pwa";
 import { RouterLink } from '@angular/router';
 import { Service } from '../../models/beauty.models';
+import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 
 @Component({
   selector: 'app-services',
   imports: [
     CommonModule,
     RouterLink,
-    InstallPwa
+    InstallPwa,
+    CurrencyPipe
   ],
   templateUrl: './services.html',
   styleUrl: './services.css',

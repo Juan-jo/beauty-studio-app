@@ -85,9 +85,9 @@
               <div class="p-6 pt-0">
                 <div class="flex items-baseline gap-1">
                   <span class="text-3xl font-bold text-brand-600">
-                    ${{ service.price }}
+                    {{ service.price | bscurrency }}
                   </span>
-                  <span class="text-sm text-gray-400">MXN</span>
+                  <!--<span class="text-sm text-gray-400">MXN</span>-->
                 </div>
   
                 <button

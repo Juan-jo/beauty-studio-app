@@ -3,10 +3,11 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
-import { HttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { AppConfigService } from './config/app-config.service';
 import { AppConfig } from './config/app-config.model';
+import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -37,6 +38,12 @@ export const appConfig: ApplicationConfig = {
 
       configService.load(config);
 
-    })
+    }),
+
+    provideHttpClient(withInterceptorsFromDi()),
+
+
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+
   ]
 };

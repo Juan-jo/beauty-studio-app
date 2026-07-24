@@ -7,13 +7,18 @@ import { BookingCalendarService } from '../../service/bokking-calendar.service';
 import { CommonModule } from '@angular/common';
 import { BookingCalendar } from '../../component/booking-calendar/booking-calendar';
 import { SelectedBeautyService } from '../../models/booking-calendar.models';
+import { DurationPipe } from '../../../../core/pipes/duration-pipe';
+import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 
 @Component({
   selector: 'app-booking',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    BookingCalendar],
+    BookingCalendar,
+    DurationPipe,
+    CurrencyPipe
+  ],
 
   templateUrl: './booking.html',
   styleUrl: './booking.css',
@@ -69,7 +74,6 @@ export class Booking {
 
   centerSectionCalendar() {
 
-    console.log('Centramos calendar');
 
     setTimeout(() => {
       this.calendarSection?.nativeElement.scrollIntoView({
@@ -185,16 +189,5 @@ export class Booking {
     });
   }
 
-  formatDuration(minutes: number): string {
-    if (!minutes) return '';
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-
-    if (hours > 0 && mins > 0) {
-      return `${hours}h ${mins}m`;
-    } else if (hours > 0) {
-      return `${hours}h`;
-    }
-    return `${mins} min`;
-  }
+  
 }
