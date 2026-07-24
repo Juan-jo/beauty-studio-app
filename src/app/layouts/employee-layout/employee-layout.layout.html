@@ -1,12 +1,23 @@
-<div class="min-h-screen bg-pink-50/50 text-gray-800 flex flex-col pb-16 md:pb-0">
+<div class="min-h-screen bg-brand-50/50 text-gray-800 flex flex-col pb-16 md:pb-0">
   
 
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 py-6 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold">B</div>
-          <span class="font-semibold text-lg tracking-tight">Beauty Studio</span>
-        </div>
-      </header>
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 py-4 flex justify-between items-center">
+    <!-- Logo / Nombre (Izquierda) -->
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold">B</div>
+      <span class="font-semibold text-lg tracking-tight">Beauty Studio</span>
+    </div>
+  
+    <!-- Botón de Logout (Derecha) -->
+    <button 
+      (click)="logout()" 
+      class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+      </svg>
+      <span>Cerrar sesión</span>
+    </button>
+  </header>
       
 
    
@@ -17,28 +28,28 @@
     </main>
   
     <!-- Navbar Táctil Inferior (PWA Fixed) -->
-    <nav class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-pink-100 py-2 px-6 flex justify-around items-center z-40 shadow-lg md:relative md:border-t-0 md:bg-transparent">
+    <nav class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-brand-100 py-2 px-6 flex justify-around items-center z-40 shadow-lg md:relative md:border-t-0 md:bg-transparent">
       
       <a 
         routerLink="/employee/agenda" 
-        routerLinkActive="text-pink-600 font-bold bg-pink-50" 
-        class="flex flex-col items-center py-1.5 px-4 rounded-xl text-xs text-gray-500 hover:text-pink-600 transition">
+        routerLinkActive="text-brand-600 font-bold bg-brand-50" 
+        class="flex flex-col items-center py-1.5 px-4 rounded-xl text-xs text-gray-500 hover:text-brand-600 transition">
         <span class="text-lg">📆</span>
         <span>Agenda</span>
       </a>
   
       <a 
         routerLink="/employee/schedule" 
-        routerLinkActive="text-pink-600 font-bold bg-pink-50" 
-        class="flex flex-col items-center py-1.5 px-4 rounded-xl text-xs text-gray-500 hover:text-pink-600 transition">
+        routerLinkActive="text-brand-600 font-bold bg-brand-50" 
+        class="flex flex-col items-center py-1.5 px-4 rounded-xl text-xs text-gray-500 hover:text-brand-600 transition">
         <span class="text-lg">⏰</span>
         <span>Horario</span>
       </a>
   
       <a 
         routerLink="/employee/services" 
-        routerLinkActive="text-pink-600 font-bold bg-pink-50" 
-        class="flex flex-col items-center py-1.5 px-4 rounded-xl text-xs text-gray-500 hover:text-pink-600 transition">
+        routerLinkActive="text-brand-600 font-bold bg-brand-50" 
+        class="flex flex-col items-center py-1.5 px-4 rounded-xl text-xs text-gray-500 hover:text-brand-600 transition">
         <span class="text-lg">💅</span>
         <span>Servicios</span>
       </a>

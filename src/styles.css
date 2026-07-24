@@ -1,3 +1,53 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+/* 1. Mapeamos la paleta personalizada 'brand' en Tailwind v4 */
+@theme {
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-900: var(--brand-900);
+}
+
+
+
+/* TEMA POR DEFECTO (ROSA) */
+:root, [data-theme="pink"] {
+  --brand-50: #fdf2f8;
+  --brand-100: #fce7f3;
+  --brand-200: #fbcfe8;
+  --brand-400: #f472b6;
+  --brand-500: #ec4899;
+  --brand-600: #db2777;
+  --brand-700: #be185d;
+  --brand-900: #831843;
+}
+
+/* TEMA VIOLETA */
+[data-theme="violet"] {
+  --brand-50: #faf5ff;
+  --brand-100: #f3e8ff;
+  --brand-200: #e9d5ff;
+  --brand-400: #c084fc;
+  --brand-500: #a855f7;
+  --brand-600: #9333ea;
+  --brand-700: #7e22ce;
+  --brand-900: #581c87; 
+}
+
+/* TEMA ESMERALDA / MINT */
+[data-theme="emerald"] {
+  --brand-50: #ecfdf5;
+  --brand-100: #d1fae5;
+  --brand-200: #a7f3d0;
+  --brand-400: #34d399;
+  --brand-500: #10b981;
+  --brand-600: #059669;
+  --brand-700: #047857;
+  --brand-900: #064e3b;
+}

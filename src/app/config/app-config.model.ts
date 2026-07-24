@@ -1,3 +1,6 @@
+
+export type ThemeType = 'pink' | 'violet' | 'emerald';
+
 export interface AppConfig {
 
     apiUrl: string;
@@ -8,5 +11,6 @@ export interface AppConfig {
   
     timezone: string,
 
-    currency: string
-  }
+    currency: string,
+
+    theme: string  }

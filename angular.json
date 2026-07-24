@@ -63,7 +63,13 @@
               "buildTarget": "beauty-studio-pwa:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "allowedHosts": [
+              ".ngrok-free.app",
+              "all"
+            ]
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test"

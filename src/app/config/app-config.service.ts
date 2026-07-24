@@ -15,6 +15,7 @@ export class AppConfigService {
 
     this.config = config;
 
+    document.documentElement.setAttribute('data-theme', config.theme);
   }
 
 
@@ -39,4 +40,9 @@ export class AppConfigService {
   }
 
 
+  get theme(): string {
+
+    return this.config.theme;
+
+  }
 }

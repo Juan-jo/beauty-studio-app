@@ -3,5 +3,6 @@
     "salonSerial": "ECA92",
     "production": true,
     "timezone": "America/Mexico_City",
-    "currency": "MXN"
+    "currency": "MXN",
+    "theme": "emerald"
 }

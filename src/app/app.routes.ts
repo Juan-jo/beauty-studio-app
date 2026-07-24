@@ -2,6 +2,7 @@ import { Router, Routes } from '@angular/router';
 import { getHomeRouteForRole, roleGuard } from './core/guards/role.guard';
 import { inject } from '@angular/core';
 import { AuthService } from './core/services/auth';
+import { publicGuard } from './core/guards/public.guard';
 
 export const routes: Routes = [
 
@@ -21,6 +22,7 @@ export const routes: Routes = [
     // Rutas PUBLIC
     {
         path: 'public',
+        canActivate: [publicGuard],
         loadComponent: () => import('./layouts/public-layout/public-layout.layout').then(c => c.PublicLayoutLayout),
         children: [
             {
@@ -56,8 +58,8 @@ export const routes: Routes = [
     // Rutas CUSTOMER
     {
         path: 'employee',
-        loadComponent: () => import('./layouts/employee-layout/employee-layout.layout').then(c => c.EmployeeLayoutLayout),
         canActivate: [roleGuard],
+        loadComponent: () => import('./layouts/employee-layout/employee-layout.layout').then(c => c.EmployeeLayoutLayout),
         data: { roles: ['EMPLOYEE'] },
         children: [
             {
