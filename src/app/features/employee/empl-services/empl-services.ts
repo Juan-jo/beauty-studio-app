@@ -18,7 +18,7 @@ import { DurationPipe } from '../../../core/pipes/duration-pipe';
 export class EmplServices {
   private readonly emplBeautyService = inject(EmplBeautyService);
 
-  // Señal para rastrear qué IDs se están actualizando actualmente
+
   updatingServiceIds = signal<Set<number>>(new Set());
 
   serviceResource = resource({
@@ -27,7 +27,7 @@ export class EmplServices {
     }
   });
 
-  // Copia/Vista computable de los servicios
+
   services = computed<EmplServiceItem[]>(() => {
     return this.serviceResource.value() ?? [];
   });
@@ -35,24 +35,24 @@ export class EmplServices {
   isLoading = this.serviceResource.isLoading;
 
   onToogleService(serviceId: number, enabled: boolean) {
-    // 1. Marcamos este ID en estado de "actualizando"
+
     this.setServiceUpdating(serviceId, true);
 
-    // 2. Actualización Optimista Local (Actualizamos la señal interna del resource inmediatamente)
+
     this.serviceResource.value.update(currentServices => {
       if (!currentServices) return [];
       return currentServices.map(s => s.id === serviceId ? { ...s, enabled } : s);
     });
 
-    // 3. Enviamos la petición PUT al backend
+
     this.emplBeautyService.updateService({ serviceId, enabled }).subscribe({
       next: () => {
-        // Petición exitosa: quitamos el estado de carga
+
         this.setServiceUpdating(serviceId, false);
       },
       error: (err) => {
         console.error('Error al actualizar servicio', err);
-        // Revertimos el cambio visualmente si falló el servidor
+
         this.serviceResource.value.update(currentServices => {
           if (!currentServices) return [];
           return currentServices.map(s => s.id === serviceId ? { ...s, enabled: !enabled } : s);
@@ -62,7 +62,7 @@ export class EmplServices {
     });
   }
 
-  // Helper para añadir/remover el ID del Set de actualización
+
   private setServiceUpdating(id: number, isUpdating: boolean) {
     this.updatingServiceIds.update(set => {
       const newSet = new Set(set);
@@ -76,37 +76,3 @@ export class EmplServices {
   }
 }
 
-
-/*export class EmplServices {
-
-  private readonly emplBeautyService = inject(EmplBeautyService);
-
-  serviceResource = resource({
-    
-    loader: async ({ }) => {
-      return await firstValueFrom(
-        this.emplBeautyService.getServices()
-      );
-    }
-
-  });
-
-  services = computed<EmplServiceItem[]>(() => {
-    const response = this.serviceResource.value();
-
-    return response ?? [];
-
-  });
-
-  isLoading = this.serviceResource.isLoading;
-
-
-
-  onToogleService(serviceId: number, enabled: boolean) {
-
-    this.emplBeautyService.updateService({serviceId,enabled})
-    .subscribe(r=> {
-
-    })
-  }
-}*/

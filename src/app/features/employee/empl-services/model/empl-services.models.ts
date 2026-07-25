@@ -6,6 +6,7 @@ export interface EmplServiceItem {
     price: string
     duration: number
     enabled: boolean
+    pictureUrl: string
 }
 
 

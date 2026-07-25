@@ -6,24 +6,31 @@ import { EmplScheduleResponse } from '../model/empl-schedule.models';
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class EmplScheduleService {
 
-  
 
-  constructor(
-    private http: HttpClient,
-    private config: AppConfigService
-   ){}
 
-  
-   getSchedules(){
+    constructor(
+        private http: HttpClient,
+        private config: AppConfigService
+    ) { }
 
-    return this.http.get<EmplScheduleResponse>(
-      `${this.config.apiUrl}/api/v1/employees/0/hours`
-    );
-  }
+
+    getSchedules() {
+
+        return this.http.get<EmplScheduleResponse>(
+            `${this.config.apiUrl}/api/v1/employees/0/hours`
+        );
+    }
+
+    enabledWorkHour(workingHourId: number, enabled: boolean) {
+
+        return this.http.patch<any>(
+            `${this.config.apiUrl}/api/v1/employees/0/hours/${workingHourId}/enabled`, { enabled }
+        );
+    }
 
 
 
