@@ -1,0 +1,44 @@
+<!-- TARJETA: APARIENCIA / TEMA -->
+<div class="bg-white rounded-2xl p-5 border border-gray-200/80 shadow-xs space-y-4">
+    <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2 border-b border-gray-100 pb-3">
+      <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 73"/>
+      </svg>
+      Color de Tema de la App
+    </h3>
+  
+    <div class="grid grid-cols-3 gap-2">
+      <!-- OPÓN 1: TEMA ROSA (ROSE / BRAND) -->
+      <button 
+        (click)="changeTheme('rose')"
+        type="button"
+        [class]="theme === 'rose' 
+          ? 'p-2.5 rounded-xl border-2 border-rose-500 bg-rose-50 flex flex-col items-center gap-1.5 cursor-pointer transition-all shadow-xs' 
+          : 'p-2.5 rounded-xl border border-gray-200 hover:border-rose-300 bg-white flex flex-col items-center gap-1.5 cursor-pointer transition-all'">
+        <span class="w-5 h-5 rounded-full bg-rose-500 border border-white shadow-xs"></span>
+        <span [class]="theme === 'rose' ? 'text-[11px] font-bold text-gray-900' : 'text-[11px] font-medium text-gray-600'">Rosa</span>
+      </button>
+      
+      <!-- OPCIÓN 2: TEMA VIOLETA -->
+      <button 
+        (click)="changeTheme('violet')"
+        type="button"
+        [class]="theme === 'violet' 
+          ? 'p-2.5 rounded-xl border-2 border-purple-600 bg-purple-50 flex flex-col items-center gap-1.5 cursor-pointer transition-all shadow-xs' 
+          : 'p-2.5 rounded-xl border border-gray-200 hover:border-purple-300 bg-white flex flex-col items-center gap-1.5 cursor-pointer transition-all'">
+        <span class="w-5 h-5 rounded-full bg-purple-600 border border-white shadow-xs"></span>
+        <span [class]="theme === 'purple' ? 'text-[11px] font-bold text-gray-900' : 'text-[11px] font-medium text-gray-600'">Violeta</span>
+      </button>
+  
+      <!-- OPCIÓN 3: TEMA ESMERALDA -->
+      <button 
+        (click)="changeTheme('emerald')"
+        type="button"
+        [class]="theme === 'emerald' 
+          ? 'p-2.5 rounded-xl border-2 border-emerald-600 bg-emerald-50 flex flex-col items-center gap-1.5 cursor-pointer transition-all shadow-xs' 
+          : 'p-2.5 rounded-xl border border-gray-200 hover:border-emerald-300 bg-white flex flex-col items-center gap-1.5 cursor-pointer transition-all'">
+        <span class="w-5 h-5 rounded-full bg-emerald-600 border border-white shadow-xs"></span>
+        <span [class]="theme === 'emerald' ? 'text-[11px] font-bold text-gray-900' : 'text-[11px] font-medium text-gray-600'">Esmeralda</span>
+      </button>
+    </div>
+  </div>

@@ -66,15 +66,22 @@ export const routes: Routes = [
                 path: 'agenda',
                 loadComponent: () => import('./features/employee/empl-agenda/empl-agenda').then(c => c.EmplAgenda)
             },
+
             {
-                path: 'schedule',
-                loadComponent: () => import('./features/employee/empl-schedule/empl-schedule').then(c => c.EmplSchedule)
+                path: 'profile',
+                loadComponent: () => import('./features/employee/empl-profile/empl-profile').then(c => c.EmplProfile)
             },
             {
-                path: 'services',
-                loadComponent: () => import('./features/employee/empl-services/empl-services').then(c => c.EmplServices)
+                path: 'notifications',
+                loadComponent: () => import('./features/employee/empl-notification/empl-notification').then(c => c.EmplNotification)
             }
         ]
+    },
+    {
+        path: 'employee/schedule',
+        canActivate: [roleGuard],
+        loadComponent: () => import('./features/employee/empl-schedule/empl-schedule').then(c => c.EmplSchedule),
+        data: { roles: ['EMPLOYEE'] },
     },
 
 

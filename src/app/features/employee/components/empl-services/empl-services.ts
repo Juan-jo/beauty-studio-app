@@ -1,9 +1,9 @@
-import { Component, computed, inject, resource, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Output, resource, signal } from '@angular/core';
 import { EmplBeautyService } from './service/empl.service';
 import { firstValueFrom } from 'rxjs';
 import { EmplServiceItem } from './model/empl-services.models';
-import { CurrencyPipe } from '../../../core/pipes/currency-pipe';
-import { DurationPipe } from '../../../core/pipes/duration-pipe';
+import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
+import { DurationPipe } from '../../../../core/pipes/duration-pipe';
 
 @Component({
   selector: 'app-empl-services',
@@ -16,7 +16,10 @@ import { DurationPipe } from '../../../core/pipes/duration-pipe';
 })
 
 export class EmplServices {
+  
   private readonly emplBeautyService = inject(EmplBeautyService);
+  
+  @Output() close = new EventEmitter<void>();
 
 
   updatingServiceIds = signal<Set<number>>(new Set());
@@ -73,6 +76,11 @@ export class EmplServices {
       }
       return newSet;
     });
+  }
+
+  closeModal() {
+
+    this.close.emit();
   }
 }
 

@@ -1,0 +1,55 @@
+<div class="bg-white rounded-2xl p-4 border border-rose-100 shadow-xs">
+    <button (click)="isOpen=true"
+        class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition-all cursor-pointer active:scale-95">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        Cerrar Sesión
+    </button>
+</div>
+
+
+
+@if(isOpen) {
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-xs animate-fade-in">
+
+    <!-- CONTENEDOR DEL MODAL -->
+    <div
+        class="bg-white rounded-3xl p-6 max-w-sm w-full border border-brand-100 shadow-xl space-y-5 animate-scale-up text-center">
+
+        <!-- ICONO DE ADVERTENCIA / SALIDA -->
+        <div
+            class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-500 flex items-center justify-center mx-auto shadow-xs">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+        </div>
+
+        <!-- TEXTOS -->
+        <div class="space-y-1.5">
+            <h3 class="text-base font-bold text-gray-900">¿Cerrar sesión?</h3>
+            <p class="text-xs text-gray-500 font-medium leading-relaxed">
+                Tendrás que volver a ingresar tus credenciales para acceder a tu agenda y servicios.
+            </p>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="grid grid-cols-2 gap-3 pt-2">
+            <!-- BOTÓN CANCELAR -->
+            <button (click)="isOpen=false" type="button"
+                class="w-full py-2.5 px-4 rounded-xl border border-gray-200/80 text-gray-700 text-xs font-semibold hover:bg-gray-50 transition-colors cursor-pointer active:scale-95">
+                Cancelar
+            </button>
+
+            <!-- BOTÓN CONFIRMAR -->
+            <button (click)="onConfirm()" type="button"
+                class="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95">
+                Sí, salir
+            </button>
+        </div>
+
+    </div>
+</div>
+}

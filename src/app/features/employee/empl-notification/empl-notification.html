@@ -1,0 +1,172 @@
+<!-- HEADER DE LA PÁGINA -->
+<header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-brand-200/60 px-4 py-3.5 shadow-xs transition-all">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <div>
+        <h2 class="text-base font-bold text-gray-900 leading-tight flex items-center gap-2">
+          Notificaciones
+          <span class="px-2 py-0.5 text-[10px] font-extrabold bg-rose-100 text-rose-600 rounded-full">
+            3 nuevas
+          </span>
+        </h2>
+        <p class="text-xs text-brand-700 font-medium">Mantente al día con tus reservas y avisos del salón</p>
+      </div>
+  
+      <!-- Acciones rápidas -->
+      <button class="text-xs font-semibold text-brand-700 hover:text-brand-800 hover:underline cursor-pointer transition-all">
+        Marcar todas como leídas
+      </button>
+    </div>
+  </header>
+  
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-4xl mx-auto p-8 p-t-4 md:p-6 bg-brand-50/30 min-h-screen space-y-5">
+  
+    <!-- FILTROS Y PESTAÑAS -->
+    <div class="flex items-center justify-between border-b border-gray-200/80 pb-2">
+      <div class="flex gap-2">
+        <button class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white border border-brand-200 text-brand-700 shadow-xs cursor-pointer">
+          Todas (8)
+        </button>
+        <button class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-gray-500 hover:text-gray-800 hover:bg-white/60 transition-colors cursor-pointer">
+          Sin leer (3)
+        </button>
+      </div>
+  
+      <span class="text-[11px] text-gray-400 font-medium hidden sm:inline">
+        Mostrando últimos 7 días
+      </span>
+    </div>
+  
+    <!-- LISTA DE NOTIFICACIONES -->
+    <div class="space-y-3">
+  
+      <!-- HOY -->
+      <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-1 pt-1">Hoy</p>
+  
+      <!-- NOTIFICACIÓN 1: NUEVA CITA (SIN LEER) -->
+      <div class="relative bg-white rounded-2xl p-4 border border-brand-200/80 shadow-xs hover:shadow-md transition-all flex items-start gap-3.5 group cursor-pointer">
+        <!-- Indicador Sin Leer (Punto) -->
+        <span class="absolute top-4 right-4 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
+  
+        <!-- Icono Categoría: Cita/Agenda -->
+        <div class="w-10 h-10 rounded-xl bg-brand-50 border border-brand-100 text-brand-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+  
+        <!-- Detalle -->
+        <div class="space-y-1 flex-1 pr-6">
+          <div class="flex items-center gap-2">
+            <p class="text-xs font-bold text-gray-900">¡Nueva cita asignada!</p>
+            <span class="text-[10px] text-gray-400 font-medium">Hace 15 min</span>
+          </div>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            <strong>María Garcia</strong> reservó <span class="text-brand-700 font-semibold">Manicura Rusa + GelX</span> para hoy a las <strong>4:30 PM</strong>.
+          </p>
+        </div>
+      </div>
+  
+      <!-- NOTIFICACIÓN 2: CAMBIO DE HORARIO (SIN LEER) -->
+      <div class="relative bg-white rounded-2xl p-4 border border-brand-200/80 shadow-xs hover:shadow-md transition-all flex items-start gap-3.5 group cursor-pointer">
+        <span class="absolute top-4 right-4 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
+  
+        <!-- Icono Categoría: Reagendado -->
+        <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+  
+        <div class="space-y-1 flex-1 pr-6">
+          <div class="flex items-center gap-2">
+            <p class="text-xs font-bold text-gray-900">Cita Reagendada</p>
+            <span class="text-[10px] text-gray-400 font-medium">Hace 2 horas</span>
+          </div>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            <strong>Camila S.</strong> cambió su cita de <span class="line-through text-gray-400">11:00 AM</span> para las <strong>2:00 PM</strong>.
+          </p>
+        </div>
+      </div>
+  
+      <!-- NOTIFICACIÓN 3: AVISO DEL SALÓN / SISTEMA (SIN LEER) -->
+      <div class="relative bg-white rounded-2xl p-4 border border-brand-200/80 shadow-xs hover:shadow-md transition-all flex items-start gap-3.5 group cursor-pointer">
+        <span class="absolute top-4 right-4 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
+  
+        <!-- Icono Categoría: Sistema -->
+        <div class="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A2.001 2.001 0 013 12 shadow-xs"/>
+          </svg>
+        </div>
+  
+        <div class="space-y-1 flex-1 pr-6">
+          <div class="flex items-center gap-2">
+            <p class="text-xs font-bold text-gray-900">Aviso de la Administración</p>
+            <span class="text-[10px] text-gray-400 font-medium">Hace 4 horas</span>
+          </div>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            Mañana habrá mantenimiento en la sucursal de 8:00 AM a 9:00 AM.
+          </p>
+        </div>
+      </div>
+  
+      <!-- AYER / ANTERIORES -->
+      <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-1 pt-3">Ayer</p>
+  
+      <!-- NOTIFICACIÓN 4: CITA CANCELADA (YA LEÍDA) -->
+      <div class="bg-white/60 rounded-2xl p-4 border border-gray-200/60 shadow-xs opacity-75 hover:opacity-100 transition-all flex items-start gap-3.5 cursor-pointer">
+        <!-- Icono Categoría: Cancelación -->
+        <div class="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 text-rose-500 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </div>
+  
+        <div class="space-y-1 flex-1">
+          <div class="flex items-center gap-2">
+            <p class="text-xs font-bold text-gray-800">Cita Cancelada</p>
+            <span class="text-[10px] text-gray-400 font-medium">Ayer, 5:40 PM</span>
+          </div>
+          <p class="text-xs text-gray-500 leading-relaxed">
+            El servicio de <strong>Lifting de Pestañas</strong> con <strong>Sofía R.</strong> ha sido cancelado por el cliente.
+          </p>
+        </div>
+      </div>
+  
+      <!-- NOTIFICACIÓN 5: EVALUACIÓN / RESEÑA (LEÍDA) -->
+      <div class="bg-white/60 rounded-2xl p-4 border border-gray-200/60 shadow-xs opacity-75 hover:opacity-100 transition-all flex items-start gap-3.5 cursor-pointer">
+        <!-- Icono Categoría: Calificación -->
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+          </svg>
+        </div>
+  
+        <div class="space-y-1 flex-1">
+          <div class="flex items-center gap-2">
+            <p class="text-xs font-bold text-gray-800">¡Nueva Reseña 5 Estrellas!</p>
+            <span class="text-[10px] text-gray-400 font-medium">Ayer, 2:15 PM</span>
+          </div>
+          <p class="text-xs text-gray-500 leading-relaxed">
+            <strong>Lucía M.</strong> dejó una excelente calificación: <em>"¡Me encantan mis uñas, excelente atención!"</em>
+          </p>
+        </div>
+      </div>
+  
+    </div>
+  
+    <!-- OPCIONAL: ESTADO VACÍO (Para cuando no haya avisos) -->
+    <!--
+    <div class="bg-white rounded-3xl p-8 border border-gray-200/80 shadow-xs text-center space-y-3 my-8">
+      <div class="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-100 text-brand-600 flex items-center justify-center mx-auto">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 01-6 0v-1m6 0H9"/></svg>
+      </div>
+      <div class="space-y-1">
+        <h3 class="text-sm font-bold text-gray-900">No tienes notificaciones pendientes</h3>
+        <p class="text-xs text-gray-400">Te avisaremos cuando tengas nuevas reservas o cambios en tu agenda.</p>
+      </div>
+    </div>
+    -->
+  
+  </main>

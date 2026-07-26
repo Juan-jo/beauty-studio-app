@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, isDevMode, inject, provideAppInitializer } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, isDevMode, inject, provideAppInitializer, LOCALE_ID, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -8,7 +8,12 @@ import { firstValueFrom } from 'rxjs';
 import { AppConfigService } from './config/app-config.service';
 import { AppConfig } from './config/app-config.model';
 import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
+import { registerLocaleData } from '@angular/common';
+import localeEsMx from '@angular/common/locales/es-MX';
 
+
+
+registerLocaleData(localeEsMx);
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -44,6 +49,8 @@ export const appConfig: ApplicationConfig = {
 
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-
-  ]
+    
+  
+  ],
+  
 };

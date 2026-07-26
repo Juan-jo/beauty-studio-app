@@ -1,27 +1,34 @@
-import { Component, computed, inject, resource, signal } from '@angular/core';
+import { Component, computed, inject, LOCALE_ID, resource, signal } from '@angular/core';
 import { EmplScheduleService } from './service/empl-schedule.service';
 import { firstValueFrom } from 'rxjs';
 import { EmplScheduleItem } from './model/empl-schedule.models';
 import { MxDayOfWeekPipe } from '../../../core/pipes/mx-dayofweek-pipe';
 import { DurationPipe } from '../../../core/pipes/duration-pipe';
-import { BsToggleComponent } from '../../../shared/components/bs-toogle/bs-toogle';
+import { TimePickerComponent } from '../../../shared/components/time-picker/time-picker';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-empl-schedule',
   imports: [
     MxDayOfWeekPipe,
     DurationPipe,
-    BsToggleComponent
+    TimePickerComponent,
+    ReactiveFormsModule
   ],
   templateUrl: './empl-schedule.html',
   styleUrl: './empl-schedule.css',
+  
+  standalone: true
 })
 export class EmplSchedule {
 
 
-  showModal = false;
   
   private readonly emplScheduleService = inject(EmplScheduleService);
+
+
+  // Fetch Week
+
 
   updatingWorkingHoursIds = signal<Set<number>>(new Set());
 
@@ -57,7 +64,6 @@ export class EmplSchedule {
         this.setWorkHourUpdating(scheduleId, false);
       },
       error: (err) => {
-        console.error('Error al actualizar servicio', err);
 
         this.scheduleResource.value.update(currentServices => {
           if (!currentServices) return [];
@@ -67,7 +73,6 @@ export class EmplSchedule {
       }
     });
 
-    console.log('patch enabled', scheduleId, enabled)
   }
 
 
@@ -82,4 +87,69 @@ export class EmplSchedule {
       return newSet;
     });
   }
+
+
+  // Update Week Hour
+
+  showModal = false;
+
+  formWorkingHours = signal<FormGroup>(
+    this.buildFormGroup()
+  );
+
+
+  updateWorkingHours(data: EmplScheduleItem) {
+
+    this.formWorkingHours.set(this.buildFormGroup(data))
+    
+    this.showModal = true;
+
+  }
+
+  
+
+  buildFormGroup(data?: EmplScheduleItem) {
+
+    return new FormGroup({
+  
+      id: new FormControl(data?.id ?? null, [
+        Validators.required
+      ]),
+  
+      startTime: new FormControl(data?.startTime ?? null, [
+        Validators.required
+      ]),
+  
+      endTime: new FormControl(data?.endTime ?? null, [
+        Validators.required
+      ])
+  
+    });  
+  }
+
+  saveWorkingHour(){
+
+    const form = this.formWorkingHours();
+  
+  
+    if(form.invalid){
+      form.markAllAsTouched();
+      return;
+    }
+  
+  
+    console.log(
+      'Save-->',
+      form.value
+    );
+  
+  
+   
+  
+    //this.showModal=false;
+  
+  }
+
+
+
 }

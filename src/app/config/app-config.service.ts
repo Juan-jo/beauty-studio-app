@@ -58,4 +58,11 @@ export class AppConfigService {
 
   }
 
+  setTheme(theme: string) {
+    if (this.config) {
+      this.config.theme = theme;
+    }
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
 }

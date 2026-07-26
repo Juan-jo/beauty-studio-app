@@ -45,8 +45,7 @@
       <span>Agenda</span>
     </a>
 
-    <!-- ITEM 2: HORARIO -->
-    <a routerLink="/employee/schedule" routerLinkActive="text-brand-700 font-semibold bg-brand-100/70"
+    <!--<a routerLink="/employee/schedule" routerLinkActive="text-brand-700 font-semibold bg-brand-100/70"
       class="flex flex-col md:flex-row items-center gap-1 md:gap-2 py-2 px-3.5 rounded-lg text-[13px] text-gray-500 hover:text-brand-700 hover:bg-brand-50 transition-all">
 
       <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +55,6 @@
       <span>Horario</span>
     </a>
 
-    <!-- ITEM 3: SERVICIOS -->
     <a routerLink="/employee/services" routerLinkActive="text-brand-700 font-semibold bg-brand-50/80"
       class="flex flex-col md:flex-row items-center gap-1 md:gap-2 py-2 px-3.5 rounded-lg text-[13px] text-gray-500 hover:text-brand-700 hover:bg-brand-50 transition-all">
 
@@ -65,6 +63,36 @@
           d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 0L4 4m5.121 5.121L4 14.121" />
       </svg>
       <span>Servicios</span>
+    </a>-->
+
+    <a routerLink="/employee/notifications" routerLinkActive="text-brand-700 font-semibold bg-brand-50/80"
+      class="relative flex flex-col md:flex-row items-center gap-1 md:gap-2 py-2 px-3.5 rounded-lg text-[13px] text-gray-500 hover:text-brand-700 hover:bg-brand-50 transition-all">
+    
+      <!-- Icono con punto de notificación sin leer -->
+      <div class="relative">
+        <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 01-6 0v-1m6 0H9" />
+        </svg>
+        <!-- Punto Indicador -->
+        <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white animate-pulse"></span>
+      </div>
+      
+      <span>Notificaciones</span>
+    </a>
+
+    <a routerLink="/employee/profile" routerLinkActive="text-brand-700 font-semibold bg-brand-50/80"
+      class="flex flex-col md:flex-row items-center gap-1 md:gap-2 py-2 px-3.5 rounded-lg text-[13px] text-gray-500 hover:text-brand-700 hover:bg-brand-50 transition-all">
+
+      <!--<svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+          d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 0L4 4m5.121 5.121L4 14.121" />
+      </svg>-->
+      <div class="relative">
+        <img class="w-6 h-6 rounded-full object-cover border border-brand-200 shadow-xs" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150" alt="Valeria Morales">
+        
+      </div>
+      <span>Perfil</span>
     </a>
 
   </nav>
