@@ -11,9 +11,10 @@ import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 import { registerLocaleData } from '@angular/common';
 import localeEsMx from '@angular/common/locales/es-MX';
 
-
+   
 
 registerLocaleData(localeEsMx);
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -50,7 +51,12 @@ export const appConfig: ApplicationConfig = {
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     
+    { provide: LOCALE_ID, useValue: 'es-MX' } 
+
+
   
   ],
   
 };
+
+
