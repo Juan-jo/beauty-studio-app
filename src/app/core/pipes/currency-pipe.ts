@@ -26,7 +26,7 @@ export class CurrencyPipe implements PipeTransform {
 
     }
     
-    return `$ ${amount} ${this.config.currency}`;
+    return `$${amount} ${this.config.currency}`;
   }
 
 }
