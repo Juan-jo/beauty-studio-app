@@ -1,5 +1,5 @@
 <!-- Subheader de Agenda (Pegado debajo del Header principal) -->
-<div class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-brand-200/60 px-4 py-3 shadow-xs transition-all ">
+<!--<div class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-brand-200/60 px-4 py-3 shadow-xs transition-all ">
   <div class="max-w-7xl mx-auto flex justify-between items-center">
     <div>
       <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-brand-100 text-brand-700">
@@ -16,154 +16,113 @@
       </p>
     </div>
   </div>
-</div>
+</div>-->
 
-<!-- Contenido Principal de la Agenda -->
-<main class="max-w-7xl mx-auto p-8 md:p-6 bg-brand-50/30 min-h-screen">
+<main class="max-w-7xl mx-auto pt-0 md:p-6 bg-brand-50/30 min-h-screen">
 
-  <!-- Barra de Herramientas / Selector de Vista -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-    <!-- Navegación de Fecha -->
-    <div class="flex items-center gap-2">
-      <button class="p-2 rounded-xl bg-white border border-brand-200/80 text-gray-600 hover:bg-brand-50 hover:text-brand-700 transition-colors shadow-xs cursor-pointer">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      </button>
-      <button class="px-4 py-2 rounded-xl bg-white border border-brand-200/80 text-xs font-semibold text-gray-700 hover:bg-brand-50 hover:text-brand-700 transition-colors shadow-xs cursor-pointer">
-        Hoy
-      </button>
-      <button class="p-2 rounded-xl bg-white border border-brand-200/80 text-gray-600 hover:bg-brand-50 hover:text-brand-700 transition-colors shadow-xs cursor-pointer">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </button>
-    </div>
 
-    <!-- Filtros de Estado y Botón Nueva Cita -->
-    <div class="flex items-center gap-3">
-      <div class="inline-flex p-1 bg-white border border-brand-200/80 rounded-xl shadow-xs">
-        <button class="px-3 py-1.5 text-xs font-medium rounded-lg bg-brand-600 text-white shadow-xs">Día</button>
-        <button class="px-3 py-1.5 text-xs font-medium rounded-lg text-gray-500 hover:text-brand-700 transition-colors">Semana</button>
-      </div>
-      
-      <button class="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        Nueva Cita
-      </button>
-    </div>
-  </div>
-
-  <!-- Timeline de Citas del Día -->
   <div class="space-y-4">
 
-    <!-- Cita 1: Completada -->
-    <div class="bg-white rounded-2xl p-4 border border-gray-200/80 shadow-xs hover:shadow-md transition-shadow flex flex-col md:flex-row md:items-center justify-between gap-4 border-l-4 border-l-emerald-500">
-      <div class="flex items-start gap-4">
-        <div class="text-center min-w-[70px] pt-1">
-          <p class="text-sm font-bold text-gray-900">09:00 AM</p>
-          <p class="text-[11px] text-gray-400 font-medium">60 min</p>
+  
+    @if (isLoading()) {
+      @for (i of [1, 2, 3]; track i) {
+        <div class="bg-white rounded-2xl p-4 border border-gray-200/80 shadow-xs animate-pulse flex flex-col md:flex-row md:items-center justify-between gap-4 border-l-4 border-l-gray-300">
+          <div class="flex items-start gap-4">
+            <div class="min-w-[70px] space-y-2 pt-1">
+              <div class="h-4 bg-gray-200 rounded-md w-12"></div>
+              <div class="h-3 bg-gray-100 rounded-md w-8"></div>
+            </div>
+            
+            <div class="flex items-center gap-3.5">
+              <div class="w-11 h-11 rounded-full bg-gray-200 shrink-0"></div>
+              <div class="space-y-2">
+                <div class="h-4 bg-gray-200 rounded-md w-32"></div>
+                <div class="h-3 bg-gray-200 rounded-md w-44"></div>
+                <div class="h-3 bg-gray-100 rounded-md w-24"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="h-8 bg-gray-200 rounded-xl w-24 self-end md:self-auto"></div>
         </div>
+      }
+    } 
+    @else {
+
+      
+      @if (viewMode() === 'week') {
+
+        <empl-week-schedule (changeView)="setViewMode('month')"></empl-week-schedule>
+    
+      }
+
+
+      
+      @if (viewMode() === 'month') {
+        @let monthData = $any(scheduleData());
+
         
-        <div class="flex items-center gap-3.5">
-          <div class="relative">
-            <img class="w-11 h-11 rounded-full object-cover border border-brand-200" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Cliente">
-            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
-          </div>
-          <div>
-            <h3 class="text-sm font-bold text-gray-900">María García</h3>
-            <p class="text-xs text-brand-700 font-medium">Manicura Rusa + GelX</p>
-            <div class="flex items-center gap-2 mt-1">
-              <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                ✓ Completado
-              </span>
-              <span class="text-[11px] text-gray-400">• $45.00</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-2 self-end md:self-auto">
-        <button class="p-2 rounded-xl text-gray-400 hover:text-brand-700 hover:bg-brand-50 transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Cita 2: En Proceso -->
-    <div class="bg-gradient-to-r from-brand-50/50 to-white rounded-2xl p-4 border border-brand-200 shadow-xs hover:shadow-md transition-shadow flex flex-col md:flex-row md:items-center justify-between gap-4 border-l-4 border-l-brand-500">
-      <div class="flex items-start gap-4">
-        <div class="text-center min-w-[70px] pt-1">
-          <p class="text-sm font-bold text-brand-700">10:30 AM</p>
-          <p class="text-[11px] text-brand-500 font-medium">90 min</p>
-        </div>
+        <div class="min-h-screen w-full bg-white border border-brand-200/80 p-4 md:p-6 shadow-xs flex flex-col justify-between relative">
+  
+          <button 
+            type="button"
+            (click)="setViewMode('week')" 
+            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-xl transition-all cursor-pointer z-10"
+            title="Cerrar">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
         
-        <div class="flex items-center gap-3.5">
-          <div class="relative">
-            <img class="w-11 h-11 rounded-full object-cover border-2 border-brand-400" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=150" alt="Cliente">
-            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-brand-500 border-2 border-white rounded-full animate-ping"></span>
+          <div class="mb-4 pr-12 shrink-0">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-900">{{ monthData?.monthName }}</h2>
           </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 class="text-sm font-bold text-gray-900">Sofía Rodríguez</h3>
-              <span class="text-[10px] bg-brand-600 text-white font-bold px-1.5 py-0.5 rounded-md uppercase tracking-wider">En curso</span>
-            </div>
-            <p class="text-xs text-brand-700 font-medium">Lifting de Pestañas + Diseño de Cejas</p>
-            <div class="flex items-center gap-2 mt-1">
-              <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-brand-700 bg-brand-100/60 px-2 py-0.5 rounded-md">
-                Atendiendo ahora
-              </span>
-              <span class="text-[11px] text-gray-400">• $65.00</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-2 self-end md:self-auto">
-        <button class="px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer">
-          Finalizar Cita
-        </button>
-      </div>
-    </div>
-
-    <!-- Cita 3: Próxima -->
-    <div class="bg-white rounded-2xl p-4 border border-gray-200/80 shadow-xs hover:shadow-md transition-shadow flex flex-col md:flex-row md:items-center justify-between gap-4 border-l-4 border-l-amber-400">
-      <div class="flex items-start gap-4">
-        <div class="text-center min-w-[70px] pt-1">
-          <p class="text-sm font-bold text-gray-900">01:00 PM</p>
-          <p class="text-[11px] text-gray-400 font-medium">45 min</p>
-        </div>
         
-        <div class="flex items-center gap-3.5">
-          <div class="w-11 h-11 rounded-full bg-brand-100/80 flex items-center justify-center font-bold text-brand-700 border border-brand-200 shrink-0">
-            CL
+          <div class="grid grid-cols-7 gap-1 md:gap-2 text-center mb-2 shrink-0">
+            @for (dayName of weekDays; track dayName) {
+              <div class="text-xs md:text-sm font-bold text-brand-700 uppercase tracking-wider py-1">
+                {{ dayName }}
+              </div>
+            }
           </div>
-          <div>
-            <h3 class="text-sm font-bold text-gray-900">Camila López</h3>
-            <p class="text-xs text-brand-700 font-medium">Pedicura Spa</p>
-            <div class="flex items-center gap-2 mt-1">
-              <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">
-                Confirmada
-              </span>
-              <span class="text-[11px] text-gray-400">• $35.00</span>
-            </div>
+        
+          <div class="grid grid-cols-7 gap-1 md:gap-2 flex-1 auto-rows-fr">
+            @for (day of monthData?.days; track day.date) {
+              <div 
+                [class]="'p-1.5 md:p-2.5 rounded-xl border flex flex-col justify-between transition-all h-full min-h-[90px] ' + 
+                  (day.isCurrentMonth ? 'bg-white border-gray-100 hover:border-brand-300' : 'bg-gray-50/50 border-transparent opacity-40') + 
+                  (day.isToday ? ' ring-2 ring-brand-500 bg-brand-50/20' : '')">
+                
+                <div class="flex items-center justify-between shrink-0">
+                  <span [class]="'text-xs md:text-sm font-bold rounded-md w-6 h-6 flex items-center justify-center ' + (day.isToday ? 'bg-brand-600 text-white' : 'text-gray-700')">
+                    {{ day.dayNumber }}
+                  </span>
+        
+                  @if (day.bookings.length > 0) {
+                    <span class="text-[10px] md:text-xs font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded-full">
+                      {{ day.bookings.length }}
+                    </span>
+                  }
+                </div>
+        
+                <div class="space-y-1 mt-1.5 overflow-y-auto flex-1 max-h-32 md:max-h-none">
+                 
+                  @if (day.bookings.length > 3) {
+                    <p class="text-[10px] font-semibold text-gray-400 text-center pt-0.5">
+                      +{{ day.bookings.length - 3 }} más
+                    </p>
+                  }
+                </div>
+        
+              </div>
+            }
           </div>
+        
         </div>
-      </div>
+      }
 
-      <div class="flex items-center gap-2 self-end md:self-auto">
-        <button class="px-3.5 py-1.5 rounded-xl border border-brand-200 hover:bg-brand-50 text-brand-700 text-xs font-semibold transition-colors cursor-pointer">
-          Iniciar Servicio
-        </button>
-      </div>
-    </div>
 
-    <!-- Cita 4: Bloque de Tiempo / Descanso -->
-    <div class="bg-gray-50/80 rounded-2xl p-3.5 border border-dashed border-gray-200 flex items-center justify-between px-6">
-      <div class="flex items-center gap-3 text-gray-500">
-        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span class="text-xs font-semibold">02:00 PM - 03:00 PM</span>
-        <span class="text-xs text-gray-400">|</span>
-        <span class="text-xs italic">Almuerzo / Descanso</span>
-      </div>
-      <span class="text-xs font-bold text-gray-400">60 min</span>
-    </div>
+    }
 
   </div>
 </main>

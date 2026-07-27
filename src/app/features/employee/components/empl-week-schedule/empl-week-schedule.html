@@ -1,0 +1,141 @@
+<div class="max-w-md mx-auto min-h-screen bg-white text-gray-800 font-sans p-4 relative pb-10">
+  
+    
+    <header class="flex items-center justify-between py-2 mb-4">
+      @if (isLoadingWeek()) {
+
+        <!-- Skeleton -->
+        <div class="text-start animate-pulse">
+          <div class="h-3 w-16 bg-gray-200 rounded mb-2"></div>
+          <div class="h-5 w-44 bg-gray-200 rounded-md"></div>
+        </div>
+    
+        <div class="h-9 w-28 bg-gray-200 rounded-xl animate-pulse"></div>
+
+      } 
+      @else {
+
+        <div class="text-start">
+          <span class="text-xs text-gray-400 block font-medium">Esta semana</span>
+          <button (click)="viewMonth()" class="flex items-center gap-1 text-base font-bold text-gray-800 capitalize">
+            {{ currrenDate() | date : 'd MMM, yyyy' }}  
+            <span class="text-gray-400 font-normal capitalize"> {{ currrenDate() | date : 'EEEE' }} </span>
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+        </div>
+    
+        <button class="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Nueva Cita
+        </button>
+      }
+    </header>
+  
+    <div class="grid grid-cols-7 text-center mb-6 border-b border-gray-100 pb-4">
+      @if(isLoadingWeek()) {
+        
+
+        <!-- Skeleton -->
+        @for (item of [1, 2, 3, 4, 5, 6, 7]; track $index) {
+          <div class="flex flex-col items-center animate-pulse">
+            <div class="h-3 w-8 bg-gray-200 rounded mb-2"></div>
+            <div class="w-9 h-9 bg-gray-200 rounded-xl"></div>
+          </div>
+        }
+
+        
+      }
+      @else {
+        
+        @for (day of week()?.week; track day.date) {
+          <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-400 mb-2 font-medium"> {{ day.day | mxDayOfWeek: 'short' }}</span>
+            <button 
+              (click)="changeDate(day.date)"
+              class="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-semibold transition-all "
+              [ngClass]="{
+                ' bg-gray-800 text-white shadow-md': currrenDate() == day.date,
+                'text-gray-700 hover:bg-gray-100': !(currrenDate() == day.date)
+              }"
+              [disabled]="isLoadingScheduleDay()"
+              > 
+              {{ day.date | date:'d' }}
+            </button>
+          </div>
+        }
+
+      }
+      
+    </div>
+  
+    <div class="relative">
+      
+
+      @if (isLoadingScheduleDay()) {
+
+        <!-- Skeleton -->
+        @for (item of [1, 2, 3]; track $index) {
+          <div class="flex border-b border-gray-100 py-3 animate-pulse">
+            
+
+            <div class="w-16 shrink-0 pr-3 text-right">
+              <div class="h-4 w-10 bg-gray-200 rounded ml-auto"></div>
+            </div>
+      
+
+            <div class="flex-1 min-w-0 max-w-full overflow-hidden">
+              <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                
+
+                <div class="flex items-start justify-between gap-4">
+                  <div class="min-w-0 flex-1">
+                    
+                    <div class="h-5 w-20 bg-gray-200 rounded-full mb-3"></div>
+                    
+                    <div class="h-5 w-3/4 bg-gray-200 rounded mb-2"></div>
+                    
+                    <div class="h-4 w-1/4 bg-gray-200 rounded"></div>
+                  </div>
+      
+                  <div class="text-right shrink-0">
+                    <div class="h-5 w-14 bg-gray-200 rounded"></div>
+                  </div>
+                </div>
+      
+                <div class="mt-5 flex items-center justify-between">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <div class="h-9 w-9 rounded-full bg-gray-200 shrink-0"></div>
+                    <div class="h-4 w-28 bg-gray-200 rounded"></div>
+                  </div>
+      
+                  <div class="flex items-center gap-2">
+                    <div class="h-8 w-16 bg-gray-200 rounded-xl"></div>
+                    <div class="h-9 w-9 rounded-full bg-gray-200"></div>
+                  </div>
+                </div>
+      
+              </div>
+            </div>
+      
+          </div>
+        }
+      }
+      @else {
+        @for (booking of scheduleDay()?.bookings; track booking.id) {
+      
+          <empl-booking-card
+          [booking]="booking"></empl-booking-card>
+          
+        }
+        @empty {
+          <p>Sin reservaciones</p>
+        }
+      }
+      
+
+    </div>
+  </div>
