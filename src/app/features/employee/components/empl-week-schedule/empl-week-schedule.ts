@@ -84,6 +84,12 @@ export class EmplWeekSchedule {
 
   scheduleDay = computed(() => this.scheduleDayResource.value());
 
+  
+  reloadScheduleDayResource() {
+
+    this.scheduleDayResource.reload();
+  }
+
 
 }
 

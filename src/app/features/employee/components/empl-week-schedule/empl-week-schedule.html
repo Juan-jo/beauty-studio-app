@@ -58,8 +58,8 @@
               (click)="changeDate(day.date)"
               class="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-semibold transition-all "
               [ngClass]="{
-                ' bg-gray-800 text-white shadow-md': currrenDate() == day.date,
-                'text-gray-700 hover:bg-gray-100': !(currrenDate() == day.date)
+                ' bg-brand-600 text-white shadow-md': currrenDate() == day.date,
+                'text-gray-700 hover:bg-brand-100': !(currrenDate() == day.date)
               }"
               [disabled]="isLoadingScheduleDay()"
               > 
@@ -128,7 +128,9 @@
         @for (booking of scheduleDay()?.bookings; track booking.id) {
       
           <empl-booking-card
-          [booking]="booking"></empl-booking-card>
+            [booking]="booking"
+            (reloadSchedule)="reloadScheduleDayResource()">
+            </empl-booking-card>
           
         }
         @empty {
