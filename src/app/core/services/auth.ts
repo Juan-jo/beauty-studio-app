@@ -1,49 +1,76 @@
-
 import { Injectable, signal } from '@angular/core';
 
-export type UserRole = 'PUBLIC' | 'CUSTOMER' | 'EMPLOYEE' | 'SALON_ADMIN';
+export type UserRole =
+  | 'PUBLIC'
+  | 'CUSTOMER'
+  | 'EMPLOYEE'
+  | 'SALON_ADMIN';
 
-export const bs_role = 'bs_role';
+export const bs_roles = 'bs_roles';
 export const bs_token = 'bs_token';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  
-  
-  //private currentRoleSignal = signal<UserRole>('EMPLOYEE');
-  
-  private currentRoleSignal = signal<UserRole>(
-    localStorage.getItem(bs_role) as UserRole ?? 'PUBLIC'
+
+  private currentRolesSignal = signal<UserRole[]>(
+    this.loadRoles()
   );
 
-  
-  readonly currentRole = this.currentRoleSignal.asReadonly();
+  readonly currentRoles = this.currentRolesSignal.asReadonly();
 
-  
+  private loadRoles(): UserRole[] {
+    const value = localStorage.getItem(bs_roles);
+
+    if (!value) {
+      return ['PUBLIC'];
+    }
+
+    try {
+      return JSON.parse(value) as UserRole[];
+    } catch {
+      return ['PUBLIC'];
+    }
+  }
+
   isLoggedIn(): boolean {
-    return this.currentRoleSignal() !== 'PUBLIC';
+    return !this.hasRole('PUBLIC');
   }
 
-  
-  getRole(): UserRole {
-    return this.currentRoleSignal();
+  getRoles(): UserRole[] {
+    return this.currentRolesSignal();
   }
 
-  saveLogin(token: string, role: UserRole) {
+  hasRole(role: UserRole): boolean {
+    return this.currentRolesSignal().includes(role);
+  }
+
+  hasAnyRole(...roles: UserRole[]): boolean {
+    return roles.some(role => this.hasRole(role));
+  }
+
+  hasRoles(roles: UserRole[]): boolean {
+    return roles.some(role => this.hasRole(role));
+  }
+
+  saveToken(token: string, roles: UserRole[]): void {
     localStorage.setItem(bs_token, token);
-    localStorage.setItem(bs_role, role);
-    this.setRole(role)
+    localStorage.setItem(bs_roles, JSON.stringify(roles));
+
+    this.setRoles(roles);
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem(bs_token);
-    localStorage.removeItem(bs_role);
-    this.setRole('PUBLIC')
+    localStorage.removeItem(bs_roles);
+
+    this.setRoles(['PUBLIC']);
   }
-  
-  setRole(role: UserRole): void {
-    this.currentRoleSignal.set(role);
+
+  setRoles(roles: UserRole[]): void {
+    this.currentRolesSignal.set(
+      roles.length ? roles : ['PUBLIC']
+    );
   }
 }

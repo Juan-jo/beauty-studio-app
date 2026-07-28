@@ -13,7 +13,7 @@ export const routes: Routes = [
           () => {
             const auth = inject(AuthService);
             const router = inject(Router);
-            return router.createUrlTree([getHomeRouteForRole(auth.getRole())]);
+            return router.createUrlTree([getHomeRouteForRole(auth.getRoles())]);
           }
         ],
         children: []

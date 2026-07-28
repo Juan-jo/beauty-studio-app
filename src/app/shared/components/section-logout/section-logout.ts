@@ -23,7 +23,7 @@ export class SectionLogout {
   onConfirm() {
     this.authService.logout();
 
-    const targetRoute = getHomeRouteForRole('PUBLIC'); 
+    const targetRoute = getHomeRouteForRole(['PUBLIC']); 
     this.router.navigate([targetRoute], { replaceUrl: true });
   }
 

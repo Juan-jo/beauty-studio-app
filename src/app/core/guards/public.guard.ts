@@ -10,9 +10,9 @@ export const publicGuard: CanActivateFn = () => {
 
   // Si YA está logueado, NO debe poder entrar a rutas públicas/login
   if (authService.isLoggedIn()) {
-    const role = authService.getRole();
+    const roles = authService.getRoles();
     // Redirige a su área según su rol
-    return router.createUrlTree([getHomeRouteForRole(role)]);
+    return router.createUrlTree([getHomeRouteForRole(roles)]);
   }
 
   return true; 

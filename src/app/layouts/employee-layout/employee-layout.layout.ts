@@ -1,8 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AppConfigService } from '../../config/app-config.service';
-import { AuthService } from '../../core/services/auth';
-import { getHomeRouteForRole } from '../../core/guards/role.guard';
+import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-employee-layout',
@@ -13,16 +10,7 @@ import { getHomeRouteForRole } from '../../core/guards/role.guard';
 export class EmployeeLayoutLayout {
 
 
-  private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
 
-
-  logout() {
-    this.authService.logout();
-
-    const targetRoute = getHomeRouteForRole('PUBLIC'); 
-    this.router.navigate([targetRoute], { replaceUrl: true });
-  }
 
 
 }
