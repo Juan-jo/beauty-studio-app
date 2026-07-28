@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
 
 export type UserRole =
   | 'PUBLIC'
@@ -8,6 +9,16 @@ export type UserRole =
 
 export const bs_roles = 'bs_roles';
 export const bs_token = 'bs_token';
+export const bs_name = 'bs_name';
+
+interface JwtPayload {
+  roles: UserRole[];
+  name: string;
+  userId: number;
+  salonId: number;
+  exp: number;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +29,14 @@ export class AuthService {
     this.loadRoles()
   );
 
-  readonly currentRoles = this.currentRolesSignal.asReadonly();
+  private currentUserNameSignal = signal<string>(
+    localStorage.getItem(bs_name) ?? ''
+  );
+
+  readonly userName = this.currentUserNameSignal.asReadonly();
+
+
+  //readonly currentRoles = this.currentRolesSignal.asReadonly();
 
   private loadRoles(): UserRole[] {
     const value = localStorage.getItem(bs_roles);
@@ -33,6 +51,8 @@ export class AuthService {
       return ['PUBLIC'];
     }
   }
+
+
 
   isLoggedIn(): boolean {
     return !this.hasRole('PUBLIC');
@@ -54,11 +74,17 @@ export class AuthService {
     return roles.some(role => this.hasRole(role));
   }
 
-  saveToken(token: string, roles: UserRole[]): void {
-    localStorage.setItem(bs_token, token);
-    localStorage.setItem(bs_roles, JSON.stringify(roles));
+  saveToken(token: string): void {
 
-    this.setRoles(roles);
+    const payload = jwtDecode<JwtPayload>(token);
+    
+    localStorage.setItem(bs_token, token);
+    localStorage.setItem(bs_name, payload.name);
+    localStorage.setItem(bs_roles, JSON.stringify(payload.roles));
+
+    this.currentUserNameSignal.set(payload.name)
+    this.setRoles(payload.roles);
+
   }
 
   logout(): void {

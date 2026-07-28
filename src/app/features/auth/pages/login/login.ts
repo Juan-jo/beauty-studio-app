@@ -20,17 +20,10 @@ export class Login {
 
     
     this.authService.saveToken(
-      'eyJhbGciOiJIUzM4NCJ9.eyJzYWxvbklkIjoxLCJyb2xlcyI6WyJTQUxPTl9BRE1JTiIsIkVNUExPWUVFIl0sIm5hbWUiOiJYb2NoIEF6dWNlbmEiLCJ1c2VySWQiOjksInN1YiI6InhvY2guZWFAZ21haWwuY29tIiwiaWF0IjoxNzg1MjEyNTQ0LCJleHAiOjE4MTY3NDg1NDR9.uTK0TJALPz8zp3GhjVXLI8Om62fiXJhQ7IXyqMf3K_iTGdRstYqD2afMGCJGAyXR',
-      [
-        "SALON_ADMIN",
-        "EMPLOYEE"
-      ]
+      'eyJhbGciOiJIUzM4NCJ9.eyJzYWxvbklkIjoxLCJyb2xlcyI6WyJTQUxPTl9BRE1JTiIsIkVNUExPWUVFIl0sIm5hbWUiOiJYb2NoIEF6dWNlbmEiLCJ1c2VySWQiOjksInN1YiI6InhvY2guZWFAZ21haWwuY29tIiwiaWF0IjoxNzg1MjEyNTQ0LCJleHAiOjE4MTY3NDg1NDR9.uTK0TJALPz8zp3GhjVXLI8Om62fiXJhQ7IXyqMf3K_iTGdRstYqD2afMGCJGAyXR'
     );
 
-    const targetRoute = getHomeRouteForRole([
-      "SALON_ADMIN",
-      "EMPLOYEE"
-    ]);
+    const targetRoute = getHomeRouteForRole(this.authService.getRoles());
 
     this.router.navigate([targetRoute], { replaceUrl: true });
 
