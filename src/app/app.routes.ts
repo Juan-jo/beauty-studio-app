@@ -55,7 +55,7 @@ export const routes: Routes = [
     },
 
 
-    // Rutas CUSTOMER
+    // Rutas EMPLOYEE
     {
         path: 'employee',
         canActivate: [roleGuard],
@@ -82,6 +82,26 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         loadComponent: () => import('./features/employee/empl-schedule/empl-schedule').then(c => c.EmplSchedule),
         data: { roles: ['EMPLOYEE'] },
+    },
+
+
+    // Rutas CUSTOMER
+    {
+        path: 'customer',
+        canActivate: [roleGuard],
+        loadComponent: () => import('./layouts/customer-layout/customer-layout.layout').then(c => c.CustomerLayoutLayout),
+        data: { roles: ['CUSTOMER'] },
+        children: [
+            {
+                path: 'feed',
+                loadComponent: () => import('./features/customer/cus-feed/cus-feed').then(c => c.CusFeed)
+            },
+
+            {
+                path: 'profile',
+                loadComponent: () => import('./features/customer/cus-profile/cus-profile').then(c => c.CusProfile)
+            }
+        ]
     },
 
 

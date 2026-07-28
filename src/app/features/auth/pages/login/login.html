@@ -17,67 +17,133 @@
 
         <!-- Formulario -->
 
-        <div
+        <form
+            [formGroup]="form"
+            (ngSubmit)="doLogin()"
             class="mt-10 rounded-3xl bg-white p-6 shadow-xl">
 
             <div class="space-y-5">
 
                 <div>
 
-                    <label
-                        class="mb-2 block text-sm font-medium text-gray-700">
-
-                        Correo electrónico
-
+                    <label class="mb-2 block text-sm font-medium text-gray-700">
+                      Correo electrónico
                     </label>
-
+                  
                     <input
-                        type="email"
-                        placeholder="correo@ejemplo.com"
-                        class="w-full rounded-xl border border-gray-300 px-4 py-4 transition focus:border-brand-500 focus:ring-4 focus:ring-brand-200 outline-none">
-
-                </div>
+                      formControlName="email"
+                      [disabled]="isLoading()"
+                      type="email"
+                      placeholder="correo@ejemplo.com"
+                      class="w-full rounded-xl border px-4 py-4 outline-none transition"
+                      [class.border-red-500]="form.controls.email.invalid && form.controls.email.touched"
+                      [class.border-gray-300]="!(form.controls.email.invalid && form.controls.email.touched)"
+                      [class.focus:ring-red-200]="form.controls.email.invalid && form.controls.email.touched"
+                      [class.focus:border-brand-500]="!(form.controls.email.invalid && form.controls.email.touched)"
+                      [class.focus:ring-brand-200]="!(form.controls.email.invalid && form.controls.email.touched)">
+                  
+                    @if (form.controls.email.touched && form.controls.email.invalid) {
+                  
+                      <p class="mt-2 text-sm text-red-600">
+                  
+                        @if (form.controls.email.hasError('required')) {
+                          El correo electrónico es obligatorio.
+                        }
+                  
+                        @if (form.controls.email.hasError('email')) {
+                          Ingresa un correo electrónico válido.
+                        }
+                  
+                      </p>
+                  
+                    }
+                    @if(form.hasError('emailNotFound')) {
+                        <p class="mt-2 text-sm text-red-600">
+                            El correo no existe.
+                        </p>
+                    }
+                  
+                  </div>
 
                 <div>
 
-                    <div
-                        class="mb-2 flex items-center justify-between">
+             
 
-                        <label
-                            class="text-sm font-medium text-gray-700">
+                <div>
 
-                            Contraseña
-
-                        </label>
-
-                        <a
-                            href="#"
-                            class="text-sm text-brand-500 hover:underline">
-
-                            ¿Olvidaste tu contraseña?
-
-                        </a>
-
+                    <div class="mb-2 flex items-center justify-between">
+                  
+                      <label class="text-sm font-medium text-gray-700">
+                        Contraseña
+                      </label>
+                  
+                      <a
+                        href="#"
+                        class="text-sm text-brand-500 hover:underline">
+                  
+                        ¿Olvidaste tu contraseña?
+                  
+                      </a>
+                  
                     </div>
-
+                  
                     <input
-                        type="password"
-                        placeholder="••••••••"
-                        class="w-full rounded-xl border border-gray-300 px-4 py-4 transition focus:border-brand-500 focus:ring-4 focus:ring-brand-200 outline-none">
+                      formControlName="password"
+                      type="password"
+                      placeholder="••••••••"
+                      [disabled]="isLoading()"
+                      class="w-full rounded-xl border px-4 py-4 outline-none transition"
+                      [class.border-red-500]="form.controls.password.invalid && form.controls.password.touched"
+                      [class.border-gray-300]="!(form.controls.password.invalid && form.controls.password.touched)"
+                      [class.focus:ring-red-200]="form.controls.password.invalid && form.controls.password.touched"
+                      [class.focus:border-brand-500]="!(form.controls.password.invalid && form.controls.password.touched)"
+                      [class.focus:ring-brand-200]="!(form.controls.password.invalid && form.controls.password.touched)">
+                  
+                    @if (form.controls.password.touched && form.controls.password.invalid) {
+                  
+                      <p class="mt-2 text-sm text-red-600">
+                  
+                        @if (form.controls.password.hasError('required')) {
+                          La contraseña es obligatoria.
+                        }
+                  
+                        @if (form.controls.password.hasError('minlength')) {
+                          La contraseña debe tener al menos
+                          {{ form.controls.password.getError('minlength').requiredLength }}
+                          caracteres.
+                        }
+                  
+                      </p>
+                  
+                    }
 
+                    @if(form.hasError('passwordInvalid')) {
+                        <p class="mt-2 text-sm text-red-600">
+                            La contraseña es incorrecta
+                        </p>
+                    }
+                  
+                  </div>
+                
                 </div>
 
                 <button
-                    (click)="fakeLogin()"
-                    class="w-full rounded-xl bg-brand-500 py-4 font-semibold text-white transition hover:bg-brand-600 active:scale-95">
+                type="submit"
+                [disabled]="isLoading() || form.invalid"
+                class="w-full rounded-xl bg-brand-500 py-4 font-semibold text-white transition hover:bg-brand-600 active:scale-95 disabled:opacity-50 disabled:pointer-events-none">
 
+                @if (isLoading()) {
+                    Iniciando sesión...
+                } @else {
                     Iniciar sesión
+                }
 
                 </button>
 
             </div>
 
-        </div>
+            </form>
+        
 
         <!-- Instalar -->
 

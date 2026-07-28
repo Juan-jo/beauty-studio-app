@@ -24,7 +24,7 @@ export function getHomeRouteForRole(roles: UserRole[]): string {
     return '/employee/agenda';
   }
   else if(roles.includes('CUSTOMER')) {
-    return '/customer/dashboard';
+    return '/customer/feed';
   }
 
   return '/public';

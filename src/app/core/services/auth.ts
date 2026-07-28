@@ -1,5 +1,7 @@
-import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
+import { AppConfigService } from '../../config/app-config.service';
 
 export type UserRole =
   | 'PUBLIC'
@@ -25,6 +27,9 @@ interface JwtPayload {
 })
 export class AuthService {
 
+  private readonly http = inject(HttpClient);
+  private readonly appConfig = inject(AppConfigService);
+
   private currentRolesSignal = signal<UserRole[]>(
     this.loadRoles()
   );
@@ -36,7 +41,10 @@ export class AuthService {
   readonly userName = this.currentUserNameSignal.asReadonly();
 
 
-  //readonly currentRoles = this.currentRolesSignal.asReadonly();
+  login(data: any) {
+    return this.http.post<{token: string}>(`${this.appConfig.apiUrl}/api/v1/auth/login`, data);
+  }
+  
 
   private loadRoles(): UserRole[] {
     const value = localStorage.getItem(bs_roles);

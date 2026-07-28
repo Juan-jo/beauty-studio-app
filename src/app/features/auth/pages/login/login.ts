@@ -1,12 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { InstallPwa } from "../../../../shared/components/install-pwa/install-pwa";
 import { AuthService } from '../../../../core/services/auth';
 import { getHomeRouteForRole } from '../../../../core/guards/role.guard';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
-  imports: [InstallPwa],
+  imports: [InstallPwa, ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -15,17 +17,65 @@ export class Login {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
+  readonly isLoading = signal(false);
 
-  fakeLogin() {
+  readonly form = new FormGroup({
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email]
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)]
+    })
+  });
 
-    
-    this.authService.saveToken(
-      'eyJhbGciOiJIUzM4NCJ9.eyJzYWxvbklkIjoxLCJyb2xlcyI6WyJTQUxPTl9BRE1JTiIsIkVNUExPWUVFIl0sIm5hbWUiOiJYb2NoIEF6dWNlbmEiLCJ1c2VySWQiOjksInN1YiI6InhvY2guZWFAZ21haWwuY29tIiwiaWF0IjoxNzg1MjEyNTQ0LCJleHAiOjE4MTY3NDg1NDR9.uTK0TJALPz8zp3GhjVXLI8Om62fiXJhQ7IXyqMf3K_iTGdRstYqD2afMGCJGAyXR'
-    );
+  doLogin(): void {
 
-    const targetRoute = getHomeRouteForRole(this.authService.getRoles());
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-    this.router.navigate([targetRoute], { replaceUrl: true });
+    if (this.form.invalid || this.isLoading()) {
+      return;
+    }
+
+    this.isLoading.set(true);
+
+    this.authService
+      .login(this.form.getRawValue())
+      .pipe(
+        finalize(() => this.isLoading.set(false))
+      )
+      .subscribe({
+        next: ({ token }) => {
+
+          this.authService.saveToken(token);
+
+          this.router.navigate(
+            [getHomeRouteForRole(this.authService.getRoles())],
+            { replaceUrl: true }
+          );
+
+        },
+        error: err => {
+
+          
+
+          if(err?.status == 404) {
+
+            this.form.setErrors({emailNotFound: true})
+
+          }
+
+          else {
+            this.form.setErrors({passwordInvalid: true})
+          }
+
+        }
+      });
 
   }
+
 }
