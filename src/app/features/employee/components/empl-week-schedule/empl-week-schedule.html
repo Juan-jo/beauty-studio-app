@@ -56,14 +56,27 @@
             <span class="text-xs text-gray-400 mb-2 font-medium"> {{ day.day | mxDayOfWeek: 'short' }}</span>
             <button 
               (click)="changeDate(day.date)"
-              class="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-semibold transition-all "
+              class="relative w-9 h-9 rounded-xl flex items-center justify-center text-sm font-semibold transition-all "
               [ngClass]="{
                 ' bg-brand-600 text-white shadow-md': currrenDate() == day.date,
                 'text-gray-700 hover:bg-brand-100': !(currrenDate() == day.date)
               }"
               [disabled]="isLoadingScheduleDay()"
               > 
-              {{ day.date | date:'d' }}
+              {{ day.date | date:'d' }} 
+              
+
+              @if (day.bookings > 0) {
+                <span 
+                  class="absolute -bottom-1 w-1 h-1 rounded-full transition-colors"
+                  [ngClass]="{
+                    'bg-white': currrenDate() == day.date,
+                    'bg-brand-600': currrenDate() != day.date
+                  }"
+                ></span>
+              }
+
+
             </button>
           </div>
         }

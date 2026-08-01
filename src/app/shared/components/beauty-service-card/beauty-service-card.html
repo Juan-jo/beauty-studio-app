@@ -1,0 +1,46 @@
+
+  <article class="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-gray-200/80 shadow-xs transition duration-300 hover:shadow-md hover:-translate-y-0.5 group">
+              
+    <div>
+      <div class="relative h-40 w-full bg-gray-100 overflow-hidden">
+        <img
+          [src]="service.pictureUrl"
+          [alt]="service.name"
+          loading="lazy"
+          class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500">
+        
+        @if (service.duration) {
+          <span class="absolute bottom-2.5 left-2.5 px-2.5 py-1 rounded-xl bg-gray-900/60 backdrop-blur-xs text-[11px] font-semibold text-white flex items-center gap-1 shadow-xs">
+            
+            {{ service.duration | duration }}
+          </span>
+        }
+      </div>
+  
+      <div class="p-4 pb-2">
+        <h2 class="text-sm md:text-base font-bold text-gray-900 line-clamp-1 group-hover:text-brand-700 transition-colors">
+          {{ service.name }}
+        </h2>
+  
+        <p class="mt-1 text-xs leading-relaxed text-gray-500 line-clamp-2 font-medium">
+          {{ service.description }}
+        </p>
+      </div>
+    </div>
+  
+    <div class="p-4 pt-2 mt-2 border-t border-gray-100 flex items-center justify-between gap-2">
+      <div>
+        <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block leading-none">Precio</span>
+        <span class="text-sm font-bold text-gray-900 leading-tight">
+          {{ service.price | bscurrency }}
+        </span>
+      </div>
+  
+      <button
+        [routerLink]="routerLink"
+        class="px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer flex items-center gap-1">
+        Reservar
+      </button>
+    </div>
+  
+  </article>

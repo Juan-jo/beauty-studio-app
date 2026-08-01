@@ -37,12 +37,6 @@ export const routes: Routes = [
                     .then(c => c.Services)
             },
 
-            {
-                path: 'booking/:serviceId',
-                loadComponent: () =>
-                    import('./features/booking/page/booking/booking')
-                        .then(c => c.Booking)
-            },
 
             {
                 path: 'login',
@@ -52,6 +46,13 @@ export const routes: Routes = [
             },
 
         ]
+    },
+
+    {
+        path: 'public/booking/:serviceId',
+                loadComponent: () =>
+                    import('./features/booking/page/booking/booking')
+                        .then(c => c.Booking)
     },
 
 
@@ -103,6 +104,17 @@ export const routes: Routes = [
             }
         ]
     },
+
+    {
+        canActivate: [roleGuard],
+        data: { roles: ['CUSTOMER'] },
+        path: 'customer/booking/:serviceId',
+                loadComponent: () =>
+                    import('./features/booking/page/booking/booking')
+                        .then(c => c.Booking)
+    },
+
+    
 
 
 
