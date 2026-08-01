@@ -10,7 +10,9 @@ import { SelectedBeautyService } from '../../models/booking-calendar.models';
 import { DurationPipe } from '../../../../core/pipes/duration-pipe';
 import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 import { CustomerBookingService } from '../../../customer/service/cus-booking';
-import { getHomeRouteForRole } from '../../../../core/guards/role.guard';
+import { HasRoleDirective } from '../../../../core/directives/has-role';
+import { AuthService } from '../../../../core/services/auth';
+import { EmployeeBookingService } from '../../../employee/service/empl-booking.service';
 
 @Component({
   selector: 'app-booking',
@@ -19,7 +21,8 @@ import { getHomeRouteForRole } from '../../../../core/guards/role.guard';
     ReactiveFormsModule,
     BookingCalendar,
     DurationPipe,
-    CurrencyPipe
+    CurrencyPipe,
+    HasRoleDirective
   ],
 
   templateUrl: './booking.html',
@@ -31,7 +34,12 @@ export class Booking {
     serviceId: new FormControl("", [Validators.required]),
     employeeId: new FormControl<number|any>(null, [Validators.required]),
     date: new FormControl<number | any>(null, [Validators.required]),
-    hour: new FormControl<string>("", [Validators.required])
+    hour: new FormControl<string>("", [Validators.required]),
+
+    // name & phone for role employee & salon admin
+    name: new FormControl<string>(""), 
+    phone: new FormControl<string>(""),
+
   })
 
 
@@ -45,6 +53,10 @@ export class Booking {
 
   private readonly bookingCalendarService = inject(BookingCalendarService);
   private readonly customerBookingService = inject(CustomerBookingService);
+  private readonly employeeBookingService = inject(EmployeeBookingService);
+
+  private authService = inject(AuthService);
+
   
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly route = inject(ActivatedRoute);
@@ -73,6 +85,16 @@ export class Booking {
         this.setValueForm('serviceId', serviceId)
       }
     });
+  }
+
+  ngOnInit(): void {
+    if(this.authService.hasRoles(['EMPLOYEE','SALON_ADMIN'])) {
+      this.form.controls.name.setValidators([Validators.required]);
+      this.form.controls.phone.setValidators([Validators.required]);
+      this.form.controls.name.updateValueAndValidity();
+      this.form.controls.phone.updateValueAndValidity();
+      this.cdr.markForCheck();
+    }
   }
 
 
@@ -243,21 +265,38 @@ export class Booking {
  
   confirmBookingSuccess() {
 
+    if(this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.cdr.markForCheck();
+      return;
+    }
+
+    const isEmployee = this.authService.hasRoles(['EMPLOYEE', 'SALON_ADMIN']);
+
     this.isSubmitting = true;
     this.bookingStatus = 'idle';
 
     const dateTime = `${this.f.date.value} ${this.f.hour.value}`;
 
-    const payload = {
+    const payload: BookingPayload = {
       serviceId: this.serviceId(),
       employeeId: this.selectedProfessional?.id,
-      dateTime: dateTime
+      dateTime: dateTime,
     };
 
-    
 
-    this.customerBookingService
-      .createBooking(payload)
+    if (isEmployee) {
+      payload.name = this.f.name.value as string;
+      payload.phone = this.f.phone.value as string;
+    }
+    
+    
+    const booking$ = isEmployee
+      ? this.employeeBookingService.createBooking(payload)
+      : this.customerBookingService.createBooking(payload);
+
+
+    booking$
       .pipe(
         finalize(() => this.isSubmitting = false)
       )
@@ -291,4 +330,14 @@ export class Booking {
 
 
   
+}
+
+
+// 1. Definir la interfaz (puedes ponerla arriba de tu componente o en un archivo .model.ts)
+interface BookingPayload {
+  serviceId: number;
+  employeeId?: number;
+  dateTime: string;
+  name?: string;
+  phone?: string;
 }

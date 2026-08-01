@@ -4,6 +4,8 @@ import { firstValueFrom } from 'rxjs';
 import { EmplScheduleService } from '../../empl-agenda/service/empl-schedule.service';
 import { MxDayOfWeekPipe } from '../../../../core/pipes/mx-dayofweek-pipe';
 import { EmplBookingCard } from '../empl-booking-card/empl-booking-card';
+import { Dialog } from '@angular/cdk/dialog';
+import { EmplSelectService } from '../empl-select-service/empl-select-service';
 
 
 
@@ -91,5 +93,24 @@ export class EmplWeekSchedule {
   }
 
 
+
+
+
+
+  private dialog = inject(Dialog);
+
+  openServicesSheet() {
+    const dialogRef = this.dialog.open(EmplSelectService, {
+      data: { serviceName: 'Corte de Cabello' },
+      panelClass: ['w-full', 'max-w-lg', 'mt-auto'], 
+      
+      backdropClass: ['bg-black/50', 'backdrop-blur-sm'],
+      
+    });
+
+    dialogRef.closed.subscribe(result => {
+      console.log('El bottom sheet se cerró con resultado:', result);
+    });
+  }
 }
 

@@ -11,7 +11,12 @@ export class JwtInterceptor implements HttpInterceptor {
     
     const token = localStorage.getItem(bs_token)
 
-    if (token && req.url.indexOf('/public') == -1) {
+    
+    /*if (token && req.url.indexOf('/public') == -1) {
+      req = this.addToken(req, token);
+    }*/
+
+    if (token) {
       req = this.addToken(req, token);
     }
 

@@ -308,7 +308,7 @@
         <!-- ESTADO 1: PREVIA Y CONFIRMACIÓN            -->
         <!-- ========================================== -->
         @if (bookingStatus === 'idle') {
-          
+          <form [formGroup]="form">
           <!-- Icono Header -->
           <div class="flex flex-col items-center text-center mb-5">
             <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 mb-4 border border-brand-200/60 shadow-inner">
@@ -349,19 +349,90 @@
               </span>
             </div>
           </div>
-  
-          <!-- Botones de Acción / Pruebas -->
-          <div class="grid grid-cols-2 gap-3">
+
+          <div *appHasRole="['EMPLOYEE','SALON_ADMIN']" class="editor-box mb-6">
             
+
+            <div class="space-y-5">
+
+              <div>
+
+                  <label class="mb-2 block text-sm font-medium text-gray-700">
+                    Nombre
+                  </label>
+                
+                  <input
+                    formControlName="name"
+                    type="text"
+                    placeholder=""
+                    class="w-full rounded-xl border px-4 py-4 outline-none transition"
+                    [class.border-red-500]="form.controls.name.invalid && form.controls.name.touched"
+                    [class.border-gray-300]="!(form.controls.name.invalid && form.controls.name.touched)"
+                    [class.focus:ring-red-200]="form.controls.name.invalid && form.controls.name.touched"
+                    [class.focus:border-brand-500]="!(form.controls.name.invalid && form.controls.name.touched)"
+                    [class.focus:ring-brand-200]="!(form.controls.name.invalid && form.controls.name.touched)">
+                
+                  @if (form.controls.name.touched && form.controls.name.invalid) {
+                
+                    <p class="mt-2 text-sm text-red-600">
+                
+                      @if (form.controls.name.hasError('required')) {
+                        El nombre es obligatorio.
+                      }
+                
+                    </p>
+                
+                  }
+                
+                </div>
+
+              <div>
+
+           
+
+              <div>
+
+                <label class="mb-2 block text-sm font-medium text-gray-700">
+                  Teléfono
+                </label>
+              
+                
+                  <input
+                    formControlName="phone"
+                    type="text"
+                    placeholder=""
+                    class="w-full rounded-xl border px-4 py-4 outline-none transition"
+                    [class.border-red-500]="form.controls.phone.invalid && form.controls.phone.touched"
+                    [class.border-gray-300]="!(form.controls.phone.invalid && form.controls.phone.touched)"
+                    [class.focus:ring-red-200]="form.controls.phone.invalid && form.controls.phone.touched"
+                    [class.focus:border-brand-500]="!(form.controls.phone.invalid && form.controls.phone.touched)"
+                    [class.focus:ring-brand-200]="!(form.controls.phone.invalid && form.controls.phone.touched)">
+                
+                  @if (form.controls.phone.touched && form.controls.phone.invalid) {
+                
+                    <p class="mt-2 text-sm text-red-600">
+                
+                      @if (form.controls.phone.hasError('required')) {
+                        El teléfono es obligatorio.
+                      }
+                
+                
+                    </p>
+                
+                  }
+
+                
+                </div>
+              
+              </div>
+
+          </div>
+
+
+            
+          </div>
   
-            <!-- Botón de Simulación Error -->
-            <!--<button 
-              type="button" 
-              (click)="confirmBookingError()" 
-              [disabled]="isSubmitting"
-              class="w-full py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-lg transition disabled:opacity-50 cursor-pointer">
-              Simular Error de Reserva (Delay 2s)
-            </button>-->
+          <div class="grid grid-cols-2 gap-3">
   
             <button 
               type="button" 
@@ -389,6 +460,7 @@
               }
             </button>
           </div>
+          </form>
         }
   
         <!-- ========================================== -->

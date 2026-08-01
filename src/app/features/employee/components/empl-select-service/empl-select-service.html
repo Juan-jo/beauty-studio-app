@@ -1,0 +1,88 @@
+<div class="bg-white rounded-t-3xl p-6 shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up">
+    <!-- Indicador visual (Drag handle) -->
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-6"></div>
+
+    <!-- Encabezado -->
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-bold text-gray-900">
+        Servicios
+      </h3>
+      <button 
+        (click)="close()" 
+        class="text-gray-400 hover:text-gray-600 text-sm font-medium p-1">
+        ✕
+      </button>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="space-y-4">
+      
+      
+
+      @if(isLoading()) {
+      
+        <section>
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="h-3 w-46 bg-gray-200/80 rounded-md"></h2>
+            <span class="h-3 w-28 bg-gray-200/80 rounded-md"></span>
+          </div>
+      
+      
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            
+            @for (item of [1, 2, 3, 4, 5, 6, 7]; track $index) {
+            
+              <article class="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-gray-200/80 shadow-xs transition duration-300 hover:shadow-md hover:-translate-y-0.5 group">
+                
+                <div>
+                  <div class=" bg-gray-200/80 relative h-40 w-full bg-gray-100 overflow-hidden">
+                    
+                    
+                  </div>
+              
+                  <div class="p-4 pb-2">
+                    <h2 class=" h-3 w-28 bg-gray-200/80  text-sm md:text-base font-bold text-gray-900 line-clamp-1 group-hover:text-brand-700 transition-colors"></h2>
+                    <p class="h-6 w-90 bg-gray-200/80 mt-1 text-xs leading-relaxed text-gray-500 line-clamp-2 font-medium"></p>
+                  </div>
+                </div>
+              
+                <div class="p-4 pt-2 mt-2 border-t border-gray-100 flex items-center justify-between gap-2">
+                  <div class="h-6 w-16 bg-gray-200/80"></div>
+                  <div class="px-3.5 py-1.5 rounded-xl h-6 w-26 bg-gray-200/80 shadow-xs transition-all active:scale-95 cursor-pointer flex items-center gap-1"></div>
+                </div>
+              
+              </article>
+      
+            }
+          </div>
+        </section>
+      
+      }
+      @else {
+      
+        <section>
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Servicios Disponibles</h2>
+            <span class="text-xs text-gray-400 font-medium">{{services().length}} disponibles</span>
+          </div>
+      
+      
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            
+            @for(data of services(); track data.id) {
+              <bs-service-card
+                  [routerLink]="['/employee/booking', data.id.toString()]"
+                  [service]="data"
+                  (closeModal)="close()">
+              </bs-service-card>
+            }
+      
+          </div>
+        </section>
+      
+      }
+      
+
+
+    </div>
+  </div>

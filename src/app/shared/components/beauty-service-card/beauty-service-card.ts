@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Service } from '../../../features/services/models/beauty.models';
 import { DurationPipe } from '../../../core/pipes/duration-pipe';
 import { CurrencyPipe } from '../../../core/pipes/currency-pipe';
@@ -17,6 +17,7 @@ export class BeautyServiceCard {
 
   @Input({ required: true }) service!: Service
   @Input({ required: true }) routerLink!: string [] 
+  @Output() closeModal = new EventEmitter<void>();
 
 
 }
