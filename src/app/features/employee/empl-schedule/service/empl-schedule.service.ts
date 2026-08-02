@@ -32,6 +32,13 @@ export class EmplScheduleService {
         );
     }
 
+    patcHour(workingHourId: number, data: any) {
+
+        return this.http.patch<any>(
+            `${this.config.apiUrl}/api/v1/employees/0/hours/${workingHourId}`,  data 
+        );
+    }
+
 
 
 }

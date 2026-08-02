@@ -4,30 +4,28 @@ import { firstValueFrom } from 'rxjs';
 import { EmplScheduleItem } from './model/empl-schedule.models';
 import { MxDayOfWeekPipe } from '../../../core/pipes/mx-dayofweek-pipe';
 import { DurationPipe } from '../../../core/pipes/duration-pipe';
-import { TimePickerComponent } from '../../../shared/components/time-picker/time-picker';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Dialog } from '@angular/cdk/dialog';
+import { Location } from '@angular/common';
+import { EditScheduleHour, EmplEditScheduleHour } from '../components/empl-edit-schedule-hour/empl-edit-schedule-hour';
+
 
 @Component({
   selector: 'app-empl-schedule',
   imports: [
     MxDayOfWeekPipe,
-    DurationPipe,
-    TimePickerComponent,
-    ReactiveFormsModule
+    DurationPipe
   ],
   templateUrl: './empl-schedule.html',
-  styleUrl: './empl-schedule.css',
   
   standalone: true
 })
 export class EmplSchedule {
 
 
+  private dialog = inject(Dialog);
+  private location = inject(Location);
   
   private readonly emplScheduleService = inject(EmplScheduleService);
-
-
-  // Fetch Week
 
 
   updatingWorkingHoursIds = signal<Set<number>>(new Set());
@@ -89,65 +87,45 @@ export class EmplSchedule {
   }
 
 
-  // Update Week Hour
-
-  showModal = false;
-
-  formWorkingHours = signal<FormGroup>(
-    this.buildFormGroup()
-  );
-
-
-  updateWorkingHours(data: EmplScheduleItem) {
-
-    this.formWorkingHours.set(this.buildFormGroup(data))
-    
-    this.showModal = true;
-
-  }
-
-  
-
-  buildFormGroup(data?: EmplScheduleItem) {
-
-    return new FormGroup({
-  
-      id: new FormControl(data?.id ?? null, [
-        Validators.required
-      ]),
-  
-      startTime: new FormControl(data?.startTime ?? null, [
-        Validators.required
-      ]),
-  
-      endTime: new FormControl(data?.endTime ?? null, [
-        Validators.required
-      ])
-  
-    });  
-  }
-
-  saveWorkingHour(){
-
-    const form = this.formWorkingHours();
   
   
-    if(form.invalid){
-      form.markAllAsTouched();
-      return;
-    }
+  editScheduleHour(item: EmplScheduleItem) {
   
+    let data: EditScheduleHour = {
+      id        : item.id,
+      startTime : item.startTime,
+      endTime   : item.endTime,
+      dayOfWeek : item.dayOfWeek
+    };
   
-    console.log(
-      'Save-->',
-      form.value
-    );
+    this.location.go(this.location.path(), '', { modalOpen: true });
   
+    const dialogRef = this.dialog.open(EmplEditScheduleHour, {
+      data: data
+    });
   
-   
+    let closedByPopState = false;
   
-    //this.showModal=false;
+    // 2. Escuchamos si el usuario presiona el botón "Atrás" del teléfono
+    const popStateSub = this.location.subscribe(() => {
+      closedByPopState = true;
+      dialogRef.close();
+    });
   
+    dialogRef.closed.subscribe((result) => {
+      popStateSub.unsubscribe();
+  
+      // Si NO se cerró por el botón "Atrás" del móvil y el estado aún existe en el historial,
+      // debemos hacer .back() SIEMPRE (independientemente de qué devolvió result).
+      if (!closedByPopState && history.state?.modalOpen) {
+        this.location.back();
+      }
+  
+      // Lógica de negocio tras cerrar el modal
+      if (result === true) {
+        this.scheduleResource.reload();
+      }
+    });
   }
 
 
