@@ -5,7 +5,9 @@ import { EmplScheduleService } from '../../empl-agenda/service/empl-schedule.ser
 import { MxDayOfWeekPipe } from '../../../../core/pipes/mx-dayofweek-pipe';
 import { EmplBookingCard } from '../empl-booking-card/empl-booking-card';
 import { Dialog } from '@angular/cdk/dialog';
-import { EmplSelectService } from '../empl-select-service/empl-select-service';
+import { EmplAddService } from '../empl-add-service/empl-add-service';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 
@@ -97,20 +99,46 @@ export class EmplWeekSchedule {
 
 
 
+  private location = inject(Location);
   private dialog = inject(Dialog);
+  private router = inject(Router);
+
 
   openServicesSheet() {
-    const dialogRef = this.dialog.open(EmplSelectService, {
-      data: { serviceName: 'Corte de Cabello' },
-      panelClass: ['w-full', 'max-w-lg', 'mt-auto'], 
-      
+    this.location.go(this.location.path(), '', { modalOpen: true });
+  
+    const dialogRef = this.dialog.open(EmplAddService, {
+      panelClass: ['w-full', 'max-w-lg', 'mt-auto'],
       backdropClass: ['bg-black/50', 'backdrop-blur-sm'],
-      
+      data: ''
     });
-
-    dialogRef.closed.subscribe(result => {
-      console.log('El bottom sheet se cerró con resultado:', result);
+  
+    // Flag para saber si el cierre fue por el botón "Atrás" del móvil
+    let closedByPopState = false;
+  
+    const popStateSub = this.location.subscribe(() => {
+      closedByPopState = true;
+      dialogRef.close();
+    });
+  
+    dialogRef.closed.subscribe((result) => {
+      popStateSub.unsubscribe();
+  
+      // SOLO hacemos .back() si el usuario cerró el modal manualmente (X, backdrop, cancelar)
+      // Y NO mediante el botón atrás del móvil NI tras aplicar una navegación
+      if (history.state?.modalOpen && !closedByPopState && result === undefined) {
+        this.location.back();
+      }
+  
+      if(typeof(result) === 'string') {
+        
+        this.router.navigate(['/employee/booking'], {
+          queryParams: { ids: result },
+        });
+      }
+      
     });
   }
+
 }
 

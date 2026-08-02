@@ -16,10 +16,10 @@ export class BookingCalendarService {
    ){}
 
   
-   getDays( serviceId: number, yearMonth: string) {
+   getDays( serviceId: string, yearMonth: string) {
 
     const params = new HttpParams()
-      .set('serviceId', serviceId)
+      .set('serviceIds', serviceId)
       .set('yearMonth', yearMonth);
 
     return this.http.get<CalendarAvailabilityResponse>(
@@ -29,10 +29,10 @@ export class BookingCalendarService {
 
   }
     
-  getBookingAvailibility( serviceId: number, date: string) {
+  getBookingAvailibility( serviceIds: string, date: string) {
 
       const params = new HttpParams()
-        .set('serviceId', serviceId)
+        .set('serviceIds', serviceIds)
         .set('date', date);
   
       return this.http.get<BookingAvailbilityPayload>(

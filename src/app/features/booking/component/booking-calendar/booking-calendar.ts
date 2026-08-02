@@ -1,9 +1,10 @@
 import { ChangeDetectorRef, Component, computed, EventEmitter, inject, Input, OnInit, Output, resource, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BookingCalendarService } from '../../service/bokking-calendar.service';
-import { CalendarDay, SelectedBeautyService } from '../../models/booking-calendar.models';
-import { firstValueFrom } from 'rxjs';
+import { CalendarDay, CalendarService } from '../../models/booking-calendar.models';
+import { distinctUntilChanged, firstValueFrom, map } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
 
 interface UICalendarDay {
   number: number | null;
@@ -26,9 +27,8 @@ export class BookingCalendar implements OnInit {
   private readonly currentDate = new Date();
 
 
-  @Input({ required: true }) serviceId!: number;
-  @Output() selectDate = new EventEmitter<string>();
-  @Output() selectedBeautyService = new EventEmitter<SelectedBeautyService>();
+  @Output() selectDate = new EventEmitter<{date: string, serviceIds: string}>();
+  @Output() selectedBeautyService = new EventEmitter<CalendarService[]>();
 
   @Output() centerSectionCalendar = new EventEmitter<void>();
   
@@ -36,9 +36,43 @@ export class BookingCalendar implements OnInit {
 
   error: string = ''
 
+
+  private route = inject(ActivatedRoute);
+  serviceIds = signal<string>('');
+
   ngOnInit(): void {
 
+    this.route.queryParams
+    .pipe(
+      map(params => params['ids']), 
+      distinctUntilChanged()
+    )
+    .subscribe((idsParam: any) => {
+      if (idsParam != '') {
+        
+        // Convierte el string "1,2,3" a un arreglo de números [1, 2, 3]
+        const arrayIds : string[] = idsParam
+          .split(',')
+          .map((id: string) => Number(id))
+          .filter((id: number) => !isNaN(id) && id > 0);
+
+        this.serviceIds.set(arrayIds.join(','));
+
+      }
+
+    });
   }
+
+  public refreshCalendar(): void {
+    
+    this.selectedDay = null;
+    this.isCalendarExpanded.set(true)
+
+    
+    this.cdr.markForCheck(); // Si usas OnPush para forzar renderizado
+  }
+
+
 
   weekdays = ['LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB', 'DOM'];
   skeletonDays = Array(35).fill(0);
@@ -66,10 +100,16 @@ export class BookingCalendar implements OnInit {
   });
 
   calendarResource = resource({
-    params: () => ({ yearMonth: this.yearMonth() }),
+    params: () => ({ yearMonth: this.yearMonth(), services: this.serviceIds() }),
     loader: async ({ params }) => {
+
+    
+      if(params.services == '') {
+        return;
+      }
+
       return await firstValueFrom(
-        this.bookingCalendarService.getDays(this.serviceId, params.yearMonth)
+        this.bookingCalendarService.getDays(params.services, params.yearMonth)
       );
     }
   });
@@ -92,12 +132,8 @@ export class BookingCalendar implements OnInit {
   daysComputed = computed(() => {
     const response = this.calendarResource.value();
 
-    this.selectedBeautyService.emit({
-      name: response?.name ?? '',
-      pictureUrl: response?.pictureUrl ?? '',
-      duration: response?.duration ?? 0,
-      price: response?.price ?? 0
-    })
+    
+    this.selectedBeautyService.emit(response?.services)
 
     if (!response?.days) return [];
     this.buildCalendarGrid(response.days);
@@ -111,7 +147,8 @@ export class BookingCalendar implements OnInit {
     const nextDate = new Date(year, month, 1);
     this.yearMonth.set(this.formatYearMonth(nextDate));
     this.selectedDay = null;
-    this.selectDate.emit('');
+    
+    this.selectDate.emit({date: '', serviceIds: this.serviceIds()});
   }
 
   prevMonth(): void {
@@ -121,7 +158,8 @@ export class BookingCalendar implements OnInit {
     const prevDate = new Date(year, month - 2, 1); // month - 2 regresa un mes atrás
     this.yearMonth.set(this.formatYearMonth(prevDate));
     this.selectedDay = null;
-    this.selectDate.emit('');
+    
+    this.selectDate.emit({date: '', serviceIds: this.serviceIds()});
   }
 
   private formatYearMonth(date: Date): string {
@@ -186,22 +224,33 @@ export class BookingCalendar implements OnInit {
     if (day.status === 'occupied') return;
 
     this.selectedDay = day.number;
-    this.selectDate.emit(this.yearMonth() + "-" + day.number.toString());
+    //this.selectDate.emit(this.yearMonth() + "-" + day.number.toString());
+
+
+    const data = {
+      date: this.yearMonth() + "-" + day.number.toString(), 
+      serviceIds: this.serviceIds()
+    }
+
+    console.log('data->', data);
+
+    this.selectDate.emit(data);
+
 
     setTimeout(() => {
       this.isCalendarExpanded.set(false);
     }, 200);
   }
 
+
+
+
   get selectedDateFormatted() {
     if (!this.selectedDay) return '';
     return `${this.selectedDay} de ${this.monthTitle()}`;
   }
-  /*selectedDateFormatted = computed(() => {
-    if (!this.selectedDay) return '';
-    return `${this.selectedDay} de ${this.monthTitle()}`;
-  });*/
 
+  
 
   formatDuration(minutes: number): string {
     if (!minutes) return '';

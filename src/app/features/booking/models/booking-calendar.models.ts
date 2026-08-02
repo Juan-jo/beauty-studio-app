@@ -14,20 +14,21 @@ export interface CalendarDay {
 }
 
 export interface CalendarAvailabilityResponse {
-  yearMonth: string; // Formato "YYYY-MM" (ej: "2026-08")
-  name: string
-  pictureUrl: string;
-  price: number;
-  duration: number
+
+  yearMonth : string; // Formato "YYYY-MM" (ej: "2026-08")
   
-  days: CalendarDay[];
+  days      : CalendarDay[];
+
+  services  : CalendarService[]
 }
 
-export interface SelectedBeautyService {
 
-  name: string
-  pictureUrl: string;
-  price: number;
-  duration: number
+export interface CalendarService {
+
+  id          : number
+  name        : string
+  pictureUrl  : string;
+  price       : number;
+  duration    : number
 
 }

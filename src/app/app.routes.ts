@@ -49,7 +49,7 @@ export const routes: Routes = [
     },
 
     {
-        path: 'public/booking/:serviceId',
+        path: 'public/booking',
                 loadComponent: () =>
                     import('./features/booking/page/booking/booking')
                         .then(c => c.Booking)
@@ -85,7 +85,7 @@ export const routes: Routes = [
         data: { roles: ['EMPLOYEE'] },
     },
     {
-        path: 'employee/booking/:serviceId',
+        path: 'employee/booking',
                 loadComponent: () =>
                     import('./features/booking/page/booking/booking')
                         .then(c => c.Booking)
@@ -114,7 +114,7 @@ export const routes: Routes = [
     {
         canActivate: [roleGuard],
         data: { roles: ['CUSTOMER'] },
-        path: 'customer/booking/:serviceId',
+        path: 'customer/booking',
                 loadComponent: () =>
                     import('./features/booking/page/booking/booking')
                         .then(c => c.Booking)

@@ -1,18 +1,21 @@
-import { ChangeDetectorRef, Component, computed, ElementRef, inject, resource, signal, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, ElementRef, inject, resource, signal, viewChild, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { finalize, firstValueFrom } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { finalize, firstValueFrom, Subscription } from 'rxjs';
 import { EmployeeSlot } from '../../models/employe-availability.models';
 import { BookingCalendarService } from '../../service/bokking-calendar.service';
 import { CommonModule } from '@angular/common';
 import { BookingCalendar } from '../../component/booking-calendar/booking-calendar';
-import { SelectedBeautyService } from '../../models/booking-calendar.models';
 import { DurationPipe } from '../../../../core/pipes/duration-pipe';
 import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 import { CustomerBookingService } from '../../../customer/service/cus-booking';
 import { HasRoleDirective } from '../../../../core/directives/has-role';
 import { AuthService } from '../../../../core/services/auth';
 import { EmployeeBookingService } from '../../../employee/service/empl-booking.service';
+import { CalendarService } from '../../models/booking-calendar.models';
+import { Dialog } from '@angular/cdk/dialog';
+import { EmplAddService } from '../../../employee/components/empl-add-service/empl-add-service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-booking',
@@ -31,7 +34,6 @@ import { EmployeeBookingService } from '../../../employee/service/empl-booking.s
 export class Booking {
 
   form = new FormGroup({
-    serviceId: new FormControl("", [Validators.required]),
     employeeId: new FormControl<number|any>(null, [Validators.required]),
     date: new FormControl<number | any>(null, [Validators.required]),
     hour: new FormControl<string>("", [Validators.required]),
@@ -60,11 +62,15 @@ export class Booking {
   
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  public bookingCalendar = viewChild<BookingCalendar>(BookingCalendar);
 
 
-  serviceId = signal<number>(0);
-  date = signal<string>('');
-  beautyService = signal<SelectedBeautyService|null>(null);
+  
+  date = signal<{date: string, serviceIds: string}>({date:'', serviceIds: ''});
+
+  services = signal<CalendarService[]>([]);
   selectedEmployeeSlot = signal<EmployeeSlot|null>(null);
 
 
@@ -75,16 +81,6 @@ export class Booking {
 
   constructor() {
 
-    this.route.paramMap.subscribe(params => {
-      const idParam = params.get('serviceId');
-      if (idParam) {
-
-        let serviceId = Number(idParam);
-
-        this.serviceId.set(serviceId);
-        this.setValueForm('serviceId', serviceId)
-      }
-    });
   }
 
   ngOnInit(): void {
@@ -98,12 +94,21 @@ export class Booking {
   }
 
 
-  selectDate(date: string) {
+  
+  
+
+
+
+  selectDate(date: string, serviceIds: string) {
 
     if(date != this.f.date.value) {
       this.startValueForm(date);
 
-      this.date.set(date);
+      this.date.set({
+        date: date,
+        serviceIds: serviceIds
+      });
+
 
       this.isChangingProfessional = false;
       this.selectedEmployeeSlot.set(null)
@@ -111,8 +116,9 @@ export class Booking {
     
   }
 
-  selectedBeautyService(beautyService: SelectedBeautyService) {
-    this.beautyService.set(beautyService); 
+  selectedBeautyService(services: CalendarService[]) {
+    //this.beautyService.set(beautyService); 
+    this.services.set(services)
     this.cdr.markForCheck();
   }
 
@@ -130,13 +136,16 @@ export class Booking {
   }
 
   bookingAvailabilityResource = resource({
-    params: () => ({ date: this.date() }),
+    params: () => ({ data: this.date() }),
     loader: async ({ params }) => {
 
-      if (!params.date || params.date == '') return null;
+      if (!params.data.date || params.data.date == '') return null;
 
       return await firstValueFrom(
-        this.bookingCalendarService.getBookingAvailibility(this.serviceId(), this.date())
+        this.bookingCalendarService.getBookingAvailibility(
+          params.data.serviceIds,
+          params.data.date
+        )
       );
     }
   });
@@ -279,7 +288,7 @@ export class Booking {
     const dateTime = `${this.f.date.value} ${this.f.hour.value}`;
 
     const payload: BookingPayload = {
-      serviceId: this.serviceId(),
+      serviceIds: this.date().serviceIds,
       employeeId: this.selectedProfessional?.id,
       dateTime: dateTime,
     };
@@ -328,6 +337,70 @@ export class Booking {
   }
   
 
+ 
+  
+  private dialog = inject(Dialog);
+  private location = inject(Location);
+
+
+
+  openServicesSheet() {
+    this.location.go(this.location.path(), '', { modalOpen: true });
+  
+    const dialogRef = this.dialog.open(EmplAddService, {
+      panelClass: ['w-full', 'max-w-lg', 'mt-auto'],
+      backdropClass: ['bg-black/50', 'backdrop-blur-sm'],
+      data: this.services().map(i => i.id).join(',')
+    });
+  
+    // Flag para saber si el cierre fue por el botón "Atrás" del móvil
+    let closedByPopState = false;
+  
+    const popStateSub = this.location.subscribe(() => {
+      closedByPopState = true;
+      dialogRef.close();
+    });
+  
+    dialogRef.closed.subscribe((result) => {
+      popStateSub.unsubscribe();
+  
+      // SOLO hacemos .back() si el usuario cerró el modal manualmente (X, backdrop, cancelar)
+      // Y NO mediante el botón atrás del móvil NI tras aplicar una navegación
+      if (history.state?.modalOpen && !closedByPopState && result === undefined) {
+        this.location.back();
+      }
+
+      if(typeof(result) === 'string') {
+        this.changeServiceIds(result)
+      }
+      
+    });
+  }
+
+  changeServiceIds(ids: string) {
+    
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { ids: ids }, // Pasa directamente el arreglo
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
+
+    this.f.employeeId.setValue(null);
+    this.f.hour.setValue(null);
+    this.f.date.setValue(null);
+
+    
+    this.selectedEmployeeSlot.set(null)
+
+    this.executeActionOnCalendar();
+    this.cdr.markForCheck();
+  }
+
+  public executeActionOnCalendar(): void {
+    this.bookingCalendar()?.refreshCalendar();
+  }
+
 
   
 }
@@ -335,7 +408,7 @@ export class Booking {
 
 // 1. Definir la interfaz (puedes ponerla arriba de tu componente o en un archivo .model.ts)
 interface BookingPayload {
-  serviceId: number;
+  serviceIds: string;
   employeeId?: number;
   dateTime: string;
   name?: string;

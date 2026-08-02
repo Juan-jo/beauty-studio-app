@@ -13,7 +13,7 @@ export interface BookingDay {
 
     id              : number
     status          : BookingStatus
-    serviceName     : string
+    services        : string []
     price           : number
     start           : string
     end             : string

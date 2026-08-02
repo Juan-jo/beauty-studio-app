@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EmplSelectService } from './empl-select-service';
+import { EmplAddService } from './empl-add-service';
 
-describe('EmplSelectService', () => {
-  let component: EmplSelectService;
-  let fixture: ComponentFixture<EmplSelectService>;
+describe('EmplAddService', () => {
+  let component: EmplAddService;
+  let fixture: ComponentFixture<EmplAddService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EmplSelectService]
+      imports: [EmplAddService]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EmplSelectService);
+    fixture = TestBed.createComponent(EmplAddService);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

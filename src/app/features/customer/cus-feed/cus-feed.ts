@@ -5,16 +5,12 @@ import { ServicesService } from '../../services/services/services';
 import { firstValueFrom } from 'rxjs';
 import { BeautyServiceCard } from '../../../shared/components/beauty-service-card/beauty-service-card';
 import { CustomerBookingService } from '../service/cus-booking';
-import { forkJoin } from 'rxjs';
 import { BookingDatePipe } from '../../../core/pipes/booking-date.pipe';
 
 @Component({
   selector: 'app-cus-feed',
   imports: [
-    BeautyServiceCard,
-    CurrencyPipe,
-    DurationPipe,
-    BookingDatePipe
+    BeautyServiceCard
   ],
   templateUrl: './cus-feed.html',
   styleUrl: './cus-feed.css',
