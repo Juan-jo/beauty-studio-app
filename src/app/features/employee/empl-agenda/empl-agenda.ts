@@ -1,4 +1,4 @@
-import { Component, computed, resource, signal } from '@angular/core';
+import { Component, computed, ElementRef, OnInit, resource, signal, ViewChild } from '@angular/core';
 import { delay, firstValueFrom, of } from 'rxjs';
 import { BookingDay, MonthDaySchedule, MonthSchedule } from './model/employee-schedule.models';
 import { EmplWeekSchedule } from '../components/empl-week-schedule/empl-week-schedule';
@@ -11,7 +11,11 @@ import { EmplWeekSchedule } from '../components/empl-week-schedule/empl-week-sch
   templateUrl: './empl-agenda.html',
   styleUrl: './empl-agenda.css',
 })
-export class EmplAgenda {
+export class EmplAgenda implements OnInit {
+  
+
+  @ViewChild('weekSection') weekSection!: ElementRef;
+
 
   viewMode = signal<'week' | 'month'>('week');
 
@@ -41,7 +45,17 @@ export class EmplAgenda {
   }
 
 
-  // MOCK DATA: Vista Mes (Julio 2026)
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.weekSection?.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        
+      });
+
+
+    }, 50);
+  }
  
   
 }

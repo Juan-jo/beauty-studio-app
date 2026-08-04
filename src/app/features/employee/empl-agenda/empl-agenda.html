@@ -1,7 +1,7 @@
 <main class="max-w-7xl mx-auto pt-0 md:p-6 bg-white min-h-screen">
 
 
-  <div class="space-y-4">
+  <div #weekSection class="space-y-4">
 
   
     @if (isLoading()) {
@@ -29,12 +29,10 @@
     } 
     @else {
 
-      
-      @if (viewMode() === 'week') {
+        @if (viewMode() === 'week') {
 
-        <empl-week-schedule (changeView)="setViewMode('month')"></empl-week-schedule>
-    
-      }
+          <empl-week-schedule (changeView)="setViewMode('month')"></empl-week-schedule>      
+        }
 
 
       

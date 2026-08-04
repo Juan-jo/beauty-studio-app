@@ -64,10 +64,10 @@ export class EmplBookingCard {
         return 'bg-violet-100 text-violet-700';
 
       case 'COMPLETED':
-        return 'bg-emerald-100 text-emerald-700';
+        return 'bg-emerald-50/40 text-emerald-700';
 
       case 'CANCELLED':
-        return 'bg-red-100 text-red-700';
+        return 'bg-red-50/40 text-red-700';
 
       case 'NO_SHOW':
         return 'bg-gray-200 text-gray-700';

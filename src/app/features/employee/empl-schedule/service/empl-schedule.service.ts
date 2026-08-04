@@ -40,5 +40,20 @@ export class EmplScheduleService {
     }
 
 
+    updateBreak(breakId: number, data: any) {
+
+        return this.http.put<any>(
+            `${this.config.apiUrl}/api/v1/employees/0/break/${breakId}`,  data 
+        );
+    }
+
+    createBreak(data: any) {
+
+        return this.http.post<any>(
+            `${this.config.apiUrl}/api/v1/employees/0/break`,  data 
+        );
+    }
+
+
 
 }

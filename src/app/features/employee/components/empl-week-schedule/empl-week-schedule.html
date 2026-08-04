@@ -146,9 +146,56 @@
             </empl-booking-card>
           
         }
+        
+
         @empty {
-          <p>Sin reservaciones</p>
+          <!-- Estado Vacío: Sin Citas -->
+
+          @if(!isLoadingWeek()) {
+
+            <div class="mx-4 my-6 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white/80 px-6 py-10 text-center backdrop-blur-xs animate-fade-in">
+            
+              <!-- Contenedor del Ícono con efecto de gradiente suave -->
+              <div class="relative mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50/80 text-brand-600 ring-8 ring-brand-50/30">
+                <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+  
+                <!-- Pequeña insignia de check positivo -->
+                <span class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white ring-2 ring-white">
+                  <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                  </svg>
+                </span>
+              </div>
+  
+              <!-- Textos explicativos -->
+              <h3 class="text-base font-bold text-gray-900">
+                Día libre de citas
+              </h3>
+              
+              <p class="mt-1 text-xs text-gray-500 max-w-[240px] leading-relaxed">
+                No hay reservaciones programadas para este día. ¡Aprovecha para descansar o agendar nuevos clientes!
+              </p>
+  
+              <!-- Botón de acción rápida -->
+              <button 
+                type="button"
+                (click)="openServicesSheet()" 
+                class="mt-5 inline-flex items-center gap-2 rounded-xl bg-brand-50 px-4 py-2 text-xs font-semibold text-brand-700 transition-all hover:bg-brand-100 hover:text-brand-800 active:scale-95 cursor-pointer">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Agendar cita aquí
+              </button>
+  
+            </div>
+            
+          }
+          
         }
+        
+
       }
       
 

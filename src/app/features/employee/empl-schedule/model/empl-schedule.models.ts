@@ -12,6 +12,7 @@ export interface EmplScheduleItem {
 
 
 export interface EmplBreak {
+    id: number,
     startTime: string,
     endTime: string
 }
