@@ -1,0 +1,137 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-xs animate-fade-in">
+
+    @if(state() === 'idle') {
+
+    <div
+        class="bg-white rounded-2xl border border-gray-200/80 shadow-xl overflow-hidden max-w-md w-full mx-auto flex flex-col">
+
+        <!-- ENCABEZADO -->
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
+            <div class="flex items-center gap-3">
+                <!-- Icono de alerta sutil -->
+                <div
+                    class="h-9 w-9 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900">Cancelar Cita</h3>
+                    <p class="text-xs text-gray-500 font-medium">Esta acción notificará al cliente</p>
+                </div>
+            </div>
+
+            <button type="button" (click)="close()"
+                class="p-1.5 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all cursor-pointer active:scale-95">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- CUERPO -->
+        <div class="p-5 space-y-4 max-h-[65vh] overflow-y-auto">
+
+            <!-- Tarjeta Resumen de la Cita a Cancelar -->
+            <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Cita a
+                        cancelar</span>
+                    <span class="text-xs font-bold text-gray-900">{{ booking.price | bscurrency }}</span>
+                </div>
+                <p class="text-xs font-bold text-gray-800">
+                    {{ booking.services.join(', ') }}
+
+                </p>
+
+                <div class="flex items-center gap-2 text-xs text-gray-500 pt-1 border-t border-gray-200/60">
+                    <span class="font-medium text-gray-700">{{ booking.customer.name }}</span>
+                    <span>•</span>
+                    <span>{{ booking.start| date: 'd MMM' }}, {{ booking.start }}</span>
+                </div>
+            </div>
+
+            <!-- Selector / Input de Motivo de Cancelación -->
+            <div class="space-y-1.5">
+                <label class="block text-xs font-semibold text-gray-700">
+                    Motivo de cancelación <!--<span class="text-gray-400 font-normal">(opcional)</span>-->
+                </label>
+                <textarea [formControl]="message" rows="3"
+                    placeholder="Ej. El cliente solicitó reprogramar, inconvenientes de agenda..."
+                    class="w-full text-xs p-3 rounded-xl border border-gray-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all placeholder:text-gray-400 resize-none">
+                </textarea>
+
+                @if (message.touched && message.invalid) {
+
+                <p class=" text-sm text-red-600">
+
+                    @if (message.hasError('required')) {
+                    * Escribe el motivo.
+                    }
+
+                </p>
+
+                }
+
+            </div>
+
+            <!-- Advertencia -->
+            <p class="text-[11px] text-gray-500 leading-relaxed">
+                ¿Estás seguro de que deseas cancelar esta cita? El horario quedará libre nuevamente en la agenda.
+            </p>
+
+        </div>
+
+        <div class="px-5 py-3.5 border-t border-gray-100 bg-gray-50/50 flex items-center justify-end gap-2 shrink-0">
+  
+            <button type="button" [disabled]="isSubmitting()" (click)="close()"
+                class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-200/60 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                Volver
+            </button>
+        
+            <button (click)="submit()" [disabled]="isSubmitting()" type="button"
+                class="flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-semibold text-white shadow-xs transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 cursor-pointer">
+        
+                @if (isSubmitting()) {
+                    <svg class="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Cancelando...</span>
+                } @else {
+                    <span>Sí, Cancelar Cita</span>
+                }
+        
+            </button>
+        
+        </div>
+
+
+    </div>
+
+    }
+
+    @else if(state() === 'success') {
+
+        <ui-state-success
+            title="Cita cancelada"
+            message="La cita fué cancelada correctamenete."
+            (close)="close(true)">
+        </ui-state-success>
+
+    }
+
+    @else if(state() === 'error') {
+
+        <ui-state-error
+                message="No pudimos cacelar la cita. Por favor inténtalo de nuevo."
+                (close)="close()"
+                (retry)="retry()">
+
+        </ui-state-error>
+
+    }
+
+
+</div>

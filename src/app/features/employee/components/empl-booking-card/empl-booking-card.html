@@ -207,7 +207,7 @@
                   
                         <button
                           type="button"
-                          (click)="selectOption('cancel')"
+                          (click)="openCancel()"
                           class="group flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-all cursor-pointer">
                           <svg class="h-4 w-4 text-rose-500 group-hover:text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -353,100 +353,7 @@
 
     <!--End Confirm-->
 
-    @else if(viewModal() == 'cancel') {
-
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-xs animate-fade-in">
-    
-            <div class="bg-white rounded-2xl border border-gray-200/80 shadow-xl overflow-hidden max-w-md w-full mx-auto flex flex-col">
-              
-              <!-- ENCABEZADO -->
-              <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
-                <div class="flex items-center gap-3">
-                  <!-- Icono de alerta sutil -->
-                  <div class="h-9 w-9 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center shrink-0">
-                    <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 class="text-sm font-bold text-gray-900">Cancelar Cita</h3>
-                    <p class="text-xs text-gray-500 font-medium">Esta acción notificará al cliente</p>
-                  </div>
-                </div>
-        
-                <button 
-                  type="button" 
-                  (click)="closeModal()"
-                  class="p-1.5 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all cursor-pointer active:scale-95">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                  </svg>
-                </button>
-              </div>
-            
-              <!-- CUERPO -->
-              <div class="p-5 space-y-4 max-h-[65vh] overflow-y-auto">
-                
-                <!-- Tarjeta Resumen de la Cita a Cancelar -->
-                <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 space-y-2">
-                  <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Cita a cancelar</span>
-                    <span class="text-xs font-bold text-gray-900">{{ booking.price | bscurrency }}</span>
-                  </div>
-                  <p class="text-xs font-bold text-gray-800">
-                    {{ booking.services.join(', ') }}
-
-                  </p>
-                  
-                  <div class="flex items-center gap-2 text-xs text-gray-500 pt-1 border-t border-gray-200/60">
-                    <span class="font-medium text-gray-700">{{ booking.customer.name }}</span>
-                    <span>•</span>
-                    <span>{{ booking.start| date: 'd MMM' }}, {{ booking.start }}</span>
-                  </div>
-                </div>
-        
-                <!-- Selector / Input de Motivo de Cancelación -->
-                <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-gray-700">
-                    Motivo de cancelación <span class="text-gray-400 font-normal">(opcional)</span>
-                  </label>
-                  <textarea 
-                    rows="3"
-                    placeholder="Ej. El cliente solicitó reprogramar, inconvenientes de agenda..."
-                    class="w-full text-xs p-3 rounded-xl border border-gray-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all placeholder:text-gray-400 resize-none">
-                  </textarea>
-                </div>
-        
-                <!-- Advertencia -->
-                <p class="text-[11px] text-gray-500 leading-relaxed">
-                  ¿Estás seguro de que deseas cancelar esta cita? El horario quedará libre nuevamente en la agenda.
-                </p>
-        
-              </div>
-        
-              <!-- FOOTER / BOTONES -->
-              <div class="px-5 py-3.5 border-t border-gray-100 bg-gray-50/50 flex items-center justify-end gap-2 shrink-0">
-                <button 
-                  type="button" 
-                  (click)="closeModal()"
-                  class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-200/60 transition-all cursor-pointer">
-                  Volver
-                </button>
-        
-                <button 
-                  type="button" 
-                  class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
-                  
-                    Sí, Cancelar Cita
-                  
-                </button>
-              </div>
-              
-            </div>
-        
-          </div>
-
-    }
+ 
 
 
     

@@ -4,6 +4,10 @@ import { DurationPipe } from '../../../../core/pipes/duration-pipe';
 import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 import { CommonModule } from '@angular/common';
 import { BookingService } from '../../../booking/service/booking.service';
+import { Dialog } from '@angular/cdk/dialog';
+import { EmplAddService } from '../empl-add-service/empl-add-service';
+import { Location } from '@angular/common';
+import { EmplCancelBooking } from '../empl-cancel-booking/empl-cancel-booking';
 
 @Component({
   selector: 'empl-booking-card',
@@ -17,6 +21,8 @@ import { BookingService } from '../../../booking/service/booking.service';
 })
 export class EmplBookingCard {
 
+  private dialog = inject(Dialog);
+  private location = inject(Location);
 
   private readonly bookingService = inject(BookingService);
 
@@ -98,7 +104,6 @@ export class EmplBookingCard {
     this.isOpenDropDown.set(false);
 
     if (action === 'cancel') {
-      this.askCancel();
     }
   }
 
@@ -133,14 +138,39 @@ export class EmplBookingCard {
 
   }
 
-  askCancel() {
-    this.viewModal.set('cancel')
-    this.isOpenModal.set(true);
+  openCancel() {
+    this.location.go(this.location.path(), '', { modalOpen: true });
+  
+    const dialogRef = this.dialog.open(EmplCancelBooking, {
+      panelClass: ['w-full', 'max-w-lg', 'mt-auto'],
+      backdropClass: ['bg-black/50', 'backdrop-blur-sm'],
+      data: this.booking
+    });
+  
+    // Flag para saber si el cierre fue por el botón "Atrás" del móvil
+    let closedByPopState = false;
+  
+    const popStateSub = this.location.subscribe(() => {
+      closedByPopState = true;
+      dialogRef.close();
+    });
+  
+    dialogRef.closed.subscribe((result) => {
+      popStateSub.unsubscribe();
+  
+      // SOLO hacemos .back() si el usuario cerró el modal manualmente (X, backdrop, cancelar)
+      // Y NO mediante el botón atrás del móvil NI tras aplicar una navegación
+      if (history.state?.modalOpen && !closedByPopState && result === undefined) {
+        this.location.back();
+      }
+
+      if(typeof(result) === 'boolean' && result === true) {
+        this.reloadSchedule.emit();
+      }
+      
+    });
   }
 
-  confirmCancel() {
-
-  }
 
   confirmStart() {
     this.isSubmitting.set(true);
