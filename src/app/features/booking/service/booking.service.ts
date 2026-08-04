@@ -44,7 +44,7 @@ export class BookingService {
 
         return this.http.patch<void>(
             `${this.config.apiUrl}/api/v1/bookings/${bookingId}/cancel`,
-            { 'reasson': message }
+            { 'message': message }
         );
 
     }
