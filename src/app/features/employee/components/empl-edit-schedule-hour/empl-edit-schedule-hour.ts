@@ -6,6 +6,8 @@ import { DayOfWeek, MxDayOfWeekPipe } from '../../../../core/pipes/mx-dayofweek-
 import { EmplScheduleService } from '../../empl-schedule/service/empl-schedule.service';
 import { finalize } from 'rxjs';
 import { UIState } from '../../../../core/ui/ui-state.model';
+import { UIStateError } from '../../../../core/ui/state-error/state-error';
+import { UIStateSuccess } from '../../../../core/ui/state-success/state-success';
 
 
 
@@ -14,7 +16,9 @@ import { UIState } from '../../../../core/ui/ui-state.model';
   imports: [
     TimePickerComponent,
     ReactiveFormsModule,
-    MxDayOfWeekPipe
+    MxDayOfWeekPipe,
+    UIStateError,
+    UIStateSuccess
   ],
   templateUrl: './empl-edit-schedule-hour.html'
 })
