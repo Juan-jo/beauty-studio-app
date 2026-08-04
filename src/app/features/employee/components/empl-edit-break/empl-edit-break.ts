@@ -6,14 +6,18 @@ import { finalize } from 'rxjs';
 import { UIState } from '../../../../core/ui/ui-state.model';
 import { EmplScheduleService } from '../../empl-schedule/service/empl-schedule.service';
 import { TimePickerComponent } from '../../../../shared/components/time-picker/time-picker';
+import { UIStateError } from '../../../../core/ui/state-error/state-error';
+import { UIStateSuccess } from "../../../../core/ui/state-success/state-success";
 
 @Component({
   selector: 'app-empl-edit-break',
   imports: [
     TimePickerComponent,
     ReactiveFormsModule,
-    MxDayOfWeekPipe
-  ],
+    MxDayOfWeekPipe,
+    UIStateError,
+    UIStateSuccess
+],
   templateUrl: './empl-edit-break.html',
 })
 export class EmplEditBreak {

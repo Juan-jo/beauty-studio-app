@@ -8,8 +8,8 @@
     <h3 class="text-base font-bold text-gray-900">
         {{title}}
     </h3>
-    <p class="text-xs text-gray-500 font-medium mt-1 leading-relaxed">
-        {{message}}
+    <p class="text-xs text-gray-500 font-medium mt-1 leading-relaxed"
+        [innerHTML]="safeMessage">
     </p>
 
     <button type="button" 

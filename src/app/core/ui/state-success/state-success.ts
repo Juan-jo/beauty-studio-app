@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'ui-state-success',
@@ -7,10 +8,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class UIStateSuccess {
 
+  private sanitizer = inject(DomSanitizer);
+
+  safeMessage!: SafeHtml;
+
 
   @Input({ required: true }) title!: string
-  @Input({ required: true }) message!: string
   
+  @Input({ required: true }) set message(val: string) {
+    this.safeMessage = this.sanitizer.bypassSecurityTrustHtml(val);
+  }
   @Output() close = new EventEmitter<void>();
 
 }
