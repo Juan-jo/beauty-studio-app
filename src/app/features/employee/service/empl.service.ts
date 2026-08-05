@@ -1,8 +1,8 @@
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AppConfigService } from '../../../../../config/app-config.service';
-import { EmplServiceResponse } from '../model/empl-services.models';
+import { AppConfigService } from '../../../config/app-config.service';
+import { EmplServiceResponse } from '../models/empl-services.models';
 
 @Injectable({
   providedIn: 'root'

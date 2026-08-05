@@ -1,7 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { SectionLogout } from '../../../shared/components/section-logout/section-logout';
 import { SectionTheme } from '../../../shared/components/section-theme/section-theme';
-import { EmplServices } from '../components/empl-services/empl-services';
 import { RouterLink } from "@angular/router";
 import { AuthService } from '../../../core/services/auth';
 import { EmployeeAuthenticatedService } from '../service/empl-authenticated.service';
@@ -13,7 +12,6 @@ import { DurationPipe } from '../../../core/pipes/duration-pipe';
   imports: [
     SectionLogout,
     SectionTheme,
-    EmplServices,
     RouterLink,
     DurationPipe
     
@@ -28,15 +26,11 @@ export class EmplProfile {
   
 
 
-  isOpenModalService = false;
 
   get username() {
     return this.auth.userName;
   }
 
-  closeModalService() {
-    this.isOpenModalService = false
-  }
 
 
   meResource = rxResource<EmployeeMe, void>({

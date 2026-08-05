@@ -1,7 +1,7 @@
 import { Component, computed, EventEmitter, inject, Output, resource, signal } from '@angular/core';
-import { EmplBeautyService } from '../components/empl-services/service/empl.service';
+import { EmplBeautyService } from '../service/empl.service';
 import { firstValueFrom } from 'rxjs';
-import { EmplServiceItem } from '../components/empl-services/model/empl-services.models';
+import { EmplServiceItem } from '../models/empl-services.models';
 import { CurrencyPipe } from '../../../core/pipes/currency-pipe';
 import { DurationPipe } from '../../../core/pipes/duration-pipe';
 import { CommonModule } from '@angular/common';
