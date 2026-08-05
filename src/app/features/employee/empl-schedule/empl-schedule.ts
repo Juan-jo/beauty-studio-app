@@ -8,6 +8,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Location } from '@angular/common';
 import { EditScheduleHour, EmplEditScheduleHour } from '../components/empl-edit-schedule-hour/empl-edit-schedule-hour';
 import { EditBreak, EmplEditBreak } from '../components/empl-edit-break/empl-edit-break';
+import { AuthService } from '../../../core/services/auth';
 
 
 @Component({
@@ -27,7 +28,12 @@ export class EmplSchedule {
   private location = inject(Location);
   
   private readonly emplScheduleService = inject(EmplScheduleService);
+  private readonly auth = inject(AuthService);
 
+
+  get username() {
+    return this.auth.userName;
+  }
 
   updatingWorkingHoursIds = signal<Set<number>>(new Set());
 

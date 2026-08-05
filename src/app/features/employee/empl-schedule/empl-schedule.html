@@ -15,9 +15,8 @@
           src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150"
           alt="Valeria Morales">
         <div>
-          <h1 class="text-sm font-bold text-gray-900 leading-tight">Valeria Morales</h1>
-          <p class="text-xs text-gray-500 font-medium">Horario Semanal • <span class="text-brand-700 font-semibold">40
-              hrs/sem</span></p>
+          <h1 class="text-sm font-bold text-gray-900 leading-tight">{{username()}}</h1>
+          <p class="text-xs text-gray-500 font-medium">Horario Semanal</p>
         </div>
       </div>
     </div>
@@ -25,10 +24,27 @@
   </div>
 </header>
 
+<main class="max-w-4xl mx-auto px-8 py-6 sm:px-6 bg-white">
+  
+  <!-- ENCABEZADO DE LA SECCIÓN -->
+  <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-gray-200/80 pb-4">
+    <div>
+      <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Horario de Atención Semanal
+      </h2>
 
-<main class="max-w-4xl mx-auto p-8 md:p-6 bg-brand-50/30 min-h-[calc(100vh-73px)] space-y-4">
+      <p class="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">
+        Configura tus días activos, horas de entrada/salida y descansos semanales.
+      </p>
+    </div>
 
-  <div class="bg-white rounded-2xl border border-gray-200/80  overflow-hidden">
+  </div>
+  
+  <div class="  overflow-hidden">
 
 
     @if(isLoading()) {
@@ -50,20 +66,7 @@
     }
     @else {
 
-    <div class="bg-white rounded-2xl p-5 border border-gray-200/80 shadow-xs space-y-4">
-      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-        <div>
-          <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2">
-            <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Horario de Atención Semanal
-          </h3>
-          <p class="text-xs text-gray-400 mt-0.5">Define los días que estás disponible para recibir citas.</p>
-        </div>
-      </div>
-
+    
       <div class="space-y-2.5">
 
 
@@ -71,7 +74,8 @@
         @let isUpdating = updatingWorkingHoursIds().has(item.id);
 
           <div
-            class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl border transition-all gap-3 bg-brand-50/40"
+            class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl border transition-all gap-3 bg-white 
+            border-gray-200/80"
             [class.bg-brand-50\/40]="item.enabled" [class.border-brand-100]="item.enabled"
             [class.bg-gray-50]="!item.enabled" [class.border-gray-100]="!item.enabled"
             [class.opacity-60]="!item.enabled && !isUpdating" [class.opacity-50]="isUpdating">
@@ -171,7 +175,6 @@
         }
 
       </div>
-    </div>
 
 
 

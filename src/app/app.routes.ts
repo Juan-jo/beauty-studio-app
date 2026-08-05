@@ -91,6 +91,14 @@ export const routes: Routes = [
                         .then(c => c.Booking)
     },
 
+    {
+        path: 'employee/available-services',
+        data: { roles: ['EMPLOYEE'] },
+        loadComponent: () =>
+                    import('./features/employee/empl-available-services/empl-available-services')
+                        .then(c => c.EmplAvailableServices)
+    },
+
 
     // Rutas CUSTOMER
     {
