@@ -6,6 +6,7 @@ import { AuthService } from '../../../core/services/auth';
 import { EmployeeAuthenticatedService } from '../service/empl-authenticated.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { DurationPipe } from '../../../core/pipes/duration-pipe';
+import { HasRoleDirective } from '../../../core/directives/has-role';
 
 @Component({
   selector: 'app-empl-profile',
@@ -13,8 +14,8 @@ import { DurationPipe } from '../../../core/pipes/duration-pipe';
     SectionLogout,
     SectionTheme,
     RouterLink,
-    DurationPipe
-    
+    DurationPipe,
+    HasRoleDirective
 ],
   templateUrl: './empl-profile.html',
   styleUrl: './empl-profile.css',

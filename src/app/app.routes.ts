@@ -131,6 +131,18 @@ export const routes: Routes = [
     
 
 
+    // Rutas SALON_ADMIN
+
+    {
+        canActivate: [roleGuard],
+        data: { roles: ['SALON_ADMIN'] },
+        path: 'salon',
+                loadComponent: () =>
+                    import('./features/salon/page/salon/salon')
+                        .then(c => c.Salon)
+    },
+
+
 
 
 

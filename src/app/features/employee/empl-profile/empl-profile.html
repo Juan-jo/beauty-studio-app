@@ -78,6 +78,54 @@
       </div>
   
       <div class="lg:col-span-2 space-y-4">
+
+
+        <!-- Opción: Salón -->
+        <a  *appHasRole="['SALON_ADMIN']" routerLink="/salon" class="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200/80 shadow-xs hover:shadow-md hover:border-brand-200 transition-all flex items-center justify-between gap-4 cursor-pointer">
+          <div class="flex items-center gap-4">
+            
+            <!-- Icono de Salón / Establecimiento -->
+            <div class="w-12 h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-700 shrink-0 group-hover:scale-105 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0H7m4 0v10" />
+              </svg>
+            </div>
+
+            <div>
+              <h3 class="text-sm font-bold text-gray-900 group-hover:text-brand-700 transition-colors">Configuración del Salón</h3>
+              <p class="text-xs text-gray-500 mt-0.5">Gestión de servicios activos, precios, datos del negocio y políticas.</p>
+
+              <!-- Indicadores de estado / métricas rápidas -->
+              <div class="flex items-center gap-2 mt-2">
+                @if(meResource.isLoading()) {
+                  <div class="h-4 w-28 bg-gray-100 rounded-md animate-pulse"></div>
+                }
+                @else {
+                  <!-- Indicador de servicios activos -->
+                  <!--  <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-md border border-brand-100/60">
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span>
+                    {{ '2' }} servicios activos
+                  </span>-->
+
+                  <!-- Nombre del Salón o Ciudad (Opcional) -->
+                  <span class="text-[11px] text-gray-400 font-medium truncate max-w-[150px]">
+                    {{ me?.salonName }}
+                  </span>
+                }
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Flecha de navegación -->
+          <div class="p-2 rounded-xl text-gray-400 group-hover:text-brand-700 group-hover:bg-brand-50 transition-colors shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </a>
+  
+
   
         <a routerLink="/employee/schedule" class="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200/80 shadow-xs hover:shadow-md hover:border-brand-200 transition-all flex items-center justify-between gap-4 cursor-pointer">
           <div class="flex items-center gap-4">
