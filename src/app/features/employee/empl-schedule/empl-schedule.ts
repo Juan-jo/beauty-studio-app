@@ -28,12 +28,28 @@ export class EmplSchedule {
   private location = inject(Location);
   
   private readonly emplScheduleService = inject(EmplScheduleService);
-  private readonly auth = inject(AuthService);
+  private readonly authService = inject(AuthService);
+
+  user = this.authService.currentUser;
 
 
-  get username() {
-    return this.auth.userName;
-  }
+  userInitials = computed(() => {
+
+    const name = this.user()?.name;
+
+    if (!name) {
+      return '';
+    }
+
+    return name
+      .trim()
+      .split(' ')
+      .slice(0, 1 )
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase();
+
+  });
 
   updatingWorkingHoursIds = signal<Set<number>>(new Set());
 

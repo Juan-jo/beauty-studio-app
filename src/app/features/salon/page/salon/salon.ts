@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 import { DurationPipe } from '../../../../core/pipes/duration-pipe';
 import { SalonAdminService } from '../../service/salon-admin.service';
@@ -22,13 +22,29 @@ export class Salon {
 
   updatingServiceIds = signal<Set<number>>(new Set());
 
-  private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+
+  user = this.authService.currentUser;
 
 
-  get username() {
-    return this.auth.userName;
-  }
+  userInitials = computed(() => {
+
+    const name = this.user()?.name;
+
+    if (!name) {
+      return '';
+    }
+
+    return name
+      .trim()
+      .split(' ')
+      .slice(0, 1 )
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase();
+
+  });
 
 
 

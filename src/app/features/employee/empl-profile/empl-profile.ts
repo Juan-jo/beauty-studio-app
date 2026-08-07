@@ -22,16 +22,29 @@ import { HasRoleDirective } from '../../../core/directives/has-role';
 })
 export class EmplProfile {
 
-  private readonly auth = inject(AuthService);
   private readonly employeeAuthenticatedService = inject(EmployeeAuthenticatedService);
-  
+  private readonly authService = inject(AuthService);
+
+  user = this.authService.currentUser;
 
 
+  userInitials = computed(() => {
 
-  get username() {
-    return this.auth.userName;
-  }
+    const name = this.user()?.name;
 
+    if (!name) {
+      return '';
+    }
+
+    return name
+      .trim()
+      .split(' ')
+      .slice(0, 1 )
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase();
+
+  });
 
 
   meResource = rxResource<EmployeeMe, void>({

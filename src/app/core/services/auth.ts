@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { AppConfigService } from '../../config/app-config.service';
+import { UserMe } from '../models/auth.models';
+import { Observable, tap } from 'rxjs';
 
 export type UserRole =
   | 'PUBLIC'
@@ -12,6 +14,7 @@ export type UserRole =
 export const bs_roles = 'bs_roles';
 export const bs_token = 'bs_token';
 export const bs_name = 'bs_name';
+export const bs_user = 'bs_user';
 
 interface JwtPayload {
   roles: UserRole[];
@@ -38,6 +41,12 @@ export class AuthService {
     localStorage.getItem(bs_name) ?? ''
   );
 
+  private currentUserSignal = signal<UserMe | null>(
+    this.loadUser()
+  );
+  
+
+  readonly currentUser = this.currentUserSignal.asReadonly();
   readonly userName = this.currentUserNameSignal.asReadonly();
 
 
@@ -57,6 +66,55 @@ export class AuthService {
       return JSON.parse(value) as UserRole[];
     } catch {
       return ['PUBLIC'];
+    }
+  }
+
+  loadAuthenticatedUser(): Observable<UserMe> {
+
+    return this.me().pipe(
+      tap(user => {
+  
+        this.currentUserSignal.set(user);
+  
+        localStorage.setItem(
+          bs_user,
+          JSON.stringify(user)
+        );
+  
+      })
+    );
+  
+  }
+  
+
+  me(): Observable<UserMe> {
+    return this.http.get<UserMe>(
+      `${this.appConfig.apiUrl}/api/v1/auth/me`
+    ).pipe(
+      tap(user => {
+        
+        localStorage.setItem(
+          bs_user,
+          JSON.stringify(user)
+        );
+
+        this.currentUserSignal.set(user);
+      })
+    );
+  }
+
+  private loadUser(): UserMe | null {
+
+    const value = localStorage.getItem(bs_user);
+
+    if (!value) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(value);
+    } catch {
+      return null;
     }
   }
 

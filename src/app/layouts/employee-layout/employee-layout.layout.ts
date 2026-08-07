@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../core/services/auth';
 
 @Component({
   selector: 'app-employee-layout',
@@ -10,7 +11,28 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 export class EmployeeLayoutLayout {
 
 
+  private readonly authService = inject(AuthService);
 
+  user = this.authService.currentUser;
+
+
+  userInitials = computed(() => {
+
+    const name = this.user()?.name;
+
+    if (!name) {
+      return '';
+    }
+
+    return name
+      .trim()
+      .split(' ')
+      .slice(0, 1 )
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase();
+
+  });
 
 
 }

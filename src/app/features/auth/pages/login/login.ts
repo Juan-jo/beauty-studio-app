@@ -53,10 +53,31 @@ export class Login {
 
           this.authService.saveToken(token);
 
-          this.router.navigate(
-            [getHomeRouteForRole(this.authService.getRoles())],
-            { replaceUrl: true }
-          );
+          this.authService.loadAuthenticatedUser()
+          .subscribe({
+
+            next: () => {
+
+              this.router.navigate(
+                [
+                  getHomeRouteForRole(
+                    this.authService.getRoles()
+                  )
+                ],
+                {
+                  replaceUrl: true
+                }
+              );
+
+            },
+
+            error: () => {
+
+              this.authService.logout();
+
+            }
+
+          });
 
         },
         error: err => {

@@ -18,24 +18,40 @@ import { AuthService } from '../../../core/services/auth';
   styleUrl: './empl-available-services.css',
 })
 export class EmplAvailableServices {
-
-  private readonly auth = inject(AuthService);
+  
 
 
 
   
   private readonly emplBeautyService = inject(EmplBeautyService);
-  
+  private readonly authService = inject(AuthService);
+
   @Output() close = new EventEmitter<void>();
 
 
   updatingServiceIds = signal<Set<number>>(new Set());
 
 
+  user = this.authService.currentUser;
 
-  get username() {
-    return this.auth.userName;
-  }
+
+  userInitials = computed(() => {
+
+    const name = this.user()?.name;
+
+    if (!name) {
+      return '';
+    }
+
+    return name
+      .trim()
+      .split(' ')
+      .slice(0, 1 )
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase();
+
+  });
 
   serviceResource = resource({
     loader: async () => {
