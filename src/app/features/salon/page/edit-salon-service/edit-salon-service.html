@@ -1,0 +1,216 @@
+<!-- HEADER DE NAVEGACIÓN DE LA PÁGINA -->
+<header class="bg-white border-b border-gray-200/80 px-4 py-3.5 sticky top-0 z-20 shadow-2xs">
+  <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+
+    <!-- Botón Volver e Info del Salón -->
+    <div class="flex items-center gap-3 min-w-0">
+      <button type="button" onclick="history.back()"
+        class="p-2 rounded-xl border border-gray-200 hover:bg-brand-50 hover:border-brand-200 text-gray-600 hover:text-brand-700 transition-all cursor-pointer active:scale-95 shrink-0"
+        title="Volver">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+
+      <div class="flex items-center gap-3 min-w-0">
+        
+        <div class="min-w-0">
+          <h1 class="text-sm font-bold text-gray-900 leading-tight truncate">{{isEdit ? 'Editar' : 'Nuevo'}} Servicio</h1>
+          
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+
+<main class="min-h-screen bg-brand-50">
+  @if(state() === 'idle') {
+    <form 
+    [formGroup]="form" 
+    (ngSubmit)="save()" 
+    class="space-y-5 p-8 bg-brand-50/40"
+  >
+  
+    <div class="space-y-5">
+  
+      <app-image-picker
+        label="Añade foto del servicio"
+        (imageSelected)="onImageChange($event)"
+        [presentPictureUrl]="currentPictureUrl"
+      />
+      <p class="mt-2 text-sm text-red-600">
+  
+        @if (image() === null && !isEdit) {
+          Foto de servicio requerido
+        }
+      </p>
+  
+      <div>
+  
+        <label class="mb-2 mt-4 block text-sm font-medium text-gray-700">
+          Nombre del servicio
+        </label>
+  
+        <input
+          formControlName="name"
+          
+          type="text"
+          placeholder="Ej. Corte de cabello"
+          class="bg-white w-full rounded-xl border px-4 py-4 outline-none transition
+          text-sm
+          font-bold
+          text-gray-800"
+          [class.border-red-500]="form.controls.name.invalid && form.controls.name.touched"
+          [class.border-gray-300]="!(form.controls.name.invalid && form.controls.name.touched)"
+          [class.focus:ring-red-200]="form.controls.name.invalid && form.controls.name.touched"
+          [class.focus:border-brand-500]="!(form.controls.name.invalid && form.controls.name.touched)"
+          [class.focus:ring-brand-200]="!(form.controls.name.invalid && form.controls.name.touched)">
+  
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+  
+          <p class="mt-2 text-sm text-red-600">
+  
+            @if (form.controls.name.hasError('required')) {
+              El nombre es obligatorio.
+            }
+          </p>
+  
+        }
+  
+      </div>
+  
+  
+      <div>
+  
+        <label class="mb-2 mt-4 block text-sm font-medium text-gray-700">
+          Descripción
+        </label>
+  
+        <textarea
+          formControlName="description"
+          rows="3"
+          placeholder="Detalles sobre el servicio..."
+          class="bg-white w-full rounded-xl border px-4 py-4 outline-none transition
+          text-sm
+          font-bold
+          text-gray-800"
+          [class.border-red-500]="form.controls.description.invalid && form.controls.description.touched"
+          [class.border-gray-300]="!(form.controls.description.invalid && form.controls.description.touched)"
+          [class.focus:ring-red-200]="form.controls.description.invalid && form.controls.description.touched"
+          [class.focus:border-brand-500]="!(form.controls.description.invalid && form.controls.description.touched)"
+          [class.focus:ring-brand-200]="!(form.controls.description.invalid && form.controls.description.touched)">
+          </textarea>
+  
+        @if (form.controls.description.touched && form.controls.description.invalid) {
+  
+          <p class="mt-2 text-sm text-red-600">
+  
+            @if (form.controls.description.hasError('required')) {
+              La descripción es obligatorio.
+            }
+          </p>
+  
+        }
+  
+      </div>    
+  
+  
+  
+  
+    </div>
+  
+  
+  
+  
+    <!-- Precio y Duración -->
+    <div class="grid grid-cols-2 gap-4">
+  
+      
+      <div class="flex flex-col gap-1.5">
+        <label class="text-sm font-medium text-gray-700">
+          Precio ({{currency}})
+        </label>
+  
+        <input formControlName="price" 
+          type="text" 
+          inputmode="numeric"
+          appCurrencyFormat
+          placeholder="Ingresa un precio"
+          class="bg-white w-full rounded-xl border px-2 py-2.5 outline-none transition
+          text-sm
+          font-bold
+          text-gray-800"
+          [class.border-red-500]="form.controls.price.invalid && form.controls.price.touched"
+          [class.border-gray-300]="!(form.controls.price.invalid && form.controls.price.touched)"
+          [class.focus:ring-red-200]="form.controls.price.invalid && form.controls.price.touched"
+          [class.focus:border-brand-500]="!(form.controls.price.invalid && form.controls.price.touched)"
+          [class.focus:ring-brand-200]="!(form.controls.price.invalid && form.controls.price.touched)">
+  
+        @if (form.controls.price.touched && form.controls.price.invalid) {
+  
+        <p class="mt-2 text-sm text-red-600">
+  
+          @if (form.controls.price.hasError('required')) {
+            Precio es obligatorio.
+          }
+        </p>
+  
+        }
+  
+      </div>    
+  
+      <div class="flex flex-col gap-1.5">
+        <label class="text-sm font-medium text-gray-700">
+          Duración
+        </label>
+        
+        <app-duration-picker
+          formControlName="durationMinutes"
+          [min]="30"
+          [max]="320"
+          >
+          </app-duration-picker>
+        
+      </div>
+    </div>
+  
+    <!-- Botón de acción principal -->
+    <button
+      type="submit"
+      class="w-full rounded-xl bg-brand-500 py-3.5 font-medium text-white shadow-sm transition hover:opacity-90 active:scale-[0.98]"
+    >
+      Guardar servicio
+    </button>
+    </form>
+  }
+  @else {
+    <div class="flex min-h-[80vh] w-[80vw] max-w-4xl mx-auto items-center justify-center p-6">
+      @if (state() === 'loading') {
+        <div class="flex flex-col items-center justify-center gap-3 text-gray-600">
+          <div class="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600"></div>
+          <span class="text-sm font-medium">Cargando...</span>
+        </div>
+      }
+      @else if (state() === 'success') {
+        <ui-state-success
+          [title]="isEdit ? 'actualizada' : 'creada'"
+          [message]="'Servicio ' + (isEdit ? 'actualizado' : 'creado') + ' correctamente'"
+          (close)="onClose()"
+          class="w-full"
+        ></ui-state-success>
+      }
+      @else if (state() === 'error') {
+        <ui-state-error
+          [message]="errorMessage"
+          (retry)="retry()"
+          (close)="onClose()"
+          class="w-full"
+        ></ui-state-error>
+      }
+    </div>
+  }
+
+  
+</main>

@@ -79,26 +79,34 @@ export const routes: Routes = [
         ]
     },
     {
-        path: 'employee/schedule',
+        path: 'employee',
         canActivate: [roleGuard],
-        loadComponent: () => import('./features/employee/empl-schedule/empl-schedule').then(c => c.EmplSchedule),
         data: { roles: ['EMPLOYEE'] },
-    },
-    {
-        path: 'employee/booking',
+        children: [
+            {   
+                path: 'schedule',     
+                loadComponent: () => 
+                    import('./features/employee/empl-schedule/empl-schedule').then(c => c.EmplSchedule),
+            },
+            {
+                path: 'booking',
                 loadComponent: () =>
-                    import('./features/booking/page/booking/booking')
-                        .then(c => c.Booking)
-    },
-
-    {
-        path: 'employee/available-services',
-        data: { roles: ['EMPLOYEE'] },
-        loadComponent: () =>
+                    import('./features/booking/page/booking/booking').then(c => c.Booking)
+            },
+            {
+                path: 'available-services',
+                loadComponent: () =>
                     import('./features/employee/empl-available-services/empl-available-services')
-                        .then(c => c.EmplAvailableServices)
+                                .then(c => c.EmplAvailableServices)
+            },
+            {
+                path: 'available-services',
+                loadComponent: () =>
+                    import('./features/employee/empl-available-services/empl-available-services')
+                                .then(c => c.EmplAvailableServices)
+            }
+        ]
     },
-
 
     // Rutas CUSTOMER
     {
@@ -134,12 +142,26 @@ export const routes: Routes = [
     // Rutas SALON_ADMIN
 
     {
+        path: 'salon',
         canActivate: [roleGuard],
         data: { roles: ['SALON_ADMIN'] },
-        path: 'salon',
+        children:  [
+
+            {
+                path: '',
                 loadComponent: () =>
                     import('./features/salon/page/salon/salon')
                         .then(c => c.Salon)
+            },
+
+            {
+                path: 'edit-salon-service',
+                loadComponent: () =>
+                    import('./features/salon/page/edit-salon-service/edit-salon-service')
+                        .then(c => c.EditSalonService)
+            }
+
+        ],
     },
 
 

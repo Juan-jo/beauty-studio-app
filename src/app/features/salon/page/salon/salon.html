@@ -114,7 +114,7 @@
           class="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all">
       </div>
 
-      <button type="button" (click)="openServiceModal()"
+      <button type="button" [routerLink]="['/salon/edit-salon-service']"
         class="px-4 py-2 rounded-xl bg-brand-600 text-white text-xs sm:text-sm font-bold hover:bg-brand-700 shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 shrink-0">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -141,10 +141,11 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
 
         <div
+          
           class="group relative flex flex-col justify-between rounded-2xl border border-gray-200/80 bg-white p-4 shadow-2xs transition-all hover:border-brand-300 hover:shadow-md">
 
           <!-- Parte Superior: Imagen y Datos principales -->
-          <div>
+          <div (click)="onEdit(serv.serviceId)">
             <div class="flex items-start gap-3">
               @if (serv.pictureUrl) {
               <img [src]="serv.pictureUrl" [alt]="serv.name"
@@ -182,12 +183,24 @@
 
             <div class="flex items-center gap-2 text-xs">
               <label class="relative inline-flex items-center cursor-pointer shrink-0">
-                <input #chk type="checkbox" [checked]="serv.enabled" [disabled]="isUpdating" class="sr-only peer">
+                <input #chk type="checkbox" 
+                [checked]="serv.enabled" 
+                [disabled]="isUpdating" 
+                (change)="onToggleService(serv.serviceId, $any($event.target).checked)"
+                class="sr-only peer">
 
                 <div
                   class="w-8 h-4.5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-200 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-brand-600 peer-disabled:opacity-50">
                 </div>
               </label>
+              @if (isUpdating) {
+                <svg class="animate-spin h-3.5 w-3.5 text-brand-600" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                  </path>
+                </svg>
+              }
             </div>
 
           </div>

@@ -40,6 +40,30 @@ export class SalonAdminService {
 
   }
 
+  createService(data: any) {
+    return this.http.post<any>(
+      `${this.config.apiUrl}/api/v1/services`, data
+    );
+  }
+
+  updateService(serviceId: number, data: any) {
+    return this.http.put<any>(
+      `${this.config.apiUrl}/api/v1/services/${serviceId}`, data
+    );
+  }
+
+  getServiceById(serviceId: number) {
+    return this.http.get<any>(
+      `${this.config.apiUrl}/api/v1/services/${serviceId}`
+    );
+  }
+
+  enabledService(serviceId: number, enabled: boolean) {
+    return this.http.patch<any>(
+      `${this.config.apiUrl}/api/v1/services/${serviceId}/enabled`, { enabled }
+    );
+  }
+
 
 
 
