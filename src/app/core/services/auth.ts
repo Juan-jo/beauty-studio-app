@@ -85,6 +85,10 @@ export class AuthService {
     );
   
   }
+
+  updatePicture(data: any) {
+    return this.http.patch<{pictureUrl:string}>(`${this.appConfig.apiUrl}/api/v1/auth/me/picture`, data);
+  }
   
 
   me(): Observable<UserMe> {
@@ -116,6 +120,24 @@ export class AuthService {
     } catch {
       return null;
     }
+  }
+
+
+  updateUserProfilePicture(newPictureUrl: string): void {
+    // 1. Actualizar la Signal reactiva de Angular
+    this.currentUserSignal.update(currentUser => {
+      if (!currentUser) return null;
+
+      const updatedUser: UserMe = {
+        ...currentUser,
+        pictureUrl: newPictureUrl
+      };
+
+      // 2. Guardar la versión actualizada en LocalStorage
+      localStorage.setItem(bs_user, JSON.stringify(updatedUser));
+
+      return updatedUser;
+    });
   }
 
 

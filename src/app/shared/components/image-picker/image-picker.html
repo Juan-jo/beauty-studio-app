@@ -1,92 +1,149 @@
 <input
   #fileInput
-  hidden
   type="file"
   accept="image/*"
+  class="hidden"
   (change)="onFileSelected($event)"
 >
 
+@if (isCropping()) {
+  <div class="flex flex-col items-center bg-white p-4 rounded-2xl shadow-xl border border-slate-100 max-w-sm w-full mx-auto gap-4">
+    <p class="text-sm font-semibold text-slate-700">Ajusta y recorta tu imagen</p>
 
-@if(imageUrl()) {
-
-<div class=" bg-white relative">
-
-    <img
-      [src]="imageUrl()"
-      class="w-full h-48 object-cover rounded-2xl"
-    >
-
-
-    <div class="absolute bottom-3 right-3 flex gap-2">
-
-        <button
-          type="button"
-          class="bg-white shadow px-3 py-2 rounded-xl text-sm"
-          (click)="openPicker()">
-          Cambiar
-        </button>
-
-
-        @if(!isEdit) {
-
-            <button
-                type="button"
-                class="bg-white shadow px-3 py-2 rounded-xl text-sm text-red-600"
-                (click)="removeImage($event)">
-                Eliminar
-            </button>
-
-        }
-        
-
+    <div class="w-full h-64 relative bg-slate-900 rounded-xl overflow-hidden">
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent()"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="mode() === 'avatar' ? 1 / 1 : 16 / 9"
+        [roundCropper]="mode() === 'avatar'"
+        [imageQuality]="80"
+        format="jpeg"
+        (imageCropped)="imageCropped($event)"
+      ></image-cropper>
     </div>
 
-</div>
+    <div class="flex justify-end gap-2 w-full">
+      <button
+        type="button"
+        class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-medium transition-colors"
+        (click)="cancelCrop()">
+        Cancelar
+      </button>
 
-
+      <button
+        type="button"
+        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-sm"
+        (click)="saveCrop()">
+        Aplicar recorte
+      </button>
+    </div>
+  </div>
 }
 @else {
 
-<button
-  type="button"
-  (click)="openPicker()"
-  class="
-    bg-white
-    w-full
-    h-48
-    border-2
-    border-dashed
-    rounded-2xl
-    flex
-    flex-col
-    items-center
-    justify-center
-    text-gray-400
-    hover:border-primary
-  "
->
-<svg 
-    class="h-10 w-10 stroke-current transition-transform group-hover:scale-110" 
-    fill="none" 
-    viewBox="0 0 24 24" 
-    stroke-width="1.5"
-  >
-    <path 
-      stroke-linecap="round" 
-      stroke-linejoin="round" 
-      d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" 
-    />
-    <path 
-      stroke-linecap="round" 
-      stroke-linejoin="round" 
-      d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" 
-    />
-  </svg>
+  @if (imageUrl() && mode() === 'avatar') {
+    <div class="flex flex-col items-center gap-3">
+      <div class="relative w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-100 shrink-0">
+        <img
+          [src]="imageUrl()"
+          class="w-full h-full object-cover object-center"
+          alt="Avatar seleccionado"
+        >
+      </div>
 
-    <span class="mt-2 text-sm">
-      {{label()}} 
-    </span>
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-medium px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition-colors"
+          (click)="fileInput.click()">
+          📷 Seleccionar otra
+        </button>
 
-</button>
+        @if (!isEdit) {
+          <button
+            type="button"
+            class="bg-red-50 hover:bg-red-100 text-red-600 font-medium px-3 py-1.5 rounded-xl text-xs transition-colors"
+            (click)="removeImage($event)">
+            Eliminar
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  @else if (imageUrl() && mode() === 'service') {
+    <div class="bg-white relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+      <img
+        [src]="imageUrl()"
+        class="w-full h-52 object-cover object-center"
+        alt="Imagen del servicio"
+      >
+
+      <div class="absolute bottom-3 right-3 flex gap-2">
+        <button
+          type="button"
+          class="bg-white/90 hover:bg-white text-gray-800 shadow-md px-3.5 py-2 rounded-xl text-sm font-medium transition-all"
+          (click)="fileInput.click()">
+          Seleccionar otra
+        </button>
+
+        @if (!isEdit) {
+          <button
+            type="button"
+            class="bg-white/90 hover:bg-white text-red-600 shadow-md px-3.5 py-2 rounded-xl text-sm font-medium transition-all"
+            (click)="removeImage($event)">
+            Eliminar
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- CASO SIN IMAGEN -->
+  @else {
+    
+    <!-- SIN IMAGEN EN MODO AVATAR (CIRCULAR) -->
+    @if (mode() === 'avatar') {
+      <div class="flex flex-col items-center gap-3 mx-auto">
+        <button
+          type="button"
+          (click)="fileInput.click()"
+          class="w-36 h-36 bg-white border-2 border-dashed border-gray-300 hover:border-indigo-500 rounded-full flex flex-col items-center justify-center text-gray-400 transition-colors group shadow-sm">
+          <svg 
+            class="h-10 w-10 stroke-current transition-transform group-hover:scale-110" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke-width="1.5"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+          </svg>
+          <span class="mt-1 text-xs font-medium text-gray-500">{{ label() }}</span>
+        </button>
+      </div>
+    }
+
+    @else {
+      <button
+        type="button"
+        (click)="fileInput.click()"
+        class="bg-white w-full h-48 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center text-gray-400 hover:border-indigo-500 transition-colors group">
+        <svg 
+          class="h-10 w-10 stroke-current transition-transform group-hover:scale-110" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke-width="1.5"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+        </svg>
+
+        <span class="mt-2 text-sm font-medium text-gray-600">
+          {{ label() }} 
+        </span>
+      </button>
+    }
+
+  }
 
 }
