@@ -3,10 +3,11 @@ import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 import { DurationPipe } from '../../../../core/pipes/duration-pipe';
 import { SalonAdminService } from '../../service/salon-admin.service';
 import { SalonEmployeesResponse, SalonResume, SalonServicesResponse } from '../../models/salon.models';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule} from '@angular/common';
 import { AuthService } from '../../../../core/services/auth';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-salon',
@@ -24,6 +25,8 @@ export class Salon {
 
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
+
 
   user = this.authService.currentUser;
 
@@ -48,7 +51,28 @@ export class Salon {
 
 
 
-  activeTab = signal<'services' | 'specialists'>('services');
+
+
+  public activeNavigation = toSignal(
+  this.route.paramMap.pipe(
+    map(params => params.get('activeNavigation') ?? 'services')
+  ),
+  { initialValue: 'services' }
+  );
+
+
+  nagivate(nav: 'services' | 'employees') {
+    this.router.navigate(
+      ['../'+nav],
+      {
+        relativeTo: this.route,
+        replaceUrl: true
+      }
+    );
+  }
+
+
+  //activeTab = signal<'services' | 'specialists'>('services');
 
 
   private readonly salonAdminService = inject(SalonAdminService);
@@ -115,9 +139,15 @@ export class Salon {
   }
 
 
-  onEdit(serviceId: number) {
+  onEditService(serviceId: number) {
 
     this.router.navigate(['/salon/edit-salon-service'], {queryParams:{id: serviceId}})
+
+  }
+
+  onEditEmployee(employeeId: number) {
+
+    this.router.navigate(['/salon/edit-salon-employee'], {queryParams:{id: employeeId}})
 
   }
 

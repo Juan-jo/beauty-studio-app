@@ -12,7 +12,8 @@ export class UIStateSuccess {
 
   safeMessage!: SafeHtml;
 
-
+  @Input() fullPage: boolean = false;
+  
   @Input({ required: true }) title!: string
   
   @Input({ required: true }) set message(val: string) {

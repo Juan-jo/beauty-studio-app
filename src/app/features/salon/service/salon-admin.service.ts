@@ -66,5 +66,23 @@ export class SalonAdminService {
 
 
 
+  createEmployee(data: any) {
+    return this.http.post<any>(
+      `${this.config.apiUrl}/api/v1/employees`, data
+    );
+  }
+
+  updateEmployee(employeeId: number, data: any) {
+    return this.http.put<any>(
+      `${this.config.apiUrl}/api/v1/employees/${employeeId}`, data
+    );
+  }
+
+  getEmployeeById(employeeId: number) {
+    return this.http.get<any>(
+      `${this.config.apiUrl}/api/v1/employees/${employeeId}`
+    );
+  }
+
 
 }

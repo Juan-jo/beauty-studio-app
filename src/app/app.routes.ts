@@ -148,18 +148,44 @@ export const routes: Routes = [
         children:  [
 
             {
-                path: '',
-                loadComponent: () =>
-                    import('./features/salon/page/salon/salon')
-                        .then(c => c.Salon)
-            },
-
-            {
                 path: 'edit-salon-service',
                 loadComponent: () =>
                     import('./features/salon/page/edit-salon-service/edit-salon-service')
                         .then(c => c.EditSalonService)
-            }
+            },
+
+            {
+                path: 'edit-salon-employee',
+                loadComponent: () =>
+                    import('./features/salon/page/edit-salon-employee/edit-salon-employee')
+                        .then(c => c.EditSalonEmployee)
+            },
+
+            {
+                path: '',
+                children: [
+            
+                  {
+                    path: '',
+                    redirectTo: 'services',
+                    pathMatch: 'full'
+                  },
+                  {
+                    path: ':activeNavigation',
+                    loadComponent: () =>
+                        import('./features/salon/page/salon/salon')
+                            .then(c => c.Salon)
+                    
+                  }
+            
+                ]
+            
+
+              },
+
+
+            
+                        
 
         ],
     },

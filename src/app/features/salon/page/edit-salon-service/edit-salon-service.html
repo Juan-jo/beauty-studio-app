@@ -308,12 +308,19 @@
 
       }
       @else if (state() === 'success') {
+        
         <ui-state-success
-          [title]="isEdit ? 'Servicio actualizado' : 'Servicio creado'"
-          [message]="'El servicio fue ' + (isEdit ? 'actualizado' : 'creado') + ' correctamente.'"
-          (close)="onClose()"
-          class="w-full">
-        </ui-state-success>
+        [fullPage]="true"
+        [title]="isEdit ? '¡Datos Actualizados!' : 'Servicio Creado!'"
+        [message]="
+
+          isEdit 
+          ? 'Los datos del servicio <span class=\'font-bold text-gray-700\'>' + form.controls.name.value + '</span> se actualizaron correctamenente.' 
+          : 'El servicio <span class=\'font-bold text-gray-700\'>' + form.controls.name.value + '</span> se creó correctamente.'"
+        (close)="onClose()"
+        class="w-full">
+      </ui-state-success>
+
       }
       @else if (state() === 'error') {
         <ui-state-error
