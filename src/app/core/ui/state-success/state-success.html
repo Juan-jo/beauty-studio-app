@@ -1,53 +1,30 @@
-<!--<div class="w-full max-w-sm bg-white rounded-2xl shadow-xl border border-gray-200/80 p-6 flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-150">
-    <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mb-4 ring-8 ring-brand-50/50">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-        </svg>
-    </div>
-
-    <h3 class="text-base font-bold text-gray-900">
-        {{title}}
-    </h3>
-    <p class="text-xs text-gray-500 font-medium mt-1 leading-relaxed"
-        [innerHTML]="safeMessage">
-    </p>
-
-    <button type="button" 
-        (click)="close.emit()"
-        class="mt-6 w-full py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer active:scale-95">
-        Aceptar
-    </button>
-</div>-->
-
 @if (fullPage) {
-    <!-- ============================================================
-         DISEÑO MEJORADO: INMERSIVO A PANTALLA COMPLETA (Sin Card)
-         ============================================================ -->
+    
     <div class="fixed inset-0 z-50 bg-white overflow-y-auto animate-in fade-in duration-300">
       
-      <!-- Fondo decorativo sutil con degradado de marca -->
-      <div class="absolute inset-0 bg-gradient-to-b from-brand-50/70 via-white to-white pointer-events-none"></div>
       
-      <!-- Contenedor Central -->
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-50/70 via-white to-white pointer-events-none"></div>
+      
+      
       <div class="relative min-h-screen flex flex-col items-center justify-center p-6 sm:p-10 text-center">
         
-        <!-- Layout de Contenido con espaciado amplio -->
+      
         <div class="w-full max-w-lg flex flex-col items-center">
           
-          <!-- Icono de Éxito Monumental y Animado -->
-          <div class="relative mb-10 group">
-            <!-- Anillo exterior con pulso -->
-            <div class="absolute inset-0 rounded-full bg-emerald-100 animate-pulse-slow group-hover:scale-110 transition-transform duration-500"></div>
+      
+            <div class="relative mb-10 group">
+      
+                <div class="absolute inset-0 rounded-full bg-emerald-100 animate-pulse-slow group-hover:scale-110 transition-transform duration-500"></div>
             
-            <!-- Contenedor del icono principal -->
-            <div class="relative w-24 h-24 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 ring-4 ring-white">
+      
+                <div class="relative w-24 h-24 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 ring-4 ring-white">
               <svg class="w-12 h-12 animate-check-draw" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
               </svg>
             </div>
           </div>
   
-          <!-- Textos con Jerarquía Tipográfica Mejorada -->
+      
           <h2 class="text-3xl md:text-4xl font-extrabold text-slate-950 tracking-tighter leading-tight">
             {{ title }}
           </h2>
@@ -73,9 +50,7 @@
     </div>
   
   } @else {
-    <!-- ============================================================
-         DISEÑO ESTÁNDAR: TARJETA COMPACTA (Para integrar en forms)
-         ============================================================ -->
+    
     <div class="w-full max-w-sm bg-white rounded-2xl shadow-xl border border-gray-200/80 p-6 flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-150 mx-auto">
         <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mb-4 ring-8 ring-brand-50/50">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
