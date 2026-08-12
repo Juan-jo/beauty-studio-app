@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "627591395367",
+    "project_id": "beauty-studio-app-4fbf0",
+    "storage_bucket": "beauty-studio-app-4fbf0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627591395367:android:670302495bd5e9a0903602",
+        "android_client_info": {
+          "package_name": "com.beautystudio.brens"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFinMJPruHi1j62pc66mLbabfb8nivL20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

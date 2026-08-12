@@ -1,5 +1,7 @@
 {
-    "apiUrl": "http://192.168.101.100:8080",
+    "apiUrl": "http://192.168.101.100:8080/studio",
+    "apiUrlD": "https://3de9-38-58-64-162.ngrok-free.app/studio",
+    
     "salonSerial": "ECA92",
     "production": true,
     "timezone": "America/Mexico_City",

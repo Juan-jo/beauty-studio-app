@@ -15,6 +15,8 @@ export const bs_roles = 'bs_roles';
 export const bs_token = 'bs_token';
 export const bs_name = 'bs_name';
 export const bs_user = 'bs_user';
+export const TOKEN_STORAGE_KEY = 'bs_last_pushed_fcm_token';
+
 
 interface JwtPayload {
   roles: UserRole[];

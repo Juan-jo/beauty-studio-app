@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
+import { PushNotificationService } from '../../core/notifications/push-notification.service';
 
 @Component({
   selector: 'app-employee-layout',
@@ -12,6 +13,7 @@ export class EmployeeLayoutLayout {
 
 
   private readonly authService = inject(AuthService);
+  protected notificationService = inject(PushNotificationService);
 
   user = this.authService.currentUser;
 

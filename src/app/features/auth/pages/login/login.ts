@@ -5,6 +5,7 @@ import { getHomeRouteForRole } from '../../../../core/guards/role.guard';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
+import { PushNotificationService } from '../../../../core/notifications/push-notification.service';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class Login {
 
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly pushNotificationService = inject(PushNotificationService);
 
   readonly isLoading = signal(false);
 
@@ -53,6 +55,8 @@ export class Login {
 
           this.authService.saveToken(token);
 
+          this.pushNotificationService.initPushNotifications().then(_=>{})
+          
           this.authService.loadAuthenticatedUser()
           .subscribe({
 

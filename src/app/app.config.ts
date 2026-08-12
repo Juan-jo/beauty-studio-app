@@ -19,8 +19,9 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes), provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      registrationStrategy: 'registerWhenStable:30000'
+      enabled: false
+      //enabled: !isDevMode(),
+      //registrationStrategy: 'registerWhenStable:30000'
     }),
 
     provideAppInitializer(async () => {
