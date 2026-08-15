@@ -28,7 +28,8 @@ export class EmplWeekSchedule {
 
   @Output() changeView = new EventEmitter<string>();
  
-  
+  currrentDate = signal<string>('');
+  today = signal<string>('');
 
   constructor() {
 
@@ -36,7 +37,8 @@ export class EmplWeekSchedule {
       const response = this.week();
   
       if (response?.currentDate) {
-        this.currrenDate.set(response.currentDate);
+        this.currrentDate.set(response.currentDate);
+        this.today.set(response.currentDate);
       }
     });
   }
@@ -48,7 +50,7 @@ export class EmplWeekSchedule {
 
   
 
-  currrenDate = signal<string>('');
+  
 
   weekResource = resource({
 
@@ -66,12 +68,12 @@ export class EmplWeekSchedule {
 
   
   changeDate(date: string) {
-    this.currrenDate.set(date)
+    this.currrentDate.set(date)
   }
 
   
   scheduleDayResource = resource({
-    params: () => ({ date: this.currrenDate() }),
+    params: () => ({ date: this.currrentDate() }),
 
     loader: async ({ params }) => {
 

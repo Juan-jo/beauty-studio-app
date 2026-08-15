@@ -44,6 +44,14 @@ export interface WeekDay {
   date          : string
   day           : DayOfWeek
   bookings      : number
+  hasPending    : boolean
+  hasConfirmed  : boolean
+  hasProgress   : boolean
+  hasCancelled  : boolean
+  hasCompleted  : boolean
+  hasNoShow     : boolean
+
+
 }
 
 export type EmplWeekResponse = EmplWeek;

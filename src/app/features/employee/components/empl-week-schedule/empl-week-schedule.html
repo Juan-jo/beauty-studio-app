@@ -18,8 +18,8 @@
         <div class="text-start ">
           <span class="text-xs text-gray-400 block font-medium">Esta semana</span>
           <button (click)="viewMonth()" class="flex items-center gap-1 text-base font-bold text-gray-800 capitalize">
-            {{ currrenDate() | date : 'd MMM, yyyy' }}  
-            <span class="text-gray-400 font-normal capitalize"> {{ currrenDate() | date : 'EEEE' }} </span>
+            {{ currrentDate() | date : 'd MMM, yyyy' }}  
+            <span class="text-gray-400 font-normal capitalize"> {{ currrentDate() | date : 'EEEE' }} </span>
             <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
@@ -52,29 +52,42 @@
       @else {
         
         @for (day of week()?.week; track day.date) {
-          <div class="flex flex-col items-center">
+          <div class="flex flex-col items-center"
+          
+            >
             <span class="text-xs text-gray-400 mb-2 font-medium"> {{ day.day | mxDayOfWeek: 'short' }}</span>
             <button 
               (click)="changeDate(day.date)"
               class="relative w-9 h-9 rounded-xl flex items-center justify-center text-sm font-semibold transition-all "
+              
               [ngClass]="{
-                ' bg-brand-600 text-white shadow-md': currrenDate() == day.date,
-                'text-gray-700 hover:bg-brand-100': !(currrenDate() == day.date)
+                'border-1 border-brand-600 border-dashed ': today() === day.date,
+                'bg-brand-600 text-white shadow-md': currrentDate() === day.date,
+                'text-gray-700 hover:bg-brand-100': currrentDate() !== day.date
               }"
+              
               [disabled]="isLoadingScheduleDay()"
               > 
               {{ day.date | date:'d' }} 
               
 
-              @if (day.bookings > 0) {
-                <span 
-                  class="absolute -bottom-1 w-1 h-1 rounded-full transition-colors"
-                  [ngClass]="{
-                    'bg-white': currrenDate() == day.date,
-                    'bg-brand-600': currrenDate() != day.date
-                  }"
-                ></span>
-              }
+              
+              <div class="absolute -bottom-2 left-0 right-0 flex justify-center gap-1">
+                @if(day.hasPending) {
+                  <span class="w-1 h-1 rounded-full bg-amber-600"></span>
+                }
+                @if (day.hasConfirmed || day.hasProgress) {
+                  <span class="w-1 h-1 rounded-full bg-emerald-600"></span>
+                }
+                @if (day.hasCancelled || day.hasNoShow) {
+                  <span class="w-1 h-1 rounded-full bg-red-600"></span>
+                }
+                @if (day.hasCompleted) {
+                  <span class="w-1 h-1 rounded-full bg-gray-600"></span>
+                }
+                
+              </div>
+              
 
 
             </button>

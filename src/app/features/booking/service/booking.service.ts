@@ -2,6 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AppConfigService } from '../../../config/app-config.service';
+import { Booking } from '../models/booking.models';
 
 @Injectable({
     providedIn: 'root'
@@ -45,6 +46,15 @@ export class BookingService {
         return this.http.patch<void>(
             `${this.config.apiUrl}/api/v1/bookings/${bookingId}/cancel`,
             { 'message': message }
+        );
+
+    }
+
+
+    get(bookingId: number) {
+
+        return this.http.get<Booking>(
+            `${this.config.apiUrl}/api/v1/bookings/${bookingId}`,
         );
 
     }

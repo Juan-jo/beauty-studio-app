@@ -41,6 +41,9 @@ export class BeautyApp implements OnInit {
 
     App.addListener('backButton', () => {
       
+      console.log('-----<window>-------', window)
+      console.log('-----<location>-----', window.location)
+
       if (window.location.pathname === '/' || window.location.pathname === '/employee/agenda') {
         //App.minimizeApp();
         App.exitApp();
@@ -61,6 +64,7 @@ export class BeautyApp implements OnInit {
         if(this.authService.isLoggedIn()) {
 
           
+          this.pushService.fetchUnreadCount();
 
           this.pushService.initPushNotifications()
           .then(_=> {});

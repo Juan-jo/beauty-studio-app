@@ -3,9 +3,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { NotificationItem, NotificationPageResponse } from '../../../core/models/notifications.models';
 import { AppConfigService } from '../../../config/app-config.service';
 import { TimeAgoPipe } from '../../../core/pipes/time-ago.pipe';
-import { map } from 'rxjs';
+import { finalize, map } from 'rxjs';
 import { BookingDatePipe } from '../../../core/pipes/booking-date.pipe';
 import { UIState } from '../../../core/ui/ui-state.model';
+import { BookingResumeDialogService } from '../../booking/service/booking-resume-dialog.service';
+import { PushNotificationService } from '../../../core/notifications/push-notification.service';
 
 @Component({
   selector: 'app-empl-notification',
@@ -18,8 +20,12 @@ import { UIState } from '../../../core/ui/ui-state.model';
 })
 export class EmplNotification implements OnInit {
 
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   private readonly appConfig = inject(AppConfigService);
+  private readonly bookingResumeDialogService = inject(BookingResumeDialogService);
+  private readonly pushNotificationService = inject(PushNotificationService);
+  
+  
   private datePipe = inject(BookingDatePipe); 
 
   notifications = signal<Notification[]>([]);
@@ -35,6 +41,10 @@ export class EmplNotification implements OnInit {
 
   
   state = signal<UIState>('loading');
+
+  markAsReading = signal<Set<number>>(new Set());
+
+
 
   ngOnInit(): void {
     this.loadNotifications();
@@ -116,7 +126,7 @@ export class EmplNotification implements OnInit {
     this.http.get<NotificationPageResponse>(`${this.appConfig.apiUrl}/api/v1/notification?page=${this.currentPage()}&size=10${unreadOnlyParam}`)
       .pipe(map(res => {
 
-        
+        this.pushNotificationService.setUnreadCount(res.unreadCount)
         this.unreadCount.set(res.unreadCount)
 
 
@@ -134,7 +144,8 @@ export class EmplNotification implements OnInit {
               body: body,
               category: it.payload.category ?? '',
               read: it.read,
-              createdAt: it.createdAt
+              createdAt: it.createdAt,
+              payload: it.payload
             }
 
             return noti;
@@ -166,6 +177,74 @@ export class EmplNotification implements OnInit {
     return item.category || 'DEFAULT';
   }
 
+
+  open(notification: Notification) {
+
+    this.markAsRead(notification.id)
+
+
+    switch(notification.category) {
+
+      case 'BOOKING_ASSIGNED':
+      case 'CANCELLED':
+
+        this.bookingResumeDialogService.openSheet(notification.payload.bookingId);
+
+        break;
+    }
+
+
+  }
+
+  markAsRead(notificationId: number) {
+
+    this.setReading(notificationId, true);
+
+
+    this.notifications.update(currentServices => {
+      if (!currentServices) return [];
+      return currentServices.map(s => s.id === notificationId ? { ...s, read: true } : s);
+    });
+
+
+    this.pushNotificationService.markAsRead(notificationId)
+    .pipe(
+      finalize(() => this.setReading(notificationId, false))
+    )
+    .subscribe({
+      next: (resp : any)  => {
+
+        const { unreadCount } = resp;
+
+        this.pushNotificationService.setUnreadCount(unreadCount)
+        this.unreadCount.set(unreadCount)
+      },
+      error: (err) => {
+        
+        console.error('Error al marcar como leido', err);
+
+        this.notifications.update(currentServices => {
+          if (!currentServices) return [];
+          return currentServices.map(s => s.id === notificationId ? { ...s, read: false } : s);
+        });
+
+      }
+    });
+
+  }
+
+  private setReading(id: number, isUpdating: boolean) {
+    this.markAsReading.update(set => {
+      const newSet = new Set(set);
+      if (isUpdating) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return newSet;
+    });
+  }
+
 }
 
 
@@ -184,6 +263,7 @@ interface Notification {
   read: boolean;
   createdAt: string;
 
+  payload: any
 }
 
 export class NotificationPage {

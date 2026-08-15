@@ -14,19 +14,15 @@ export class PushNotificationService {
     
     private isListenersRegistered = false;
     private readonly appConfig = inject(AppConfigService);
+    private readonly http = inject(HttpClient);
 
   
     private unreadCountSignal = signal<number>(0);
 
-    // Computados expuestos para la interfaz
+    
     readonly unreadCount = this.unreadCountSignal.asReadonly();
     readonly hasUnread = computed(() => this.unreadCountSignal() > 0);
 
-
-
-    constructor(private http: HttpClient) {
-        
-    }
   
     
     public async initPushNotifications(): Promise<void> {
@@ -95,14 +91,14 @@ export class PushNotificationService {
     
         // Escuchar notificación recibida cuando la App está abierta (Foreground)
         PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
-            console.log('Notificación recibida en primer plano:', notification);
+            console.log('----------------<FMS> Notificación recibida en primer plano:', notification);
             this.unreadCountSignal.update(count => count + 1);
         });
     
         // Escuchar cuando el usuario hace clic en la notificación
         PushNotifications.addListener('pushNotificationActionPerformed', (notification: ActionPerformed) => {
-            console.log('Acción realizada sobre la notificación:', notification);
-            this.fetchUnreadCount();
+            //console.log('----------------<FMS> Acción realizada sobre la notificación:', notification);
+            //this.fetchUnreadCount();
             
         });
     }
@@ -176,24 +172,24 @@ export class PushNotificationService {
       
     }
 
+    setUnreadCount(unreadCount: number) {
+        this.unreadCountSignal.set(unreadCount)
+
+    }
 
 
     fetchUnreadCount(): void {
 
-        console.log("--< fetching push notification >--")
         this.http.get<{ unreadCount: number }>(`${this.appConfig.apiUrl}/api/v1/notification/unread-count`).subscribe({
-        next: (res) => this.unreadCountSignal.set(res.unreadCount),
-        error: (err) => console.error('Error al obtener notificaciones no leídas', err)
+            next: (res) => this.unreadCountSignal.set(res.unreadCount),
+            error: (err) => console.error('Error al obtener notificaciones no leídas', err)
         });
+
     }
 
     
-    markAllAsRead(): void {
-        if (this.unreadCountSignal() === 0) return;
-
-        this.http.patch(`${this.appConfig.apiUrl}/api/v1/notification/mark-as-read`, {}).subscribe({
-        next: () => this.unreadCountSignal.set(0),
-        error: (err) => console.error('Error al marcar notificaciones como leídas', err)
-        });
+    markAsRead(notificationId: number) {
+        return this.http.patch(`${this.appConfig.apiUrl}/api/v1/notification/${notificationId}/mark-as-read`, {});
     }
+
   }

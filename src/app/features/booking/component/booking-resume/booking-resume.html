@@ -1,0 +1,190 @@
+<div class="flex flex-col bg-white w-full max-w-lg mx-auto rounded-t-3xl shadow-2xl min-h-[500px] max-h-[90vh] border border-slate-200/60 overflow-hidden transition-all duration-300 backdrop-blur-xl">
+
+    <!-- Header Elegante -->
+    <div class="px-6 py-4 bg-white border-b border-slate-100 flex items-center justify-between flex-none sticky top-0 z-10">
+        <div class="flex items-center gap-3">
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100 animate-pulse"></div>
+            <div>
+                <h3 class="text-base font-bold text-slate-900 tracking-tight leading-tight">
+                    Reserva #{{ booking.value()?.id || 'Detalle' }}
+                </h3>
+                <p class="text-[11px] font-medium text-slate-400">
+                    Información y estado de la cita
+                </p>
+            </div>
+        </div>
+
+        <button
+            type="button"
+            class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-2 rounded-xl transition-all cursor-pointer active:scale-90"
+            aria-label="Cerrar modal">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Contenido Scrollable -->
+    <div class="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+
+        @if(state() === 'loading') {
+
+            <!-- Skeleton Interactivo -->
+            <div class="space-y-4 animate-pulse">
+                <div class="h-32 bg-gray-200/50 rounded-2xl border border-slate-100"></div>
+                <div class="h-16 bg-gray-200/50 rounded-2xl border border-slate-100"></div>
+                <div class="h-16 bg-gray-200/50 rounded-2xl border border-slate-100"></div>
+                <div class="h-32 bg-gray-200/50 rounded-2xl border border-slate-100"></div>
+                <div class="h-16 bg-gray-200/50 rounded-2xl border border-slate-100"></div>
+            </div>
+
+        }
+        @else if (state() === 'error') {
+
+            <div class="flex flex-col items-center justify-center py-12 text-center my-auto">
+                <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 text-rose-500 flex items-center justify-center mb-3 shadow-xs">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.5m0 3h.01M10.3 3.8l-7 12.1A2 2 0 005 19h14a2 2 0 001.7-3.1l-7-12.1a2 2 0 00-3.4 0z" />
+                    </svg>
+                </div>
+                <p class="text-sm font-bold text-slate-800">
+                    No pudimos obtener la cita
+                </p>
+                <p class="text-xs text-slate-500 mt-1">
+                    Verifica tu conexión o intenta nuevamente.
+                </p>
+            </div>
+
+        }
+        @else if (state() === 'idle') {
+
+            @if (booking.value(); as booking) {
+
+                <!-- Tarjeta Principal: Estado y Tiempo -->
+                <div class="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs relative overflow-hidden">
+                    <!-- Banda lateral decorativa según estado -->
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5"
+                            [ngClass]="bgStatus"></div>
+
+                    <div class="flex items-center justify-between mb-3 pl-1">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Horario Programado
+                        </span>
+                        <booking-status-badge
+                            [status]="booking.status"></booking-status-badge>
+                            
+                    </div>
+
+                    <div class="flex items-center justify-between gap-4 pl-1 pt-1">
+                        <!-- Fecha (ocupa todo el espacio disponible) -->
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-[11px] text-slate-400 font-medium">Fecha</p>
+                                <p class="text-xs font-bold text-slate-800 truncate" [title]="booking.startDate | bookingDate">
+                                    {{ booking.startDate | bookingDate }}
+                                </p>
+                            </div>
+                        </div>
+                    
+                        <!-- Duración (ocupa solo lo necesario) -->
+                        <div class="flex items-center gap-3 shrink-0 p-r-4">
+                          
+                            <div>
+                                <p class="text-[11px] text-slate-400 font-medium">Duración</p>
+                                <p class="text-xs font-bold text-slate-800 whitespace-nowrap">
+                                    {{ booking.durationMinutes | duration }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Participantes (Cliente & Especialista) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Cliente -->
+                    <div class="bg-white p-3.5 rounded-2xl border border-slate-200/70 shadow-xs flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
+                            {{ booking.client.name.charAt(0) }}
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Cliente</span>
+                            <p class="text-xs font-bold text-slate-800 truncate">{{ booking.client.name }}</p>
+                            <p class="text-[11px] text-slate-500 truncate">{{ booking.client.phone }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Especialista -->
+                    <div class="bg-white p-3.5 rounded-2xl border border-slate-200/70 shadow-xs flex items-center gap-3">
+                        <img
+                            src="http://192.168.101.100:8088/insecure/rs:fit:150:150/q:80/g:sm/plain/http://minio:9000/delicias/9f2057ad-c524-4bd0-8ffe-40f7dab584be.png"
+                            [alt]="booking.employee.name"
+                            class="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0">
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Especialista</span>
+                            <p class="text-xs font-bold text-slate-800 truncate">{{ booking.employee.name }}</p>
+                            <p class="text-[11px] text-emerald-600 font-medium">Asignado</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Servicios -->
+                <div class="bg-white rounded-2xl p-4 border border-slate-200/70 shadow-xs space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                            Servicios Seleccionados
+                        </h4>
+                        <span class="text-xs font-semibold text-slate-400">
+                            {{ booking.services.length }}
+                        </span>
+                    </div>
+
+                    <div class="space-y-2">
+                        @for(service of booking.services; track $index) {
+                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50/80 hover:bg-slate-50 transition-colors">
+                                <div class="flex items-center gap-2.5 min-w-0">
+                                    <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-xs font-semibold text-slate-700 truncate">
+                                        {{ service.name }}
+                                    </span>
+                                </div>
+                                <span class="text-xs font-bold text-slate-900 ml-2">
+                                    {{ service.price | bscurrency }}
+                                </span>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Total -->
+                <div class="bg-gradient-to-r from-brand-700 via-brand-800 to-brand-900 text-white rounded-2xl p-4 shadow-md flex items-center justify-between border border-brand-600/30">
+                    <div>
+                        <p class="text-[11px] font-semibold text-brand-200 uppercase tracking-wider">
+                            Monto Total
+                        </p>
+                        <p class="text-xs text-white/70 mt-0.5">
+                            Incluye impuestos y cargos
+                        </p>
+                    </div>
+                    
+                    <div class="text-right">
+                        <span class="text-2xl font-black tracking-tight text-white">
+                            {{ booking.price | bscurrency }}
+                        </span>
+                    </div>
+                </div>
+            }
+
+        }
+
+    </div>
+
+</div>

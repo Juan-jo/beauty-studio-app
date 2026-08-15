@@ -8,13 +8,16 @@ import { Dialog } from '@angular/cdk/dialog';
 import { EmplAddService } from '../empl-add-service/empl-add-service';
 import { Location } from '@angular/common';
 import { EmplCancelBooking } from '../empl-cancel-booking/empl-cancel-booking';
+import { BookingResumeDialogService } from '../../../booking/service/booking-resume-dialog.service';
+import { BookingStatusBadge } from '../../../booking/component/booking-status-badge/booking-status-badge';
 
 @Component({
   selector: 'empl-booking-card',
   imports: [
     DurationPipe,
     CurrencyPipe,
-    CommonModule
+    CommonModule,
+    BookingStatusBadge
   ],
   templateUrl: './empl-booking-card.html',
   styleUrl: './empl-booking-card.css',
@@ -25,6 +28,8 @@ export class EmplBookingCard {
   private location = inject(Location);
 
   private readonly bookingService = inject(BookingService);
+  private readonly bookingResumeDialogService = inject(BookingResumeDialogService);
+
 
   @Output() reloadSchedule = new EventEmitter<void>();
 
@@ -206,6 +211,10 @@ export class EmplBookingCard {
 
       }
     });
+  }
+
+  openBooking() {
+    this.bookingResumeDialogService.openSheet(this.booking.id)
   }
 
 
