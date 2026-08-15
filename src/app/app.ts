@@ -41,18 +41,26 @@ export class BeautyApp implements OnInit {
 
     App.addListener('backButton', () => {
       
-      console.log('-----<window>-------', window)
-      console.log('-----<location>-----', window.location)
-
-      if (window.location.pathname === '/' || window.location.pathname === '/employee/agenda') {
-        //App.minimizeApp();
-        App.exitApp();
-      } else {
-        this.location.back();
+      // Si hay un modal abierto, primero cerrarlo
+      if (history.state?.modalOpen) {
+        //this.location.back();
+        return;
       }
+  
+      // Si no hay modal, aplicar navegación normal
+      if (
+        window.location.pathname === '/' ||
+        window.location.pathname === '/employee/agenda'
+      ) {
+        App.exitApp();
+        return;
+      }
+      
+      this.location.back();
     });
-
+  
   }
+
 
   private setupAppLifecycleListener(): void {
     

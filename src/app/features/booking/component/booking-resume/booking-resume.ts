@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { BookingService } from '../../service/booking.service';
-import { DIALOG_DATA } from '@angular/cdk/dialog';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Booking } from '../../models/booking.models';
 import { BookingDatePipe } from '../../../../core/pipes/booking-date.pipe';
@@ -28,11 +28,13 @@ type BookingUIState = 'idle' | 'loading' | 'error';
 })
 export class BookingResume {
 
+  dialogRef = inject(DialogRef);
+
   
   private readonly bookingService = inject(BookingService);
-
   public readonly bookingId = inject<number>(DIALOG_DATA, { optional: false });
 
+  
   booking = rxResource<Booking, void>({
     stream: () => this.bookingService.get(this.bookingId)
   });

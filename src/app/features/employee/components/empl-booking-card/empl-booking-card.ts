@@ -1,15 +1,13 @@
-import { Component, ElementRef, EventEmitter, HostListener, inject, Input, Output, output, signal } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, inject, Input, Output, signal } from '@angular/core';
 import { BookingDay } from '../../empl-agenda/model/employee-schedule.models';
 import { DurationPipe } from '../../../../core/pipes/duration-pipe';
 import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 import { CommonModule } from '@angular/common';
 import { BookingService } from '../../../booking/service/booking.service';
-import { Dialog } from '@angular/cdk/dialog';
-import { EmplAddService } from '../empl-add-service/empl-add-service';
-import { Location } from '@angular/common';
 import { EmplCancelBooking } from '../empl-cancel-booking/empl-cancel-booking';
-import { BookingResumeDialogService } from '../../../booking/service/booking-resume-dialog.service';
 import { BookingStatusBadge } from '../../../booking/component/booking-status-badge/booking-status-badge';
+import { OpenDialogService } from '../../../../shared/dialog/open-dialog';
+import { BookingResume } from '../../../booking/component/booking-resume/booking-resume';
 
 @Component({
   selector: 'empl-booking-card',
@@ -24,11 +22,10 @@ import { BookingStatusBadge } from '../../../booking/component/booking-status-ba
 })
 export class EmplBookingCard {
 
-  private dialog = inject(Dialog);
-  private location = inject(Location);
 
   private readonly bookingService = inject(BookingService);
-  private readonly bookingResumeDialogService = inject(BookingResumeDialogService);
+  private readonly openDialogService = inject(OpenDialogService);
+  
 
 
   @Output() reloadSchedule = new EventEmitter<void>();
@@ -52,53 +49,6 @@ export class EmplBookingCard {
 
   constructor(private eRef: ElementRef) { }
 
-
-  getInitials(name: string): string {
-    if (!name) return 'CL';
-    return name
-      .split(' ')
-      .map(part => part[0])
-      .join('')
-      .substring(0, 2)
-      .toUpperCase();
-  }
-
-  bookingStatusBadge(status: string): string {
-    switch (status) {
-      case 'PENDING':
-        return 'bg-amber-100 text-amber-700';
-
-      case 'CONFIRMED':
-        return 'bg-sky-100 text-sky-700';
-
-      case 'IN_PROGRESS':
-        return 'bg-violet-100 text-violet-700';
-
-      case 'COMPLETED':
-        return 'bg-emerald-50/40 text-emerald-700';
-
-      case 'CANCELLED':
-        return 'bg-red-50/40 text-red-700';
-
-      case 'NO_SHOW':
-        return 'bg-gray-200 text-gray-700';
-
-      default:
-        return 'bg-gray-100 text-gray-600';
-    }
-  }
-
-  bookingStatusLabel(status: string): string {
-    switch (status) {
-      case 'PENDING': return 'Pendiente';
-      case 'CONFIRMED': return 'Confirmada';
-      case 'IN_PROGRESS': return 'En servicio';
-      case 'COMPLETED': return 'Finalizada';
-      case 'CANCELLED': return 'Cancelada';
-      case 'NO_SHOW': return 'No asistió';
-      default: return status;
-    }
-  }
 
   toggleMenu() {
     this.isOpenDropDown.update((v) => !v);
@@ -143,37 +93,33 @@ export class EmplBookingCard {
 
   }
 
-  openCancel() {
-    this.location.go(this.location.path(), '', { modalOpen: true });
-  
-    const dialogRef = this.dialog.open(EmplCancelBooking, {
-      panelClass: ['w-full', 'max-w-lg', 'mt-auto'],
-      backdropClass: ['bg-black/50', 'backdrop-blur-sm'],
-      data: this.booking
-    });
-  
-    // Flag para saber si el cierre fue por el botón "Atrás" del móvil
-    let closedByPopState = false;
-  
-    const popStateSub = this.location.subscribe(() => {
-      closedByPopState = true;
-      dialogRef.close();
-    });
-  
-    dialogRef.closed.subscribe((result) => {
-      popStateSub.unsubscribe();
-  
-      // SOLO hacemos .back() si el usuario cerró el modal manualmente (X, backdrop, cancelar)
-      // Y NO mediante el botón atrás del móvil NI tras aplicar una navegación
-      if (history.state?.modalOpen && !closedByPopState && result === undefined) {
-        this.location.back();
-      }
+  openBooking() {
+    
+    this.openDialogService.open<any, number>(BookingResume, {
+      data: this.booking.id
+    }
+    ).then(response => {
+      
 
-      if(typeof(result) === 'boolean' && result === true) {
+
+    });
+  }
+
+
+  openCancel() {
+
+
+    this.openDialogService.open<boolean, BookingDay>(EmplCancelBooking, {
+      data: this.booking
+    }
+    ).then(response => {
+
+      if (typeof (response) === 'boolean' && response === true) {
         this.reloadSchedule.emit();
       }
-      
+
     });
+
   }
 
 
@@ -211,10 +157,6 @@ export class EmplBookingCard {
 
       }
     });
-  }
-
-  openBooking() {
-    this.bookingResumeDialogService.openSheet(this.booking.id)
   }
 
 

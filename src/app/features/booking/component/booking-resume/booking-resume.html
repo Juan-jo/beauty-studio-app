@@ -6,7 +6,7 @@
             <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100 animate-pulse"></div>
             <div>
                 <h3 class="text-base font-bold text-slate-900 tracking-tight leading-tight">
-                    Reserva #{{ booking.value()?.id || 'Detalle' }}
+                    Cita <span class=" tracking-wider text-slate-400">#{{ booking.value()?.id || '' }}</span>
                 </h3>
                 <p class="text-[11px] font-medium text-slate-400">
                     Información y estado de la cita
@@ -15,6 +15,7 @@
         </div>
 
         <button
+            (click)="dialogRef.close()"
             type="button"
             class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-2 rounded-xl transition-all cursor-pointer active:scale-90"
             aria-label="Cerrar modal">

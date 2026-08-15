@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { NotificationItem, NotificationPageResponse } from '../../../core/models/notifications.models';
+import { NotificationPageResponse } from '../../../core/models/notifications.models';
 import { AppConfigService } from '../../../config/app-config.service';
 import { TimeAgoPipe } from '../../../core/pipes/time-ago.pipe';
 import { finalize, map } from 'rxjs';
 import { BookingDatePipe } from '../../../core/pipes/booking-date.pipe';
 import { UIState } from '../../../core/ui/ui-state.model';
-import { BookingResumeDialogService } from '../../booking/service/booking-resume-dialog.service';
 import { PushNotificationService } from '../../../core/notifications/push-notification.service';
+import { OpenDialogService } from '../../../shared/dialog/open-dialog';
+import { BookingResume } from '../../booking/component/booking-resume/booking-resume';
 
 @Component({
   selector: 'app-empl-notification',
@@ -22,7 +23,7 @@ export class EmplNotification implements OnInit {
 
   private readonly http = inject(HttpClient);
   private readonly appConfig = inject(AppConfigService);
-  private readonly bookingResumeDialogService = inject(BookingResumeDialogService);
+  private readonly openDialogService = inject(OpenDialogService);
   private readonly pushNotificationService = inject(PushNotificationService);
   
   
@@ -188,7 +189,10 @@ export class EmplNotification implements OnInit {
       case 'BOOKING_ASSIGNED':
       case 'CANCELLED':
 
-        this.bookingResumeDialogService.openSheet(notification.payload.bookingId);
+        this.openDialogService.open<any, number>(BookingResume, {
+          data: notification.payload.bookingId
+        }
+        ).then(response => {});
 
         break;
     }
