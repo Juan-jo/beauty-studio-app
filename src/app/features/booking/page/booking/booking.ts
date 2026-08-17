@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, computed, ElementRef, inject, resource, signal, viewChild, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, firstValueFrom, Subscription } from 'rxjs';
+import { filter, finalize, firstValueFrom } from 'rxjs';
 import { EmployeeSlot } from '../../models/employe-availability.models';
 import { BookingCalendarService } from '../../service/bokking-calendar.service';
 import { CommonModule } from '@angular/common';
@@ -13,8 +13,8 @@ import { HasRoleDirective } from '../../../../core/directives/has-role';
 import { AuthService } from '../../../../core/services/auth';
 import { EmployeeBookingService } from '../../../employee/service/empl-booking.service';
 import { CalendarService } from '../../models/booking-calendar.models';
-import { Dialog } from '@angular/cdk/dialog';
 import { EmplAddService } from '../../../employee/components/empl-add-service/empl-add-service';
+import { OpenDialogService } from '../../../../shared/dialog/open-dialog';
 import { Location } from '@angular/common';
 
 @Component({
@@ -42,6 +42,8 @@ export class Booking {
     name: new FormControl<string>(""), 
     phone: new FormControl<string>(""),
 
+    total: new FormControl(""),
+
   })
 
 
@@ -56,13 +58,16 @@ export class Booking {
   private readonly bookingCalendarService = inject(BookingCalendarService);
   private readonly customerBookingService = inject(CustomerBookingService);
   private readonly employeeBookingService = inject(EmployeeBookingService);
+  private readonly openDialogService = inject(OpenDialogService);
 
-  private authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly route = inject(ActivatedRoute);
   private router = inject(Router);
+  private location = inject(Location);
+
 
   public bookingCalendar = viewChild<BookingCalendar>(BookingCalendar);
 
@@ -71,10 +76,9 @@ export class Booking {
   date = signal<{date: string, serviceIds: string}>({date:'', serviceIds: ''});
 
   services = signal<CalendarService[]>([]);
+  isLoadingServices = signal<boolean>(true);
+
   selectedEmployeeSlot = signal<EmployeeSlot|null>(null);
-
-
-  isSubmite = signal<number>(0);
 
 
   isChangingProfessional = false;
@@ -99,7 +103,7 @@ export class Booking {
 
 
 
-  selectDate(date: string, serviceIds: string) {
+  selectDate(date: string, serviceIds: string, total: string) {
 
     if(date != this.f.date.value) {
       this.startValueForm(date);
@@ -109,6 +113,7 @@ export class Booking {
         serviceIds: serviceIds
       });
 
+      this.f.total.setValue(total)
 
       this.isChangingProfessional = false;
       this.selectedEmployeeSlot.set(null)
@@ -117,9 +122,13 @@ export class Booking {
   }
 
   selectedBeautyService(services: CalendarService[]) {
-    //this.beautyService.set(beautyService); 
+    this.isLoadingServices.set(false)
     this.services.set(services)
     this.cdr.markForCheck();
+  }
+
+  setLoadingServices() {
+    this.isLoadingServices.set(true)
   }
 
   centerSectionCalendar() {
@@ -255,6 +264,16 @@ export class Booking {
    */
   openConfirmationModal() {
     if (this.f?.hour?.value) {
+
+      this.location.go(
+        this.location.path(),
+        '',
+        {
+          //...history.state,
+          modalOpen: true
+        }
+      );
+
       this.bookingStatus = 'idle';
       this.errorMessage = '';
       this.showConfirmationModal = true;
@@ -265,9 +284,18 @@ export class Booking {
    * Cierra el modal y resetea estados
    */
   closeConfirmationModal() {
+    this.location.back();
+
     this.showConfirmationModal = false;
     this.bookingStatus = 'idle';
     this.isSubmitting = false;
+    
+  }
+
+  navigateAgenda() {
+    
+    history.back();
+    history.back();
     
   }
 
@@ -335,53 +363,43 @@ export class Booking {
     this.cdr.markForCheck()
 
   }
-  
-
- 
-  
-  private dialog = inject(Dialog);
-  private location = inject(Location);
-
 
 
   openServicesSheet() {
-    this.location.go(this.location.path(), '', { modalOpen: true });
-  
-    const dialogRef = this.dialog.open(EmplAddService, {
-      panelClass: ['w-full', 'max-w-lg', 'mt-auto'],
-      backdropClass: ['bg-black/50', 'backdrop-blur-sm'],
+
+    this.openDialogService.open<string|null, string>(EmplAddService, {
       data: this.services().map(i => i.id).join(',')
-    });
-  
-    // Flag para saber si el cierre fue por el botón "Atrás" del móvil
-    let closedByPopState = false;
-  
-    const popStateSub = this.location.subscribe(() => {
-      closedByPopState = true;
-      dialogRef.close();
-    });
-  
-    dialogRef.closed.subscribe((result) => {
-      popStateSub.unsubscribe();
-  
-      // SOLO hacemos .back() si el usuario cerró el modal manualmente (X, backdrop, cancelar)
-      // Y NO mediante el botón atrás del móvil NI tras aplicar una navegación
-      if (history.state?.modalOpen && !closedByPopState && result === undefined) {
-        this.location.back();
+    })
+    .then(response => {
+      
+
+      if(typeof(response) === 'string') {
+        
+        this.changeServiceIds(response)
+
       }
 
-      if(typeof(result) === 'string') {
-        this.changeServiceIds(result)
-      }
-      
     });
+
+  }
+
+  removeService(service: CalendarService) {
+
+    let services = this.services()
+                    .filter(s => s.id != service.id)
+                    .map(s => s.id)
+                    .join(',')
+
+    this.changeServiceIds(services);
+
+
   }
 
   changeServiceIds(ids: string) {
     
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { ids: ids }, // Pasa directamente el arreglo
+      queryParams: { services: ids }, // Pasa directamente el arreglo
       queryParamsHandling: 'merge',
       replaceUrl: true
     });
@@ -394,6 +412,7 @@ export class Booking {
     this.selectedEmployeeSlot.set(null)
 
     this.executeActionOnCalendar();
+    this.setLoadingServices();
     this.cdr.markForCheck();
   }
 

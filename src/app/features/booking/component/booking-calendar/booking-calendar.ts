@@ -4,7 +4,7 @@ import { BookingCalendarService } from '../../service/bokking-calendar.service';
 import { CalendarDay, CalendarService } from '../../models/booking-calendar.models';
 import { distinctUntilChanged, firstValueFrom, map } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 interface UICalendarDay {
   number: number | null;
@@ -27,8 +27,9 @@ export class BookingCalendar implements OnInit {
   private readonly currentDate = new Date();
 
 
-  @Output() selectDate = new EventEmitter<{date: string, serviceIds: string}>();
+  @Output() selectDate = new EventEmitter<{date: string, serviceIds: string, total: string}>();
   @Output() selectedBeautyService = new EventEmitter<CalendarService[]>();
+  @Output() loadingServices = new EventEmitter<void>();
 
   @Output() centerSectionCalendar = new EventEmitter<void>();
   
@@ -40,11 +41,15 @@ export class BookingCalendar implements OnInit {
   private route = inject(ActivatedRoute);
   serviceIds = signal<string>('');
 
+
+  // Total Amount
+  totalAmmount = ''
+
   ngOnInit(): void {
 
     this.route.queryParams
     .pipe(
-      map(params => params['ids']), 
+      map(params => params['services']), 
       distinctUntilChanged()
     )
     .subscribe((idsParam: any) => {
@@ -133,6 +138,8 @@ export class BookingCalendar implements OnInit {
     const response = this.calendarResource.value();
 
     
+    this.totalAmmount = response?.total ?? '';
+
     this.selectedBeautyService.emit(response?.services)
 
     if (!response?.days) return [];
@@ -148,7 +155,7 @@ export class BookingCalendar implements OnInit {
     this.yearMonth.set(this.formatYearMonth(nextDate));
     this.selectedDay = null;
     
-    this.selectDate.emit({date: '', serviceIds: this.serviceIds()});
+    this.selectDate.emit({date: '', serviceIds: this.serviceIds(), total: this.totalAmmount});
   }
 
   prevMonth(): void {
@@ -159,7 +166,7 @@ export class BookingCalendar implements OnInit {
     this.yearMonth.set(this.formatYearMonth(prevDate));
     this.selectedDay = null;
     
-    this.selectDate.emit({date: '', serviceIds: this.serviceIds()});
+    this.selectDate.emit({date: '', serviceIds: this.serviceIds(), total: this.totalAmmount});
   }
 
   private formatYearMonth(date: Date): string {
@@ -169,6 +176,7 @@ export class BookingCalendar implements OnInit {
   }
 
   private buildCalendarGrid(apiDays: CalendarDay[]): void {
+
     if (!apiDays || !Array.isArray(apiDays) || apiDays.length === 0) {
       console.warn('apiDays está vacío o no es un arreglo válido');
       this.days = [];
@@ -221,18 +229,17 @@ export class BookingCalendar implements OnInit {
   }
 
   onSelectDay(day: any) {
+
     if (day.status === 'occupied') return;
 
     this.selectedDay = day.number;
-    //this.selectDate.emit(this.yearMonth() + "-" + day.number.toString());
 
 
     const data = {
       date: this.yearMonth() + "-" + day.number.toString(), 
-      serviceIds: this.serviceIds()
+      serviceIds: this.serviceIds(),
+      total: this.totalAmmount
     }
-
-    console.log('data->', data);
 
     this.selectDate.emit(data);
 
@@ -251,18 +258,5 @@ export class BookingCalendar implements OnInit {
   }
 
   
-
-  formatDuration(minutes: number): string {
-    if (!minutes) return '';
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-
-    if (hours > 0 && mins > 0) {
-      return `${hours}h ${mins}m`;
-    } else if (hours > 0) {
-      return `${hours}h`;
-    }
-    return `${mins} min`;
-  }
 
 }

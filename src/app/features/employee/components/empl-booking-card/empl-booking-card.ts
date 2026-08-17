@@ -4,10 +4,11 @@ import { DurationPipe } from '../../../../core/pipes/duration-pipe';
 import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 import { CommonModule } from '@angular/common';
 import { BookingService } from '../../../booking/service/booking.service';
-import { EmplCancelBooking } from '../empl-cancel-booking/empl-cancel-booking';
 import { BookingStatusBadge } from '../../../booking/component/booking-status-badge/booking-status-badge';
 import { OpenDialogService } from '../../../../shared/dialog/open-dialog';
 import { BookingResume } from '../../../booking/component/booking-resume/booking-resume';
+import { ConfirmBookingDialog } from '../../../booking/component/confirm-booking-dialog/confirm-booking-dialog';
+import { CancelBookingDialog } from '../../../booking/component/cancel-booking-dialog/cancel-booking-dialog';
 
 @Component({
   selector: 'empl-booking-card',
@@ -67,31 +68,26 @@ export class EmplBookingCard {
     this.isOpenModal.set(false);
   }
 
+ 
+
+
   askConfirm() {
-    this.viewModal.set('confirm')
-    this.isOpenModal.set(true);
-  }
+    
 
-  confirmBooking() {
+    this.openDialogService.open<any, BookingDay>(ConfirmBookingDialog, {
+      data: this.booking
+    }
+    ).then(response => {
 
-    this.isSubmitting.set(true);
-
-    this.bookingService.confirm(this.booking.id).subscribe({
-      next: () => {
-
-        this.isSubmitting.set(false);
-        this.isOpenModal.set(false);
+      if (typeof (response) === 'boolean' && response === true) {
         this.reloadSchedule.emit();
-
-      },
-      error: (err) => {
-
-        this.isSubmitting.set(false)
-
       }
+
+
     });
 
   }
+
 
   openBooking() {
     
@@ -109,7 +105,7 @@ export class EmplBookingCard {
   openCancel() {
 
 
-    this.openDialogService.open<boolean, BookingDay>(EmplCancelBooking, {
+    this.openDialogService.open<boolean, BookingDay>(CancelBookingDialog, {
       data: this.booking
     }
     ).then(response => {

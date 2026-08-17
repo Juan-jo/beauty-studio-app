@@ -25,7 +25,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class EmplAddService {
 
   private readonly beautyService = inject(ServicesService);
-  public readonly dataReceived = inject<string>(DIALOG_DATA, { optional: false });
+  public readonly dataReceived = inject<string|undefined>(DIALOG_DATA, { optional: false });
 
   dialogRef = inject(DialogRef);
 
@@ -40,12 +40,19 @@ export class EmplAddService {
 
     this.loadServices();
 
-    const initialIds : number[] = this.dataReceived
-    .split(',')
-    .map((id: string) => Number(id))
-    .filter((id: number) => !isNaN(id));
+    if(this.dataReceived !== undefined) {
 
-    this.selection.select(...initialIds);
+      const initialIds : number[] = this.dataReceived
+      .split(',')
+      .map((id: string) => Number(id))
+      .filter((id: number) => !isNaN(id));
+
+
+      this.selection.select(...initialIds);
+
+    }
+
+    
 
   }
 

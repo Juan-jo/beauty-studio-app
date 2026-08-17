@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { BookingService } from '../../../booking/service/booking.service';
-import { BookingDay } from '../../empl-agenda/model/employee-schedule.models';
 import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 import { CommonModule } from '@angular/common';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
@@ -9,19 +8,23 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { UIStateError } from '../../../../core/ui/state-error/state-error';
 import { UIStateSuccess } from '../../../../core/ui/state-success/state-success';
+import { BookingDay } from '../../../employee/empl-agenda/model/employee-schedule.models';
 
 @Component({
-  selector: 'app-empl-cancel-booking',
-  imports: [
+  selector: 'app-cancel-booking-dialog',
+  imports: [ 
     CurrencyPipe,
     CommonModule,
     ReactiveFormsModule,
     UIStateSuccess,
     UIStateError
   ],
-  templateUrl: './empl-cancel-booking.html',
+  templateUrl: './cancel-booking-dialog.html'
 })
-export class EmplCancelBooking {
+export class CancelBookingDialog {
+
+
+
 
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -89,4 +92,5 @@ export class EmplCancelBooking {
   retry() {
     this.state.set('idle')
   }
+
 }

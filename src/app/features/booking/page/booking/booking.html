@@ -26,32 +26,53 @@
     </div>
   </header>
 
-<!--<header class="bg-white border-b border-brand-200/60 px-4 py-3.5 sticky top-0 z-20 shadow-xs">
-    <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
-  
-      <div class="flex items-center gap-3">
-        <button type="button" onclick="history.back()"
-          class="p-2 rounded-xl border border-gray-200/80 hover:bg-brand-50 hover:border-brand-200 text-gray-600 hover:text-brand-700 transition-all cursor-pointer active:scale-95 shrink-0"
-          title="Volver">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-        </button>
-  
-        <div class="flex items-center gap-3">
-         <h1 class="mt-5 text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
-                Reserva tu cita
-            </h1>
-        </div>
-      </div>
-  
-    </div>
-  </header>-->
 
 <section class="min-h-screen bg-brand-50">
     <div class="mx-auto max-w-7xl px-6 py-10  lg:px-8 lg:py-16 pt-1">
+
+      @if (isLoadingServices()) {
+        <section class="mb-6 mt-6 rounded-2xl border border-gray-200/80 bg-white p-4 shadow-2xs animate-pulse">
+          
+          <!-- Skeleton Encabezado -->
+          <div class="mb-3 flex items-center justify-between">
+            <div class="h-3 w-36 rounded bg-gray-200"></div>
+            <div class="h-3 w-20 rounded bg-gray-200"></div>
+          </div>
+      
+          <!-- Skeleton Lista de Servicios (3 ítems de muestra) -->
+          <div class="space-y-2">
+            
+            @for (item of services() != null ? services(): [1]; track item) {
+              <div class="flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50/60 p-2.5">
+                
+                <!-- Skeleton Imagen/Icono -->
+                <div class="h-10 w-10 shrink-0 rounded-lg bg-gray-200"></div>
+      
+                <!-- Skeleton Título y Duración -->
+                <div class="flex-1 space-y-1.5 min-w-0">
+                  <div class="h-3 w-3/5 rounded bg-gray-200"></div>
+                  <div class="h-2.5 w-1/4 rounded bg-gray-200"></div>
+                </div>
+      
+                <!-- Skeleton Precio y Acciones -->
+                <div class="flex items-center gap-2 shrink-0">
+                  <div class="h-3 w-12 rounded bg-gray-200"></div>
+                  <div class="h-6 w-6 rounded-lg bg-gray-200"></div>
+                </div>
+      
+              </div>
+            }
+          </div>
+      
+          <!-- Skeleton Botón Inferior -->
+          <div class="mt-3 pt-2.5 border-t border-gray-100">
+            <div class="h-8 w-full rounded-xl bg-gray-200"></div>
+          </div>
+      
+        </section>
+      }
    
-      @if (services() != null) {
+      @else if (services() != null) {
         <section class="mb-6 mt-6 rounded-2xl border border-gray-200/80 bg-white p-4 shadow-2xs">
       
           <!-- Encabezado sutil -->
@@ -105,15 +126,20 @@
                   </span>
       
                   <!-- Botón Quitar Servicio -->
-                  <button
+                   @if(services().length > 1) {
+
+                    <button
                     type="button"
-                    
+                    (click)="removeService(service)"
                     title="Quitar servicio"
                     class="flex h-6 w-6 items-center justify-center rounded-lg text-gray-400 hover:bg-rose-50 hover:text-rose-600 transition-all cursor-pointer">
                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                   </button>
+
+                   }
+                  
                 </div>
       
               </div>
@@ -157,7 +183,7 @@
 
             <section #calendarSection>
                 <booking-calendar 
-                    (selectDate)="selectDate($event.date, $event.serviceIds)"
+                    (selectDate)="selectDate($event.date, $event.serviceIds, $event.total)"
                     (selectedBeautyService)="selectedBeautyService($event)"
                     (centerSectionCalendar)="centerSectionCalendar()">
                 </booking-calendar>
@@ -178,9 +204,32 @@
                 </div>
 
                 @if (isLoadingAvailability()) {
-                <div class="loading-container">
-                    <span>Cargando disponibilidades...</span>
-                </div>
+
+                  <div class="space-y-2">
+                    @for (item of [1, 2]; track item) {
+                      <div class="rounded-2xl border border-brand-200/60 bg-brand-50/40 p-4 animate-pulse">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <!-- Skeleton Avatar con ring de imitación -->
+                                <div class="h-12 w-12 shrink-0 rounded-full bg-gray-200 ring-2 ring-gray-100"></div>
+                                
+                                <!-- Skeleton Nombre y Estado -->
+                                <div class="space-y-2">
+                                    <div class="h-4 w-32 rounded bg-gray-200"></div>
+                                    <div class="flex items-center gap-1.5">
+                                        <div class="h-2 w-2 rounded-full bg-gray-200"></div>
+                                        <div class="h-3 w-16 rounded bg-gray-200"></div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <!-- Skeleton Botón Cambiar -->
+                            <div class="h-7 w-20 shrink-0 rounded-xl bg-gray-200"></div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                
                 }
                 @else if (selectedProfessional && !isChangingProfessional) {
                 <div class="rounded-2xl border border-brand-200 bg-brand-50/60 p-4 transition">
@@ -348,13 +397,6 @@
 
 
 
-
-
-<!--Start Modal Confirm-->
-
-
-<!-- MODAL DE CONFIRMACIÓN DE RESERVA -->
-
 <!-- MODAL DE CONFIRMACIÓN / RESULTADO -->
 @if (showConfirmationModal) {
     <div 
@@ -408,7 +450,7 @@
             <div class="flex justify-between items-center pt-0.5">
               <span class="text-gray-500 font-medium">Total:</span>
               <span class="font-bold text-brand-600 text-base">
-                {{ 100  | bscurrency }}
+                {{ f.total.value ?? '' | bscurrency }}
               </span>
             </div>
           </div>
@@ -551,7 +593,7 @@
   
             <button 
               type="button" 
-              onclick="history.back()"
+              (click)="navigateAgenda()"
               
               class="mt-6 w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-emerald-700 active:scale-95 cursor-pointer">
               Entendido

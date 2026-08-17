@@ -4,10 +4,9 @@ import { firstValueFrom } from 'rxjs';
 import { EmplScheduleService } from '../../empl-agenda/service/empl-schedule.service';
 import { MxDayOfWeekPipe } from '../../../../core/pipes/mx-dayofweek-pipe';
 import { EmplBookingCard } from '../empl-booking-card/empl-booking-card';
-import { Dialog } from '@angular/cdk/dialog';
 import { EmplAddService } from '../empl-add-service/empl-add-service';
-import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { OpenDialogService } from '../../../../shared/dialog/open-dialog';
 
 
 
@@ -25,6 +24,10 @@ export class EmplWeekSchedule {
 
 
   private readonly emplScheduleService = inject(EmplScheduleService);
+  private readonly openDialogService = inject(OpenDialogService);
+  private router = inject(Router);
+
+
 
   @Output() changeView = new EventEmitter<string>();
  
@@ -98,49 +101,25 @@ export class EmplWeekSchedule {
 
 
 
-
-
-
-  private location = inject(Location);
-  private dialog = inject(Dialog);
-  private router = inject(Router);
-
-
   openServicesSheet() {
-    this.location.go(this.location.path(), '', { modalOpen: true });
-  
-    const dialogRef = this.dialog.open(EmplAddService, {
-      panelClass: ['w-full', 'max-w-lg', 'mt-auto'],
-      backdropClass: ['bg-black/50', 'backdrop-blur-sm'],
-      data: ''
-    });
-  
-    // Flag para saber si el cierre fue por el botón "Atrás" del móvil
-    let closedByPopState = false;
-  
-    const popStateSub = this.location.subscribe(() => {
-      closedByPopState = true;
-      dialogRef.close();
-    });
-  
-    dialogRef.closed.subscribe((result) => {
-      popStateSub.unsubscribe();
-  
-      // SOLO hacemos .back() si el usuario cerró el modal manualmente (X, backdrop, cancelar)
-      // Y NO mediante el botón atrás del móvil NI tras aplicar una navegación
-      if (history.state?.modalOpen && !closedByPopState && result === undefined) {
-        this.location.back();
-      }
-  
-      if(typeof(result) === 'string') {
+
+
+    this.openDialogService.open<string|null, string>(EmplAddService, {})
+    .then(response => {
+
+
+      if(typeof(response) === 'string') {
         
         this.router.navigate(['/employee/booking'], {
-          queryParams: { ids: result },
-        });
+          queryParams: { services: response },
+        });    
+        
       }
-      
+
     });
+
   }
+
 
 }
 

@@ -166,7 +166,10 @@
 
           @if(!isLoadingWeek()) {
 
-            <div class="mx-4 my-6 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white/80 px-6 py-10 text-center backdrop-blur-xs animate-fade-in">
+            
+            <div 
+            class="min-h-[60vh]  mx-4 my-6 flex flex-col items-center justify-center px-6 py-10 text-center animate-fade-in" >
+            <!--<div class="mx-4 my-6 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white/80 px-6 py-10 text-center backdrop-blur-xs animate-fade-in">-->
             
               <!-- Contenedor del Ícono con efecto de gradiente suave -->
               <div class="relative mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50/80 text-brand-600 ring-8 ring-brand-50/30">
@@ -188,11 +191,11 @@
               </h3>
               
               <p class="mt-1 text-xs text-gray-500 max-w-[240px] leading-relaxed">
-                No hay reservaciones programadas para este día. ¡Aprovecha para descansar o agendar nuevos clientes!
+                No hay reservaciones programadas para este día.
               </p>
   
               <!-- Botón de acción rápida -->
-              <button 
+              <!--<button 
                 type="button"
                 (click)="openServicesSheet()" 
                 class="mt-5 inline-flex items-center gap-2 rounded-xl bg-brand-50 px-4 py-2 text-xs font-semibold text-brand-700 transition-all hover:bg-brand-100 hover:text-brand-800 active:scale-95 cursor-pointer">
@@ -200,7 +203,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
                 Agendar cita aquí
-              </button>
+              </button>-->
   
             </div>
             

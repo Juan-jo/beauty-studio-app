@@ -19,7 +19,9 @@ export interface CalendarAvailabilityResponse {
   
   days      : CalendarDay[];
 
-  services  : CalendarService[]
+  services  : CalendarService[],
+
+  total     : string
 }
 
 
