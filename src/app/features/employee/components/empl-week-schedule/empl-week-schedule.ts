@@ -7,7 +7,7 @@ import { EmplBookingCard } from '../empl-booking-card/empl-booking-card';
 import { EmplAddService } from '../empl-add-service/empl-add-service';
 import { Router } from '@angular/router';
 import { OpenDialogService } from '../../../../shared/dialog/open-dialog';
-
+import { getDayStatusColor } from '../../../booking/models/booking-calendar.models'
 
 
 @Component({
@@ -28,6 +28,7 @@ export class EmplWeekSchedule {
   private router = inject(Router);
 
 
+  getDayStatusColor = getDayStatusColor;
 
   @Output() changeView = new EventEmitter<string>();
  
@@ -37,12 +38,16 @@ export class EmplWeekSchedule {
   constructor() {
 
     effect(() => {
+
       const response = this.week();
   
-      if (response?.currentDate) {
+      if (this.currrentDate() == '' && response?.currentDate) {
+
         this.currrentDate.set(response.currentDate);
         this.today.set(response.currentDate);
+
       }
+
     });
   }
 
@@ -95,7 +100,8 @@ export class EmplWeekSchedule {
 
   
   reloadScheduleDayResource() {
-
+    
+    this.weekResource.reload();
     this.scheduleDayResource.reload();
   }
 

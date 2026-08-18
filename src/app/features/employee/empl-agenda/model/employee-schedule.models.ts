@@ -59,22 +59,24 @@ export type EmplWeekResponse = EmplWeek;
 
 
 
+export interface MonthSchedule {
+  yearMonth     : string;
+  startDay      : DayOfWeek
+  endMonth      : number
+  currentDate   : string
+  days: MonthDaySchedule[];
+}
+
 export interface MonthDaySchedule {
-    dayNumber: number;
-    date: string; // YYYY-MM-DD
-    isCurrentMonth: boolean;
-    isToday?: boolean;
-    bookings: BookingDay[];
-  }
-  
-  export interface MonthSchedule {
-    monthName: string; // ej. "Julio 2026"
-    days: MonthDaySchedule[];
-  }
+  day             : number;
+  services        : number; 
+  hasPending      : boolean;
+  hasConfirmed    : boolean;
+  hasProgress     : boolean;
+  hasCancelled    : boolean;
+  hasCompleted    : boolean;
+  hasNoShow       : boolean;   
+}
 
 
-
-
-
-///
-
+export type MonthScheduleResponse = MonthSchedule;

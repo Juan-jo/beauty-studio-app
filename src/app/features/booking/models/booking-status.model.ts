@@ -24,15 +24,15 @@ export const BOOKING_STATUS_CONFIG: Record<BookingStatus, StatusConfig> = {
     },
 
     'PENDING': {
-        label: 'Pendiente',
+        label: 'Pendiente por confirmar',
         classes: 'bg-amber-50 text-amber-800 border-amber-100',
         barBg: 'bg-amber-500'
     },
 
     'IN_PROGRESS': {
-        label: 'En Progreso',
-        classes: 'bg-brand-50 text-brand-700 border-brand-100',
-        barBg: 'bg-brand-600'
+        label: 'En Curso',
+        classes: 'bg-indigo-50 text-indigo-700 border-indigo-100',
+        barBg: 'bg-indigo-600'
     },
 
     'COMPLETED': {
@@ -43,27 +43,27 @@ export const BOOKING_STATUS_CONFIG: Record<BookingStatus, StatusConfig> = {
 
     'CANCELLED': {
         label: 'Cancelado',
-        classes: 'bg-red-50/40 text-red-700 border-red-100',
-        barBg: 'bg-red-600'
+        classes: 'bg-rose-50/40 text-rose-700 border-rose-100',
+        barBg: 'bg-rose-600'
     },
-    
+
     'NO_SHOW': {
         label: 'No asistió',
-        classes: 'bg-purple-50 text-purple-800 border-purple-100',
-        barBg: 'bg-purple-600'
+        classes: 'bg-rose-50 text-rose-800 border-rose-100',
+        barBg: 'bg-rose-600'
     }
 };
 
 
 export function getBookingStatusClasses(status: BookingStatus): string {
     return BOOKING_STATUS_CONFIG[status]?.classes || 'bg-gray-50 text-gray-800 border-gray-500';
-  }
-  
-  export function getBookingStatusLabel(status: BookingStatus): string {
+}
+
+export function getBookingStatusLabel(status: BookingStatus): string {
     return BOOKING_STATUS_CONFIG[status]?.label || status;
-  }
+}
 
 
-  export function getBookingStatusBarBg(status: BookingStatus): string {
+export function getBookingStatusBarBg(status: BookingStatus): string {
     return BOOKING_STATUS_CONFIG[status]?.barBg || 'bg-white';
-  }
+}

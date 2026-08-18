@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { EmployeeScheduleDay, EmplScheduleDayResponse, EmplWeekResponse } from '../model/employee-schedule.models';
+import {  EmplScheduleDayResponse, EmplWeekResponse, MonthScheduleResponse } from '../model/employee-schedule.models';
 import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from '../../../../config/app-config.service';
 
@@ -14,10 +14,10 @@ export class EmplScheduleService {
 
 
 
-  getWeek() {
+  getWeek(params: string = '') {
 
     return this.http.get<EmplWeekResponse>(
-      `${this.config.apiUrl}/api/v1/employee/schedule/week`
+      `${this.config.apiUrl}/api/v1/employee/schedule/week${params}`
     );
   }
 
@@ -27,6 +27,15 @@ export class EmplScheduleService {
 
     return this.http.get<EmplScheduleDayResponse>(
       `${this.config.apiUrl}/api/v1/employee/schedule/day?date=${date}`
+    );
+  }
+
+
+
+  getMonth(params: string) {
+
+    return this.http.get<MonthScheduleResponse>(
+      `${this.config.apiUrl}/api/v1/employee/schedule/month${params}`
     );
   }
 

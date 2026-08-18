@@ -1,5 +1,8 @@
 <div class="max-w-md mx-auto min-h-screen bg-brand-50/30  text-gray-800 font-sans relative pb-10">
   
+  <div class="sticky top-0 z-20 bg-white/95 backdrop-blur-md shadow-2xs">
+  
+
     
     <header class="flex items-center justify-between px-4 pt-4 pb-4 bg-white">
       @if (isLoadingWeek()) {
@@ -35,7 +38,7 @@
       }
     </header>
   
-    <div class="grid grid-cols-7 text-center mb-6 border-b border-gray-100 pb-4 bg-white">
+    <div class="grid grid-cols-7 text-center mb-3 border-b border-gray-100 pb-4 bg-white">
       @if(isLoadingWeek()) {
         
 
@@ -52,7 +55,7 @@
       @else {
         
         @for (day of week()?.week; track day.date) {
-          <div class="flex flex-col items-center"
+          <div class="flex flex-col items-center pb-3"
           
             >
             <span class="text-xs text-gray-400 mb-2 font-medium"> {{ day.day | mxDayOfWeek: 'short' }}</span>
@@ -74,16 +77,36 @@
               
               <div class="absolute -bottom-2 left-0 right-0 flex justify-center gap-1">
                 @if(day.hasPending) {
-                  <span class="w-1 h-1 rounded-full bg-amber-600"></span>
+                  
+                  <span 
+                    class=" h-1.5 w-1.5 rounded-full"
+                    [ngClass]="getDayStatusColor('PENDING')">
+                  </span>
+                  
                 }
-                @if (day.hasConfirmed || day.hasProgress) {
-                  <span class="w-1 h-1 rounded-full bg-emerald-600"></span>
+                @if (day.hasConfirmed) {
+                  <span 
+                    class=" h-1.5 w-1.5 rounded-full"
+                    [ngClass]="getDayStatusColor('CONFIRMED')">
+                  </span>
+                }
+                @if (day.hasProgress) {
+                  <span 
+                    class=" h-1.5 w-1.5 rounded-full"
+                    [ngClass]="getDayStatusColor('IN_PROGRESS')">
+                  </span>
                 }
                 @if (day.hasCancelled || day.hasNoShow) {
-                  <span class="w-1 h-1 rounded-full bg-red-600"></span>
+                  <span 
+                    class=" h-1.5 w-1.5 rounded-full"
+                    [ngClass]="getDayStatusColor('CANCELLED')">
+                  </span>
                 }
                 @if (day.hasCompleted) {
-                  <span class="w-1 h-1 rounded-full bg-gray-600"></span>
+                  <span 
+                    class=" h-1.5 w-1.5 rounded-full"
+                    [ngClass]="getDayStatusColor('COMPLETED')">
+                  </span>
                 }
                 
               </div>
@@ -97,6 +120,8 @@
       }
       
     </div>
+
+  </div>
   
     <div class="relative pr-4">
       

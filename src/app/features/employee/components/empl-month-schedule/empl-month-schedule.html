@@ -1,0 +1,389 @@
+<div cdkDrag cdkDragLockAxis="y" (cdkDragEnded)="onDragEnded($event)"
+    [class]="isFullScreen() ? 'h-screen rounded-t-3xl' : 'max-h-[85vh] rounded-t-3xl'"
+    class="flex flex-col bg-white w-full shadow-2xl transition-all duration-300 ease-out overflow-hidden min-h-[75vh]">
+
+    <div cdkDragHandle class="p-6 pb-2 flex-none">
+        <!-- Indicador visual (Drag handle) -->
+        <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
+
+        
+    </div>
+
+    <div class="p-6 pt-0 flex-1 overflow-y-auto space-y-4">
+
+
+
+        <div class="animate-fadeIn">
+
+
+            @if(viewMode() === 'month') {
+
+                <!-- Encabezado -->
+                <div class="mb-5">
+                    <h3 class="text-xl font-bold tracking-tight text-gray-900">
+                      Calendario
+                    </h3>
+                    <p class="text-xs text-gray-500">
+                      Gestión general de disponibilidad y citas del mes
+                    </p>
+
+                    
+                  </div>
+
+                <!-- Leyenda de Indicadores de Estado -->
+                <div class="mb-6 flex flex-wrap items-center gap-x-5 gap-y-2.5 rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3 text-xs font-medium text-gray-600 shadow-2xs backdrop-blur-xs">
+                    
+                    
+                    <div class="inline-flex items-center gap-2">
+                      <span class="h-2.5 w-2.5 rounded-full ring-2 ring-white" [ngClass]="getDayStatusColor('PENDING')"></span>
+                      <span>Pendientes por confirmar</span>
+                    </div>
+                
+                    <div class="inline-flex items-center gap-2">
+                      <span class="h-2.5 w-2.5 rounded-full ring-2 ring-white" [ngClass]="getDayStatusColor('CONFIRMED')"></span>
+                      <span>Confirmados</span>
+                    </div>
+                
+                    <div class="inline-flex items-center gap-2">
+                      <span class="h-2.5 w-2.5 rounded-full ring-2 ring-white" [ngClass]="getDayStatusColor('IN_PROGRESS')"></span>
+                      <span>En curso</span>
+                    </div>
+                
+                    <div class="inline-flex items-center gap-2">
+                      <span class="h-2.5 w-2.5 rounded-full ring-2 ring-white" [ngClass]="getDayStatusColor('COMPLETED')"></span>
+                      <span>Completados</span>
+                    </div>
+                
+                    <div class="inline-flex items-center gap-2">
+                      <span class="h-2.5 w-2.5 rounded-full ring-2 ring-white" [ngClass]="getDayStatusColor('CANCELLED')"></span>
+                      <span>Cancelados</span>
+                    </div>
+                  </div>
+
+            <!-- Calendario Componente -->
+            <div class="calendar rounded-3xl bg-white">
+
+                <!-- Navegación del mes -->
+                @if(isLoading()) {
+                <div class="mb-5 flex items-center justify-between animate-pulse">
+                    <!-- Skeleton Título del Mes -->
+                    <div class="h-7 w-36 rounded-lg bg-gray-200"></div>
+
+                    <!-- Skeleton Botones de Navegación -->
+                    <div class="flex gap-2">
+                        <div class="h-9 w-9 rounded-full bg-gray-200"></div>
+                        <div class="h-9 w-9 rounded-full bg-gray-200"></div>
+                    </div>
+                </div>
+                }
+                @else {
+
+                <div class="mb-5 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-gray-800">
+                        {{ monthTitle() }}
+                    </h3>
+
+                    <div class="flex gap-2">
+                        <button (click)="prevMonth()"
+                            class="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:bg-brand-50 hover:text-brand-600 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-600"
+                            aria-label="Mes anterior">
+                            ‹
+                        </button>
+
+                        <button (click)="nextMonth()"
+                            class="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:bg-brand-50 hover:text-brand-600"
+                            aria-label="Mes siguiente">
+                            ›
+                        </button>
+                    </div>
+                </div>
+
+                }
+
+
+
+                <!-- Días de la semana -->
+                <div class="mb-3 grid grid-cols-7 text-center text-xs font-semibold text-gray-400">
+                    @for (weekday of weekdays; track weekday) {
+                    <span>{{ weekday }}</span>
+                    }
+                </div>
+
+                <!-- Grilla de días -->
+                <div class="grid grid-cols-7 gap-y-2 gap-x-1 text-center">
+                    @if (isLoading()) {
+                    @for (item of skeletonDays; track $index) {
+                    <div class="mx-auto flex h-10 w-10 items-center justify-center">
+                        <div class="h-9 w-9 animate-pulse rounded-2xl bg-gray-100"></div>
+                    </div>
+                    }
+                    } @else {
+
+
+                        
+
+                    @for (day of days(); track $index) {
+                    @if (day.status === 'empty') {
+                    <div class="h-10 w-10"></div>
+                    } @else {
+                    <div class="flex items-center justify-center">
+                        <button (click)="selectDay(day.number)" type="button" class="group relative flex h-10 w-10 cursor-pointer flex-col items-center justify-center rounded-2xl text-xs font-bold transition-all duration-200
+                                 text-gray-700 hover:bg-brand-50 hover:text-brand-600 hover:shadow-xs active:scale-95
+                                 focus-visible:outline-2 focus-visible:outline-brand-500"
+                                [ngClass]="{
+                                    'border-1 border-brand-600 border-dashed ': currentDate() === yearMonth() + '-'+ day.number
+                                    
+                                }"
+                                >
+
+
+
+
+                            <span>{{ day.number }}</span>
+
+                            <!-- Indicadores de estado (puntos inferiores integrados) -->
+                            <div class="mt-0.5 flex h-1.5 items-center justify-center gap-0.5">
+                                @if (day.hasPending) {
+                                    <span class="h-1.5 w-1.5 rounded-full ring-2 ring-white" 
+                                    [ngClass]="getDayStatusColor('PENDING')"></span>
+                                }
+                                @if (day.hasConfirmed) {
+                                    <span class="h-1.5 w-1.5 rounded-full ring-2 ring-white" 
+                                    [ngClass]="getDayStatusColor('CONFIRMED')"></span>
+                                }
+                                @if (day.hasProgress) {
+                                    <span class="h-1.5 w-1.5 rounded-full ring-2 ring-white" 
+                                    [ngClass]="getDayStatusColor('IN_PROGRESS')"></span>
+                                }
+
+                                @if (day.hasCancelled || day.hasNoShow) {
+                                    <span class="h-1.5 w-1.5 rounded-full ring-2 ring-white" 
+                                    [ngClass]="getDayStatusColor('CANCELLED')"></span>
+                                    }
+                                @if (day.hasCompleted) {
+                                    <span class="h-1.5 w-1.5 rounded-full ring-2 ring-white" 
+                                    [ngClass]="getDayStatusColor('COMPLETED')"></span>
+                                }
+                            </div>
+
+                        </button>
+                    </div>
+                    }
+                    }
+
+                    
+
+
+
+
+                    }
+                </div>
+            </div>
+
+            }
+          
+            @else if (viewMode() === 'week') {
+
+                <!-- CONTENEDOR FIJO EN TOP (Sticky) -->
+                <div class="sticky top-0 z-20 bg-white/95 pb-6 backdrop-blur-md shadow-2xs">
+                  
+                  <!-- Barra de Encabezado: Día actual + Toggle a vista Mes -->
+                  <div class="mb-3 flex items-center justify-between px-1">
+                    <span class="text-xs font-bold tracking-wider uppercase text-gray-400">
+                      Semana
+                    </span>
+              
+                    <!-- Botón para cambiar a vista Mes -->
+                    <button
+                      type="button"
+                      (click)="viewMode.set('month')"
+                      class="inline-flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-2.5 py-1 text-xs font-semibold text-gray-600 shadow-2xs transition-all hover:border-brand-300 hover:bg-brand-50/50 hover:text-brand-600 active:scale-95 cursor-pointer">
+                      <svg class="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                      </svg>
+                      Ver Mes Completo
+                    </button>
+                  </div>
+              
+                  <!-- Nombres de los Días -->
+                  <div class="mb-2 grid grid-cols-7 text-center text-xs font-semibold text-gray-400">
+                    @for (weekday of weekdays; track weekday) {
+                      <span>{{ weekday }}</span>
+                    }
+                  </div>
+              
+                  <!-- Grilla de la Semana -->
+                  <div class="grid grid-cols-7 gap-x-1 text-center">
+                    @if (week.isLoading()) {
+                      @for (item of [1, 2, 3, 4, 5, 6, 7]; track item) {
+                        <div class="flex items-center justify-center">
+                          <div class="h-10 w-10 animate-pulse rounded-2xl bg-gray-100"></div>
+                        </div>
+                      }
+                    } @else  {
+
+                        @for (day of week.value()?.week; track day.date) {
+                            <div class="flex flex-col items-center"
+                            
+                              >
+                              
+                              <button 
+                                (click)="changeDate(day.date)"
+                                class="relative w-9 h-9 rounded-xl flex items-center justify-center text-sm font-semibold transition-all "
+                                
+                                [ngClass]="{
+                                  'border-1 border-brand-600 border-dashed ': currentDate() === day.date,
+                                  'bg-brand-600 text-white shadow-md': selectedDate() === day.date,
+                                  'text-gray-700 hover:bg-brand-100': selectedDate() !== day.date
+                                }"
+                                
+                                [disabled]="isLoadingScheduleDay()"
+                                > 
+                                {{ day.date | date:'d' }} 
+                                
+                  
+                                
+                                <div class="absolute -bottom-2 left-0 right-0 flex justify-center gap-1">
+                                  @if(day.hasPending) {
+                                    
+                                    <span 
+                                      class=" h-1.5 w-1.5 rounded-full"
+                                      [ngClass]="getDayStatusColor('PENDING')">
+                                    </span>
+                                    
+                                  }
+                                  @if (day.hasConfirmed) {
+                                    <span 
+                                      class=" h-1.5 w-1.5 rounded-full"
+                                      [ngClass]="getDayStatusColor('CONFIRMED')">
+                                    </span>
+                                  }
+                                  @if (day.hasProgress) {
+                                    <span 
+                                      class=" h-1.5 w-1.5 rounded-full"
+                                      [ngClass]="getDayStatusColor('IN_PROGRESS')">
+                                    </span>
+                                  }
+                                  @if (day.hasCancelled || day.hasNoShow) {
+                                    <span 
+                                      class=" h-1.5 w-1.5 rounded-full"
+                                      [ngClass]="getDayStatusColor('CANCELLED')">
+                                    </span>
+                                  }
+                                  @if (day.hasCompleted) {
+                                    <span 
+                                      class=" h-1.5 w-1.5 rounded-full"
+                                      [ngClass]="getDayStatusColor('COMPLETED')">
+                                    </span>
+                                  }
+                                  
+                                </div>
+                                
+                  
+                  
+                              </button>
+                            </div>
+                          }
+
+                      <!--@for (day of week.value()?.week; track day.date) {
+                        <div class="flex items-center justify-center">
+                          <button 
+                            type="button"
+                            (click)="changeDate(day.date)"
+                            class="group relative flex h-10 w-10 cursor-pointer flex-col items-center justify-center rounded-2xl text-xs font-bold transition-all duration-200"
+                            [ngClass]="{
+                              'bg-brand-600 text-white shadow-md shadow-brand-500/20': selectedDate() === day.date,
+                              'border border-dashed border-brand-500 text-brand-600 bg-brand-50/30': currentDate() === day.date && selectedDate() !== day.date,
+                              'text-gray-700 hover:bg-brand-50 hover:text-brand-600': selectedDate() !== day.date && currentDate() !== day.date
+                            }"> 
+                            
+                            <span>{{ day.date | date:'d' }}</span>
+              
+                            <div class="mt-0.5 flex h-1.5 items-center justify-center gap-0.5">
+                              @if (day.hasPending) {
+                                <span class="h-1 w-1 rounded-full bg-amber-500 transition-transform group-hover:scale-125" [class.!bg-white]="selectedDate() === day.date"></span>
+                              }
+                              @if (day.hasConfirmed || day.hasProgress) {
+                                <span class="h-1 w-1 rounded-full bg-emerald-500 transition-transform group-hover:scale-125" [class.!bg-white]="selectedDate() === day.date"></span>
+                              }
+                              @if (day.hasCancelled || day.hasNoShow) {
+                                <span class="h-1 w-1 rounded-full bg-rose-500 transition-transform group-hover:scale-125" [class.!bg-white]="selectedDate() === day.date"></span>
+                              }
+                              @if (day.hasCompleted) {
+                                <span class="h-1 w-1 rounded-full bg-slate-400 transition-transform group-hover:scale-125" [class.!bg-white]="selectedDate() === day.date"></span>
+                              }
+                            </div>
+                          </button>
+                        </div>
+                      }-->
+                    }
+                  </div>
+              
+                </div>
+                <!-- FIN CONTENEDOR FIJO -->
+              
+                <!-- Lista de Citas del Día (Scrollable) -->
+                <div class="relative space-y-3 pl-1 pr-1 pt-3">
+                  @if (isLoadingScheduleDay()) {
+                    @for (item of [1, 2, 3]; track $index) {
+                      <div class="flex items-start gap-3 py-2 animate-pulse">
+                        <div class="w-12 shrink-0 pt-2 text-right">
+                          <div class="ml-auto h-3 w-10 rounded bg-gray-200"></div>
+                        </div>
+                        <div class="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-2xs">
+                          <div class="flex items-center justify-between gap-2 mb-3">
+                            <div class="h-4 w-20 rounded bg-gray-200"></div>
+                            <div class="h-4 w-12 rounded bg-gray-200"></div>
+                          </div>
+                          <div class="h-3 w-3/4 rounded bg-gray-200 mb-4"></div>
+                          <div class="flex items-center justify-between pt-2 border-t border-gray-50">
+                            <div class="h-7 w-24 rounded-full bg-gray-200"></div>
+                            <div class="h-6 w-16 rounded-lg bg-gray-200"></div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  }
+                  @else {
+                    @for (booking of scheduleDay()?.bookings; track booking.id) {
+                      <empl-booking-card
+                        [booking]="booking"
+                        [updateUrl]="false"
+                        (reloadSchedule)="reloadScheduleDayResource()">
+                      </empl-booking-card>
+                    }
+                    
+                    @empty {
+                      @if (!isLoadingScheduleDay()) {
+                        <div class="my-8 flex min-h-[40vh] flex-col items-center justify-center rounded-3xl border border-dashed border-gray-200/80 bg-gray-50/50 px-6 py-10 text-center animate-fade-in">
+                          <div class="relative mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 ring-6 ring-brand-50/40">
+                            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-white ring-2 ring-white">
+                              <svg class="h-2.5 w-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                              </svg>
+                            </span>
+                          </div>
+              
+                          <h3 class="text-sm font-bold text-gray-900">Día libre de citas</h3>
+                          <p class="mt-1 max-w-[220px] text-xs leading-relaxed text-gray-400">
+                            No hay reservaciones programadas para este día.
+                          </p>
+                        </div>
+                      }
+                    }
+                  }
+                </div>
+              
+              }
+
+
+        </div>
+
+
+    </div>
+
+
+</div>

@@ -33,6 +33,8 @@ export class EmplBookingCard {
 
   @Input({ required: true }) booking!: BookingDay
 
+  @Input() updateUrl: boolean = true
+
   viewModal = signal<'' | 'confirm' | 'cancel'>('');
 
 
@@ -92,10 +94,13 @@ export class EmplBookingCard {
   openBooking() {
     
     this.openDialogService.open<any, number>(BookingResume, {
-      data: this.booking.id
+      data: this.booking.id,
+      updateUrl: this.updateUrl
     }
     ).then(response => {
       
+
+
 
 
     });
@@ -106,7 +111,8 @@ export class EmplBookingCard {
 
 
     this.openDialogService.open<boolean, BookingDay>(CancelBookingDialog, {
-      data: this.booking
+      data: this.booking,
+      updateUrl: this.updateUrl
     }
     ).then(response => {
 

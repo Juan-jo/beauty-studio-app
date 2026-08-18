@@ -1,7 +1,8 @@
-import { Component, computed, ElementRef, OnInit, resource, signal, ViewChild } from '@angular/core';
-import { delay, firstValueFrom, of } from 'rxjs';
-import { BookingDay, MonthDaySchedule, MonthSchedule } from './model/employee-schedule.models';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { EmplWeekSchedule } from '../components/empl-week-schedule/empl-week-schedule';
+import { OpenDialogService } from '../../../shared/dialog/open-dialog';
+import { EmplMonthSchedule } from '../components/empl-month-schedule/empl-month-schedule';
+
 
 @Component({
   selector: 'app-empl-agenda',
@@ -15,33 +16,21 @@ export class EmplAgenda implements OnInit {
   
 
   @ViewChild('weekSection') weekSection!: ElementRef;
-
-
-  viewMode = signal<'week' | 'month'>('week');
-
+  
+  private readonly openDialogService = inject(OpenDialogService);
+  
   weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
-  dayResource = resource({
-    params: () => ({ mode: this.viewMode() }),
-
-    loader: async ({ params }) => {
-
-
-      switch (params.mode) {
-        case 'week':
-          return of([]).pipe(delay(400));
-        case 'month':
-          return of([]).pipe(delay(400));
+  setViewMonthMode() {
+    
+    this.openDialogService.open<any, any>(
+      EmplMonthSchedule,
+      {
+        updateUrl: true
       }
-      
-    }
-  });
-  
-  isLoading = this.dayResource.isLoading;
-  scheduleData = computed(() => this.dayResource.value());
+    ).then();
 
-  setViewMode(mode:'week' | 'month') {
-    this.viewMode.set(mode);
+
   }
 
 
