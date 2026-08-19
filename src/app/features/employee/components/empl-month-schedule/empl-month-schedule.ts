@@ -1,14 +1,14 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { CdkDragEnd, DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, computed, effect, inject, resource, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, signal } from '@angular/core';
 import { EmplScheduleService } from '../../empl-agenda/service/empl-schedule.service';
-import { firstValueFrom } from 'rxjs';
-import { EmplWeekResponse, MonthSchedule } from '../../empl-agenda/model/employee-schedule.models';
+import { EmplScheduleDayResponse, EmplWeekResponse, MonthSchedule, MonthScheduleResponse } from '../../empl-agenda/model/employee-schedule.models';
 import { DayOfWeek } from '../../../../core/pipes/mx-dayofweek-pipe';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EmplBookingCard } from '../empl-booking-card/empl-booking-card';
 import { getDayStatusColor } from '../../../booking/models/booking-calendar.models';
+import { EmplScheduleRefreshService } from '../../empl-agenda/service/empl-schedule-refresh.service';
 
 
 interface UICalendarDay {
@@ -25,6 +25,7 @@ interface UICalendarDay {
 
 @Component({
   selector: 'app-empl-month-schedule',
+  standalone: true,
   imports: [
     CommonModule,
     DragDropModule,
@@ -37,6 +38,7 @@ export class EmplMonthSchedule {
 
   private readonly emplScheduleService = inject(EmplScheduleService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private refreshService = inject(EmplScheduleRefreshService);
 
   yearMonth     = signal<string>('');
   selectedDate  = signal<string>('');
@@ -66,30 +68,33 @@ export class EmplMonthSchedule {
         this.currentDate.set(response.currentDate);
         
       }
+
     });
+      
   }
 
+  monthResource = rxResource<MonthScheduleResponse, null>({
 
-
-  monthResource = resource({
-
-
-    loader: async () => {
+    stream: () => {
 
       let query = '';
 
+      const yearMonth = this.yearMonth();
+
       
-      if(this.yearMonth() != '') {
+      if(yearMonth !== '') {
 
 
-        query = `?yearMonth=${this.yearMonth()}`
+        query = `?yearMonth=${yearMonth}`
 
       }
 
-      return await firstValueFrom(this.emplScheduleService.getMonth(query));
 
+     return this.emplScheduleService.getMonth(query)
+      
     }
   });
+
 
   isLoading = this.monthResource.isLoading;
 
@@ -143,9 +148,8 @@ export class EmplMonthSchedule {
 
   selectDay(day: number | null) {
 
-    console.log(this.yearMonth() + '-'+day)
     this.selectedDate.set(this.yearMonth() + '-'+day)
-    this.viewMode.set('week')
+    this.setMode('week')
 
   }
 
@@ -155,11 +159,13 @@ export class EmplMonthSchedule {
   }
 
 
-  week = rxResource<EmplWeekResponse, any>({
+  week = rxResource<EmplWeekResponse, { date: string } | undefined>({
     
-    params: () => ({ 
-      date: this.selectedDate() 
-    }),
+
+    params: () => {
+      const date = this.selectedDate();
+      return date != '' ? { date } : undefined;
+    },
   
     stream: (request) => {
 
@@ -172,28 +178,46 @@ export class EmplMonthSchedule {
   });
 
 
-  scheduleDayResource = resource({
-    params: () => ({ date: this.selectedDate() }),
+  scheduleDayResource = rxResource<EmplScheduleDayResponse, { date: string } | undefined>({
+    params: () => {
 
-    loader: async ({ params }) => {
+      const date = this.selectedDate();
+      return date != '' ? { date } : undefined;
+    },
 
-      if(params.date == '') {
-        return;
-      }
+    stream: (request) => {
 
-     return await firstValueFrom(this.emplScheduleService.getDaySchedule(params.date));
+      const date = request.params.date;
+
+
+     return this.emplScheduleService.getDaySchedule(date);
       
     }
   });
-  
+
   isLoadingScheduleDay = this.scheduleDayResource.isLoading;
 
   scheduleDay = computed(() => this.scheduleDayResource.value());
 
   reloadScheduleDayResource() {
+    this.week.reload();
+    this.scheduleDayResource.reload();
+
+    this.refreshService.notifyRefresh(this.selectedDate());
 
   }
 
+
+  setMode(mode: 'month' | 'week') {
+
+    if(mode === 'month') {
+
+      this.monthResource.reload();
+
+    }
+
+    this.viewMode.set(mode)
+  }
   
 
   buildCalendarGrid(monthSchedule: MonthSchedule): UICalendarDay[] {

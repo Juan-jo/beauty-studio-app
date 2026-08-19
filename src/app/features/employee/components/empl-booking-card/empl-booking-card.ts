@@ -77,7 +77,8 @@ export class EmplBookingCard {
     
 
     this.openDialogService.open<any, BookingDay>(ConfirmBookingDialog, {
-      data: this.booking
+      data: this.booking,
+      updateUrl: this.updateUrl
     }
     ).then(response => {
 

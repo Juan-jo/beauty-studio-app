@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, computed, ElementRef, inject, resource, signal, viewChild, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, finalize, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { EmployeeSlot } from '../../models/employe-availability.models';
 import { BookingCalendarService } from '../../service/bokking-calendar.service';
 import { CommonModule } from '@angular/common';
@@ -9,13 +9,13 @@ import { BookingCalendar } from '../../component/booking-calendar/booking-calend
 import { DurationPipe } from '../../../../core/pipes/duration-pipe';
 import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 import { CustomerBookingService } from '../../../customer/service/cus-booking';
-import { HasRoleDirective } from '../../../../core/directives/has-role';
 import { AuthService } from '../../../../core/services/auth';
 import { EmployeeBookingService } from '../../../employee/service/empl-booking.service';
 import { CalendarService } from '../../models/booking-calendar.models';
 import { EmplAddService } from '../../../employee/components/empl-add-service/empl-add-service';
 import { OpenDialogService } from '../../../../shared/dialog/open-dialog';
 import { Location } from '@angular/common';
+import { BookingCheckoutData, BookingCheckoutDialog } from '../../component/booking-checkout-dialog/booking-checkout-dialog';
 
 @Component({
   selector: 'app-booking',
@@ -24,8 +24,7 @@ import { Location } from '@angular/common';
     ReactiveFormsModule,
     BookingCalendar,
     DurationPipe,
-    CurrencyPipe,
-    HasRoleDirective
+    CurrencyPipe
   ],
 
   templateUrl: './booking.html',
@@ -56,8 +55,7 @@ export class Booking {
 
 
   private readonly bookingCalendarService = inject(BookingCalendarService);
-  private readonly customerBookingService = inject(CustomerBookingService);
-  private readonly employeeBookingService = inject(EmployeeBookingService);
+  
   private readonly openDialogService = inject(OpenDialogService);
 
   private readonly authService = inject(AuthService);
@@ -252,12 +250,6 @@ export class Booking {
   // Confirm Booking Modal
 
 
-  showConfirmationModal = false;
-  isSubmitting = false;
-  
-  // Control de respuesta 'idle' | 'success' | 'error'
-  bookingStatus: 'idle' | 'success' | 'error' = 'idle';
-  errorMessage = '';
 
   /**
    * Abre el modal de confirmación
@@ -265,104 +257,39 @@ export class Booking {
   openConfirmationModal() {
     if (this.f?.hour?.value) {
 
-      this.location.go(
-        this.location.path(),
-        '',
-        {
-          //...history.state,
-          modalOpen: true
+      this.openDialogService.open<boolean, BookingCheckoutData>(BookingCheckoutDialog, {
+        data: {
+          serviceIds: this.date().serviceIds,
+          services: this.services().map(i => i.name),
+          dateTime: this.f.date.value + " " + this.f.hour.value,
+          employee: {
+            employeeId: this.selectedProfessional?.id ?? 0,
+            name: this.selectedProfessional?.name ?? '',
+            pictureUrl: this.selectedProfessional?.pictureUrl ?? '',
+          },
+          total: this.f.total.value ?? ''
+        },
+        closeOnHardwareBack: false
+      })
+      .then(response => {
+        
+  
+        if(typeof(response) === 'boolean') {
+          
+          console.log('se hizo la reservacion')
+  
         }
-      );
-
-      this.bookingStatus = 'idle';
-      this.errorMessage = '';
-      this.showConfirmationModal = true;
+  
+      });
+      
+      
     }
   }
 
   /**
    * Cierra el modal y resetea estados
    */
-  closeConfirmationModal() {
-    this.location.back();
-
-    this.showConfirmationModal = false;
-    this.bookingStatus = 'idle';
-    this.isSubmitting = false;
-    
-  }
-
-  navigateAgenda() {
-    
-    history.back();
-    history.back();
-    
-  }
-
- 
-  confirmBookingSuccess() {
-
-    if(this.form.invalid) {
-      this.form.markAllAsTouched();
-      this.cdr.markForCheck();
-      return;
-    }
-
-    const isEmployee = this.authService.hasRoles(['EMPLOYEE', 'SALON_ADMIN']);
-
-    this.isSubmitting = true;
-    this.bookingStatus = 'idle';
-
-    const dateTime = `${this.f.date.value} ${this.f.hour.value}`;
-
-    const payload: BookingPayload = {
-      serviceIds: this.date().serviceIds,
-      employeeId: this.selectedProfessional?.id,
-      dateTime: dateTime,
-    };
-
-
-    if (isEmployee) {
-      payload.name = this.f.name.value as string;
-      payload.phone = this.f.phone.value as string;
-    }
-    
-    
-    const booking$ = isEmployee
-      ? this.employeeBookingService.createBooking(payload)
-      : this.customerBookingService.createBooking(payload);
-
-
-    booking$
-      .pipe(
-        finalize(() => this.isSubmitting = false)
-      )
-      .subscribe({
-        next: () => {
-
-          this.bookingStatus = 'success';
-          this.cdr.markForCheck()
-          
-
-        },
-        error: err => {
-
-          this.confirmBookingError()
-
-        }
-      })
-
-  }
-
- 
-  confirmBookingError() {
-
-    this.isSubmitting = false;
-    this.bookingStatus = 'error';
-    this.errorMessage = 'El horario seleccionado ya no se encuentra disponible. Por favor elige otro horario.';
-    this.cdr.markForCheck()
-
-  }
+  
 
 
   openServicesSheet() {
@@ -425,11 +352,4 @@ export class Booking {
 }
 
 
-// 1. Definir la interfaz (puedes ponerla arriba de tu componente o en un archivo .model.ts)
-interface BookingPayload {
-  serviceIds: string;
-  employeeId?: number;
-  dateTime: string;
-  name?: string;
-  phone?: string;
-}
+

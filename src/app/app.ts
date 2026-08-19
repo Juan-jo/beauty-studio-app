@@ -5,6 +5,7 @@ import { Location } from '@angular/common';
 import { App } from '@capacitor/app';
 import { PushNotificationService } from './core/notifications/push-notification.service';
 import { Capacitor } from '@capacitor/core';
+import { OpenDialogService } from './shared/dialog/open-dialog';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,8 @@ export class BeautyApp implements OnInit {
 
   private pushService = inject(PushNotificationService);
   private authService = inject(AuthService);
+
+  private readonly openDialogService = inject(OpenDialogService);
 
   constructor() {
     this.authService.loadAuthenticatedUser();
@@ -40,10 +43,67 @@ export class BeautyApp implements OnInit {
   initHardwareBackButton() {
 
     App.addListener('backButton', () => {
+  
+      // Hay un modal abierto
+      if (this.openDialogService.hasOpenModals()) {
+  
+        this.openDialogService.closeTopModal();
+  
+        return;
+      }
+  
+      // No hay modal
+      const pathname = window.location.pathname;
+  
+      if (
+        pathname === '/' ||
+        pathname === '/employee/agenda'
+      ) {
+        App.exitApp();
+        return;
+      }
+  
+      this.location.back();
+  
+    });
+  
+  }
+  
+  /*initHardwareBackButton() {
+
+    App.addListener('backButton', () => {
+  
+      // 1. Hay un modal abierto
+      if (this.openDialogService.hasOpenModals()) {
+        this.openDialogService.closeTopModal();
+        return;
+      }
+  
+      // 2. No hay modal → navegación normal
+      const pathname = window.location.pathname;
+  
+      if (
+        pathname === '/' ||
+        pathname === '/employee/agenda'
+      ) {
+        App.exitApp();
+        return;
+      }
+  
+      // 3. Regresar a la página anterior
+      this.location.back();
+    });
+  
+  }*/
+
+
+  /*initHardwareBackButton() {
+
+    App.addListener('backButton', () => {
       
       // Si hay un modal abierto, primero cerrarlo
       if (history.state?.modalOpen) {
-        //this.location.back();
+        this.location.back();
         return;
       }
   
@@ -59,7 +119,7 @@ export class BeautyApp implements OnInit {
       this.location.back();
     });
   
-  }
+  }*/
 
 
   private setupAppLifecycleListener(): void {

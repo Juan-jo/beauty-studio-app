@@ -9,6 +9,8 @@ interface ModalStackItem {
   dialogRef: DialogRef<any, any>;
   closedByPopState: boolean;
   updateUrl: boolean;
+  closeOnHardwareBack: boolean;
+
 }
 
 @Injectable({
@@ -22,15 +24,59 @@ export class OpenDialogService {
 
   private modalStack: ModalStackItem[] = [];
 
+
   constructor() {
+
     this.location.subscribe(() => {
-      if (this.modalStack.length > 0) {
-        const topModal = this.modalStack[this.modalStack.length - 1];
-        topModal.closedByPopState = true;
-        topModal.dialogRef.close();
+
+      if (this.modalStack.length === 0) {
+        return;
       }
+
+      const topModal =
+        this.modalStack[this.modalStack.length - 1];
+
+      if (!topModal.updateUrl) {
+        return;
+      }
+
+      topModal.closedByPopState = true;
+      topModal.dialogRef.close();
+
     });
+
   }
+
+
+  hasOpenModals(): boolean {
+    return this.modalStack.length > 0;
+  }
+
+
+  closeTopModal(): boolean {
+
+    if (this.modalStack.length === 0) {
+      return false;
+    }
+  
+    const topModal =
+      this.modalStack[this.modalStack.length - 1];
+  
+    // Este modal NO permite Back
+    if (!topModal.closeOnHardwareBack) {
+      return true;
+    }
+  
+    // Este modal sí permite Back
+    if (topModal.updateUrl) {
+      this.location.back();
+    } else {
+      topModal.dialogRef.close();
+    }
+  
+    return true;
+  }
+
 
   open<TResult = unknown, TData = unknown>(
     component: ComponentType<unknown>,
@@ -38,148 +84,128 @@ export class OpenDialogService {
       data?: TData;
       disableClose?: boolean;
       updateUrl?: boolean;
+      closeOnHardwareBack?: boolean;
+
     } = {}
   ): Promise<TResult | undefined> {
 
     const updateUrl = options.updateUrl ?? true;
-
-    // Si se activa updateUrl, insertamos un nuevo estado en el historial por cada modal
-    if (updateUrl) {
-
-      this.location.go(this.location.path(), '', { modalOpen: true, stackIndex: this.modalStack.length });
-    }
-
-    const dialogRef = this.dialog.open<TResult, TData>(component, {
-      data: options.data,
-      panelClass: ['w-full', 'max-w-lg', 'mt-auto'],
-      backdropClass: ['bg-black/50', 'backdrop-blur-sm'],
-      disableClose: options.disableClose ?? false,
-    });
-
-    const stackItem: ModalStackItem = {
-      dialogRef,
-      closedByPopState: false,
-      updateUrl,
-    };
-
-    // Apilamos el modal actual
-    this.modalStack.push(stackItem);
-
     
-    return new Promise<TResult | undefined>((resolve) => {
-      dialogRef.closed.subscribe((result) => {
-        // Desapilamos el modal cerrado
-        const index = this.modalStack.indexOf(stackItem);
-        if (index !== -1) {
-          this.modalStack.splice(index, 1);
-        }
+    const closeOnHardwareBack = options.closeOnHardwareBack ?? true;
 
-        
-        if (!stackItem.closedByPopState && stackItem.updateUrl) {
-          this.location.back();
-        }
-
-        setTimeout(() => {
-          resolve(result);
-        }, 50);
-
-        //resolve(result as TResult | undefined);
-      });
-    });
-  }
-
-
-
-  openCloseable<TResult = unknown, TData = unknown>(
-    component: ComponentType<unknown>,
-    options: {
-      data?: TData;
-      disableClose?: boolean;
-      updateUrl?: boolean;
-    }
-
-  ): Promise<TResult | undefined> {
-
-    const updateUrl = options.updateUrl ?? true;
-
+    // Crear entrada en historial
     if (updateUrl) {
 
       this.location.go(
         this.location.path(),
         '',
         {
-          //...history.state,
+          ...history.state,
           modalOpen: true,
+          stackIndex: this.modalStack.length
         }
       );
+
     }
 
-    const dialogRef = this.dialog.open<TResult, TData>(
-      component,
-      {
-        data: options.data,
 
-        panelClass: [
-          'w-full',
-          'max-w-lg',
-          'mt-auto'
-        ],
+    const dialogRef =
+      this.dialog.open<TResult, TData>(
+        component,
+        {
+          data: options.data,
 
-        backdropClass: [
-          'bg-black/50',
-          'backdrop-blur-sm'
-        ],
+          panelClass: [
+            'w-full',
+            'max-w-lg',
+            'mt-auto'
+          ],
 
-        disableClose: options.disableClose ?? false
-      }
-    );
+          backdropClass: [
+            'bg-black/50',
+            'backdrop-blur-sm'
+          ],
 
-    let closedByPopState = false;
+          disableClose:
+            options.disableClose ?? false
+        }
+      );
+
+
+    const stackItem: ModalStackItem = {
+      dialogRef,
+      closedByPopState: false,
+      updateUrl,
+      closeOnHardwareBack
+    };
+
+
+    this.modalStack.push(stackItem);
+
 
     return new Promise<TResult | undefined>((resolve) => {
 
-      const popStateSub = this.location.subscribe(() => {
-
-        // El usuario presionó atrás
-        closedByPopState = true;
-
-        dialogRef.close();
-
-      });
-
       dialogRef.closed.subscribe((result) => {
 
-        popStateSub.unsubscribe();
+        // Eliminar del stack
+        const index =
+          this.modalStack.indexOf(stackItem);
 
-        // El modal se cerró porque el usuario presionó atrás
-        if (closedByPopState) {
-          resolve(result);
-          return;
+        if (index !== -1) {
+          this.modalStack.splice(index, 1);
         }
 
-        // El modal se cerró manualmente
+
+        /*
+         * El modal fue cerrado por BACK.
+         *
+         * La entrada del historial ya fue eliminada,
+         * por lo tanto no hacemos location.back().
+         */
+        if (stackItem.closedByPopState) {
+
+          resolve(result);
+          return;
+
+        }
+
+
+        /*
+         * El modal fue cerrado manualmente:
+         *
+         * X
+         * backdrop
+         * dialogRef.close()
+         *
+         * Tenemos que eliminar su entrada del historial.
+         */
         if (
-          updateUrl &&
+          stackItem.updateUrl &&
           history.state?.modalOpen
         ) {
 
-          // Quitamos la entrada del modal
           this.location.back();
 
-          // Esperamos a que termine el cambio de historial
+          /*
+           * Esperamos a que termine la navegación
+           * antes de resolver el Promise.
+           */
           setTimeout(() => {
             resolve(result);
-          }, 50);
+          }, 150);
 
           return;
+
         }
 
+
         resolve(result);
+
       });
 
     });
-  }
 
+  }
 
 }
 

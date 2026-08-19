@@ -64,8 +64,7 @@
                 <div class="flex items-center justify-between py-1.5 border-b border-gray-100">
                     <span class="text-xs text-gray-500 font-medium">Fecha y hora</span>
                     <div class="text-right">
-                        <p class="text-xs font-semibold text-gray-900 capitalize">{{ booking.start | date: 'EEEE, d MMM,
-                            yyyy' }}</p>
+                        <p class="text-xs font-semibold text-gray-900 capitalize">{{ booking.start | date: 'EEEE, d MMM, yyyy' }}</p>
                         <p class="text-[11px] text-gray-500 font-medium">{{ booking.start | date: 'HH:mm a' }} ({{booking.duration | duration }})</p>
                     </div>
                 </div>

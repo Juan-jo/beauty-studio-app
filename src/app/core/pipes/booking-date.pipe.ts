@@ -21,7 +21,7 @@ export class BookingDatePipe implements PipeTransform {
       (startDate.getTime() - startToday.getTime()) / 86400000
     );
 
-    const hour = formatDate(date, 'h:mm a', this.locale);
+    const hour = formatDate(date, 'HH:mm a', this.locale);
 
     switch (diffDays) {
       case 0:

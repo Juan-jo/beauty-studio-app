@@ -8,6 +8,8 @@ import { EmplAddService } from '../empl-add-service/empl-add-service';
 import { Router } from '@angular/router';
 import { OpenDialogService } from '../../../../shared/dialog/open-dialog';
 import { getDayStatusColor } from '../../../booking/models/booking-calendar.models'
+import { EmplScheduleRefreshService } from '../../empl-agenda/service/empl-schedule-refresh.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -25,6 +27,8 @@ export class EmplWeekSchedule {
 
   private readonly emplScheduleService = inject(EmplScheduleService);
   private readonly openDialogService = inject(OpenDialogService);
+  private refreshService = inject(EmplScheduleRefreshService);
+
   private router = inject(Router);
 
 
@@ -49,6 +53,28 @@ export class EmplWeekSchedule {
       }
 
     });
+
+
+    this.refreshService.refresh$
+      .pipe(takeUntilDestroyed()) 
+      .subscribe((date) => {
+        
+        let index = this.week()?.week.findIndex(i => i.date == date) ?? -1
+
+        if(index >-1) {
+
+          
+          this.weekResource.reload();
+
+          if(date == this.currrentDate()) {
+
+            this.scheduleDayResource.reload();
+          }
+
+        }
+
+      });
+      
   }
 
 
