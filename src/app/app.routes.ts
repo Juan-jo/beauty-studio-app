@@ -61,7 +61,7 @@ export const routes: Routes = [
         path: 'employee',
         canActivate: [roleGuard],
         loadComponent: () => import('./layouts/employee-layout/employee-layout.layout').then(c => c.EmployeeLayoutLayout),
-        data: { roles: ['EMPLOYEE'] },
+        data: { roles: ['ROLE_EMPLOYEE'] },
         children: [
             {
                 path: 'agenda',
@@ -81,7 +81,7 @@ export const routes: Routes = [
     {
         path: 'employee',
         canActivate: [roleGuard],
-        data: { roles: ['EMPLOYEE'] },
+        data: { roles: ['ROLE_EMPLOYEE'] },
         children: [
             {   
                 path: 'schedule',     
@@ -113,7 +113,7 @@ export const routes: Routes = [
         path: 'customer',
         canActivate: [roleGuard],
         loadComponent: () => import('./layouts/customer-layout/customer-layout.layout').then(c => c.CustomerLayoutLayout),
-        data: { roles: ['CUSTOMER'] },
+        data: { roles: ['ROLE_CUSTOMER'] },
         children: [
             {
                 path: 'feed',
@@ -128,12 +128,18 @@ export const routes: Routes = [
     },
 
     {
+        path: 'customer',
         canActivate: [roleGuard],
-        data: { roles: ['CUSTOMER'] },
-        path: 'customer/booking',
+        data: { roles: ['ROLE_CUSTOMER'] },
+        children: [
+            
+            {
+                path: 'booking',
                 loadComponent: () =>
-                    import('./features/booking/page/booking/booking')
-                        .then(c => c.Booking)
+                    import('./features/booking/page/booking/booking').then(c => c.Booking)
+            },
+            
+        ]
     },
 
     

@@ -20,10 +20,11 @@ export const roleGuard: CanActivateFn = (route, state) => {
 
 export function getHomeRouteForRole(roles: UserRole[]): string {
 
-  if(roles.includes('EMPLOYEE') || roles.includes('SALON_ADMIN')) {
+
+  if(roles.includes('ROLE_EMPLOYEE') || roles.includes('ROLE_SALON_ADMIN')) {
     return '/employee/agenda';
   }
-  else if(roles.includes('CUSTOMER')) {
+  else if(roles.includes('ROLE_CUSTOMER')) {
     return '/customer/feed';
   }
 
