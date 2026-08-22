@@ -53,8 +53,6 @@ export class Login {
       .subscribe({
         next: ({ token }) => {
 
-          this.authService.saveToken(token);
-
           this.pushNotificationService.initPushNotifications().then(_=>{})
           
           this.authService.loadAuthenticatedUser()
