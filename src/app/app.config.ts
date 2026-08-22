@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, isDevMode, inject, provideAppInitializer, LOCALE_ID, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, isDevMode, inject, provideAppInitializer, LOCALE_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -10,8 +10,10 @@ import { AppConfig } from './config/app-config.model';
 import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 import { registerLocaleData } from '@angular/common';
 import localeEsMx from '@angular/common/locales/es-MX';
+import { AuthService } from './core/services/auth';
+import { Router } from '@angular/router';
+import { getHomeRouteForRole } from './core/guards/role.guard';
 
-   
 
 registerLocaleData(localeEsMx);
 
@@ -28,6 +30,9 @@ export const appConfig: ApplicationConfig = {
 
       const http = inject(HttpClient);
       const configService = inject(AppConfigService);
+      const authService = inject(AuthService);
+      const router = inject(Router);
+
 
       const baseHref =
         document
@@ -35,15 +40,37 @@ export const appConfig: ApplicationConfig = {
           ?.getAttribute('href') ?? '/';
 
 
-      const config = await firstValueFrom(
-        http.get<AppConfig>(
-          `${baseHref}config/config.json`
-        )
-      );
+      try {
+        const config = await firstValueFrom(
+          http.get<AppConfig>(
+            `${baseHref}config/config.json`
+          )
+        );
 
+        configService.load(config);
 
-
-      configService.load(config);
+        await firstValueFrom(authService.refresh()).catch((err) => {
+          
+          router.navigate(
+            [
+              getHomeRouteForRole(
+                ['ROLE_PUBLIC']
+              )
+            ],
+            {
+              replaceUrl: true
+            }
+          );
+          
+          
+          return null;
+        });
+        
+      }
+      catch (err) {
+        console.error('Error durante la inicialización de la app:', err);
+      }
+      
 
     }),
 
@@ -52,7 +79,7 @@ export const appConfig: ApplicationConfig = {
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     
-    { provide: LOCALE_ID, useValue: 'es-MX' } 
+    { provide: LOCALE_ID, useValue: 'es-MX' }
 
 
   
