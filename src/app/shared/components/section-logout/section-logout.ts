@@ -21,10 +21,15 @@ export class SectionLogout {
 
 
   onConfirm() {
-    this.authService.logout();
+    this.authService.logout().subscribe(() => {
 
-    const targetRoute = getHomeRouteForRole(['PUBLIC']); 
-    this.router.navigate([targetRoute], { replaceUrl: true });
+
+      const targetRoute = getHomeRouteForRole(['ROLE_PUBLIC']); 
+      this.router.navigate([targetRoute], { replaceUrl: true });
+      
+    });
+
+    
   }
 
 }

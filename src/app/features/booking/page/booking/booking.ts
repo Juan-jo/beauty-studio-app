@@ -86,7 +86,7 @@ export class Booking {
   }
 
   ngOnInit(): void {
-    if(this.authService.hasRoles(['EMPLOYEE','SALON_ADMIN'])) {
+    if(this.authService.hasRoles(['ROLE_EMPLOYEE', 'ROLE_SALON_ADMIN'])) {
       this.form.controls.name.setValidators([Validators.required]);
       this.form.controls.phone.setValidators([Validators.required]);
       this.form.controls.name.updateValueAndValidity();

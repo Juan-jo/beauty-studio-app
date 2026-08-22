@@ -70,7 +70,7 @@ export class BookingCheckoutDialog implements OnInit {
 
   ngOnInit(): void {
     
-    const isEmployee = this.authService.hasRoles(['EMPLOYEE', 'SALON_ADMIN']);
+    const isEmployee = this.authService.hasRoles(['ROLE_EMPLOYEE','ROLE_SALON_ADMIN']);
 
     if (isEmployee) {
       this.form.controls.name.setValidators(Validators.required);
@@ -108,7 +108,7 @@ export class BookingCheckoutDialog implements OnInit {
     }
 
 
-    const isEmployee = this.authService.hasRoles(['EMPLOYEE', 'SALON_ADMIN']);
+    const isEmployee = this.authService.hasRoles(['ROLE_EMPLOYEE','ROLE_SALON_ADMIN']);
 
     this.isSubmitting = true;
     this.state = 'idle';

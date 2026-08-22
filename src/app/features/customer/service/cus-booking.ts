@@ -13,9 +13,9 @@ export class CustomerBookingService {
   private readonly appConfig = inject(AppConfigService);
 
 
-  activeBookings() {
+  bookings(mode: 'active' | 'history', page: number, size: number) {
 
-    return this.http.get<ResponseCustommerBooking>(`${this.appConfig.apiUrl}/api/v1/customer/bookings/actives`)
+    return this.http.get<ResponseCustommerBooking>(`${this.appConfig.apiUrl}/api/v1/customer/bookings?viewMode=${mode}&page=${page}&size=${size}`)
   }
 
   createBooking(data: any) {

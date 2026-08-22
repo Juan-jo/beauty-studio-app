@@ -1,27 +1,23 @@
-import { Component, computed, inject, resource, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { CustomerBookingService } from '../../features/customer/service/cus-booking';
-import { firstValueFrom } from 'rxjs';
-import { BookingDatePipe } from '../../core/pipes/booking-date.pipe';
-import { DurationPipe } from '../../core/pipes/duration-pipe';
-import { CurrencyPipe } from '../../core/pipes/currency-pipe';
-import { NgClass } from '@angular/common';
+
+import { OpenDialogService } from '../../shared/dialog/open-dialog';
+import { CusBookingsDialog } from '../../features/customer/components/cus-bookings-dialog/cus-bookings-dialog';
 
 @Component({
   selector: 'app-customer-layout',
   imports: [
     RouterOutlet,
     RouterLink,
-    RouterLinkActive,
-    CurrencyPipe,
-    DurationPipe,
-    BookingDatePipe,
-    NgClass
+    RouterLinkActive
 ],
   templateUrl: './customer-layout.layout.html',
   styles: ``,
 })
 export class CustomerLayoutLayout {
+
+
+  private readonly openDialogService = inject(OpenDialogService);
 
 
   isCollapsed = signal<boolean>(false);
@@ -30,22 +26,16 @@ export class CustomerLayoutLayout {
     this.isCollapsed.update(prev => !prev);
   }
 
-  private readonly customerBookingService = inject(CustomerBookingService);
-
-
-
-  bookingsResource = resource({
-    loader: () => firstValueFrom(this.customerBookingService.activeBookings())
-  });
-  
-  
-  bookings = computed(() => this.bookingsResource.value());
-
-
-  isLoadingBookings = this.bookingsResource.isLoading;
 
   buildPadding() {
     return 'pb-8';
+
+  }
+
+  openDialogBookings() {
+
+    this.openDialogService.open<null, null>(CusBookingsDialog, {})
+    .then(response => {});
 
   }
   

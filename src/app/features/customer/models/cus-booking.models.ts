@@ -1,9 +1,19 @@
 import { BookingStatus } from "../../booking/models/booking-status.model"
 
-export interface CustomerBookingActive {
+
+export interface CustomerBookingPaged {
+    
+    view : string
+    content: CustomerBooking[]
+    isLast: boolean
+    totalElements: number
+
+}
+
+export interface CustomerBooking {
 
     id                  : number
-    service             : string
+    service             : string[]
     date                : string
     price               : number
     duration            : number
@@ -15,4 +25,4 @@ export interface CustomerBookingActive {
     },
 }
 
-export type ResponseCustommerBooking = CustomerBookingActive []
+export type ResponseCustommerBooking = CustomerBookingPaged
