@@ -1,43 +1,141 @@
-import { Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,} from '@angular/common/http';
-import { catchError, Observable, throwError} from 'rxjs';
-import { bs_token } from '../services/auth';
+import { inject, Injectable } from '@angular/core';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, } from '@angular/common/http';
+import { BehaviorSubject, catchError, filter, finalize, Observable, retry, switchMap, take, tap, throwError } from 'rxjs';
+import { AuthService } from '../services/auth';
+import { Router } from '@angular/router';
+import { getHomeRouteForRole } from '../guards/role.guard';
 
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    
-    const token = localStorage.getItem(bs_token)
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-    
-    /*if (token && req.url.indexOf('/public') == -1) {
-      req = this.addToken(req, token);
-    }*/
+  private isRefreshing = false;
 
-    if (token) {
-      req = this.addToken(req, token);
+  private refreshTokenSubject = new BehaviorSubject<string | null>(null);
+
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+
+    let authReq = req.clone({
+      withCredentials: true
+    });
+
+    const token = this.authService.accessToken();
+
+    const isAuthRequest =
+      req.url.includes('/auth/login') ||
+      req.url.includes('/auth/refresh') ||
+      req.url.includes('/auth/logout');
+
+    if (token && !isAuthRequest) {
+      authReq = this.addToken(req, token);
     }
 
-    return next.handle(req).pipe(
-      catchError(error => {
-        if (error.status === 401) {
-          //return this.handle401Error(req, next);
+    return next.handle(authReq).pipe(
+      catchError((error: HttpErrorResponse) => {
+
+        if (
+          error.status !== 401 ||
+          isAuthRequest
+        ) {
+          return throwError(() => error);
         }
-        
-        return throwError(() => error.error);
+
+        return this.handle401Error(req, next);
       })
     );
   }
 
-  private addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
-    return req.clone({ setHeaders: { 
-      Authorization: `Bearer ${token}` ,
-      //'Content-Type': 'application/json',
 
-    } });
+  private handle401Error(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+
+    // Esta petición espera el nuevo token.
+    if (this.isRefreshing) {
+
+      return this.refreshTokenSubject.pipe(
+        filter(token => token !== null),
+        take(1),
+        switchMap(token => {
+
+          return next.handle(
+            this.addToken(req, token!)
+          );
+
+        })
+      );
+    }
+
+
+    this.isRefreshing = true;
+    this.refreshTokenSubject.next(null);
+
+    return this.authService.refresh().pipe(
+
+      tap(response => {
+        
+        this.refreshTokenSubject.next(response.token);
+      }),
+
+      switchMap(response => {
+
+        return next.handle(
+          this.addToken(req, response.token)
+        );
+
+      }),
+
+      catchError(error => {
+
+        this.refreshTokenSubject.next(null);
+       
+        this.authService.logout().subscribe(_=> {
+
+          this.router.navigate(
+            [
+              getHomeRouteForRole(
+                ['ROLE_PUBLIC']
+              )
+            ],
+            {
+              replaceUrl: true
+            }
+          );
+
+
+        });
+        
+
+        return throwError(() => error);
+
+      }),
+
+      finalize(() => {
+
+        this.isRefreshing = false;
+
+      })
+    );
   }
 
 
+  private addToken(
+    req: HttpRequest<any>,
+    token: string
+  ): HttpRequest<any> {
+
+    return req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    });
+  }
 }
