@@ -13,7 +13,7 @@ export class EmployeeAuthenticatedService {
 
 
   meAuthenticated() {
-    return this.http.get<any>(`${this.appConfig.apiUrl}/api/v1/employees/me`)
+    return this.http.get<any>(`${this.appConfig.apiUrl}/api/v1/employees/profile`)
   }
   
   

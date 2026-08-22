@@ -49,8 +49,20 @@ export const appConfig: ApplicationConfig = {
 
         configService.load(config);
 
-        await firstValueFrom(authService.refresh()).catch((err) => {
+        await firstValueFrom(authService.refresh())
+        .then(async _ => {
+
           
+          await firstValueFrom(
+            authService.loadAuthenticatedUser()
+          );
+
+        })
+        
+        .catch((err) => {
+          
+          
+
           router.navigate(
             [
               getHomeRouteForRole(
@@ -65,6 +77,8 @@ export const appConfig: ApplicationConfig = {
           
           return null;
         });
+
+        
         
       }
       catch (err) {

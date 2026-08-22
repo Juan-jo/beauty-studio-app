@@ -23,10 +23,6 @@ export class BeautyApp implements OnInit {
 
   private readonly openDialogService = inject(OpenDialogService);
 
-  constructor() {
-    this.authService.loadAuthenticatedUser();
-  }
-
   ngOnInit() {
     this.initHardwareBackButton();
 

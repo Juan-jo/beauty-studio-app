@@ -145,12 +145,12 @@ export const routes: Routes = [
     
 
 
-    // Rutas SALON_ADMIN
+    // Rutas ROLE_SALON_ADMIN
 
     {
         path: 'salon',
         canActivate: [roleGuard],
-        data: { roles: ['SALON_ADMIN'] },
+        data: { roles: ['ROLE_SALON_ADMIN'] },
         children:  [
 
             {

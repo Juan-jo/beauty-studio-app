@@ -38,13 +38,9 @@ export class AuthService {
 
   private currentRolesSignal = signal<UserRole[]>(['ROLE_PUBLIC']);
 
-  private currentUserNameSignal = signal<string>('');
-
   private currentUserSignal = signal<UserMe | null>(null);
   
-
   readonly currentUser = this.currentUserSignal.asReadonly();
-  readonly userName = this.currentUserNameSignal.asReadonly();
 
 
   login(data: any) {
@@ -74,7 +70,6 @@ export class AuthService {
 
     const payload = jwtDecode<JwtPayload>(token);
 
-    this.currentUserNameSignal.set(payload.name)
     this.setRoles(payload.roles);
 
     this.accessToken.set(token);
