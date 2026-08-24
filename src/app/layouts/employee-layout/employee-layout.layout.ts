@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { PushNotificationService } from '../../core/notifications/push-notification.service';
@@ -9,9 +9,8 @@ import { PushNotificationService } from '../../core/notifications/push-notificat
   templateUrl: './employee-layout.layout.html',
   styles: ``,
 })
-export class EmployeeLayoutLayout {
-
-
+export class EmployeeLayoutLayout implements OnInit {
+  
   private readonly authService = inject(AuthService);
   protected notificationService = inject(PushNotificationService);
 
@@ -37,4 +36,7 @@ export class EmployeeLayoutLayout {
   });
 
 
+  ngOnInit(): void {
+    this.notificationService.fetchUnreadCount();
+  }
 }

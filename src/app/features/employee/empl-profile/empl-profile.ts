@@ -7,7 +7,8 @@ import { EmployeeAuthenticatedService } from '../service/empl-authenticated.serv
 import { rxResource } from '@angular/core/rxjs-interop';
 import { DurationPipe } from '../../../core/pipes/duration-pipe';
 import { HasRoleDirective } from '../../../core/directives/has-role';
-import { UserUpdatePictureDialogService } from '../../../shared/components/user-update-picture/service/user-update-picture.service';
+import { OpenDialogService } from '../../../shared/dialog/open-dialog';
+import { UserUpdatePictureComponent } from '../../../shared/components/user-update-picture/user-update-picture';
 
 @Component({
   selector: 'app-empl-profile',
@@ -26,8 +27,8 @@ export class EmplProfile {
   private readonly employeeAuthenticatedService = inject(EmployeeAuthenticatedService);
   private readonly authService = inject(AuthService);
 
-  private readonly userUpdatePictureDialogService = inject(UserUpdatePictureDialogService);
-  
+  private readonly openDialogService = inject(OpenDialogService);
+
 
   user = this.authService.currentUser;
 
@@ -57,7 +58,8 @@ export class EmplProfile {
 
 
   updatePicture() {
-    this.userUpdatePictureDialogService.openSheet();
+    this.openDialogService.open<null, null>(UserUpdatePictureComponent, {})
+    .then(response => {});
   }
 }
 

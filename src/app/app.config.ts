@@ -50,15 +50,6 @@ export const appConfig: ApplicationConfig = {
         configService.load(config);
 
         await firstValueFrom(authService.refresh())
-        .then(async _ => {
-
-          
-          await firstValueFrom(
-            authService.loadAuthenticatedUser()
-          );
-
-        })
-        
         .catch((err) => {
           
           
@@ -76,10 +67,7 @@ export const appConfig: ApplicationConfig = {
           
           
           return null;
-        });
-
-        
-        
+        });        
       }
       catch (err) {
         console.error('Error durante la inicialización de la app:', err);

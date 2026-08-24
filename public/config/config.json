@@ -1,5 +1,5 @@
 {
-    "apiUrlD": "http://192.168.101.100:8080/studio",
+    "apiUrlA": "http://192.168.101.100:8080/studio",
     "apiUrl": "",
 
     "salonSerial": "ECA92",

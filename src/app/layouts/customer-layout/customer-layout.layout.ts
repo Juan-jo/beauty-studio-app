@@ -1,8 +1,12 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { OpenDialogService } from '../../shared/dialog/open-dialog';
 import { CusBookingsDialog } from '../../features/customer/components/cus-bookings-dialog/cus-bookings-dialog';
+import { AuthService } from '../../core/services/auth';
+import { PushNotificationService } from '../../core/notifications/push-notification.service';
+import { UserUpdatePictureComponent } from '../../shared/components/user-update-picture/user-update-picture';
+import { CustomerBookingService } from '../../features/customer/service/cus-booking';
 
 @Component({
   selector: 'app-customer-layout',
@@ -14,28 +18,55 @@ import { CusBookingsDialog } from '../../features/customer/components/cus-bookin
   templateUrl: './customer-layout.layout.html',
   styles: ``,
 })
-export class CustomerLayoutLayout {
+export class CustomerLayoutLayout implements OnInit {
 
+  protected notificationService = inject(PushNotificationService);
+  protected customerBookingService = inject(CustomerBookingService);
+
+  
 
   private readonly openDialogService = inject(OpenDialogService);
+  private readonly authService = inject(AuthService);
 
+  user = this.authService.currentUser;
 
-  isCollapsed = signal<boolean>(false);
+  userInitials = computed(() => {
 
-  toggleCollapse(): void {
-    this.isCollapsed.update(prev => !prev);
-  }
+    const name = this.user()?.name;
 
+    if (!name) {
+      return '';
+    }
 
-  buildPadding() {
-    return 'pb-8';
+    return name
+      .trim()
+      .split(' ')
+      .slice(0, 1 )
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase();
 
-  }
+  });
+  
 
   openDialogBookings() {
 
     this.openDialogService.open<null, null>(CusBookingsDialog, {})
-    .then(response => {});
+    .then(_ => {});
+
+  }
+
+  uploadPicture() {
+
+    this.openDialogService.open<null, null>(UserUpdatePictureComponent, {})
+    .then(_ => {});
+
+  }
+
+
+  ngOnInit(): void {
+    this.notificationService.fetchUnreadCount();
+    this.customerBookingService.fetchCountActiveBookings();
 
   }
   

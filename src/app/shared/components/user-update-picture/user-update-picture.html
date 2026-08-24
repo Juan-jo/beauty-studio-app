@@ -78,17 +78,12 @@
     }
     @else if(state() === 'success') {
 
-        <div class="p-8 flex-1 overflow-y-auto flex flex-col items-center justify-center">
-        
-            <div class="w-full max-w-xs flex flex-col items-center">
-                <ui-state-success
-                message="Foto cargada correctamente"
-                title="Exito"
-                (close)="close()">
-                </ui-state-success>
-            </div>
-        
-        </div>
+      <ui-state-success
+        message="Foto cargada correctamente"
+        [fullPage]="true"
+        title="Exito"
+        (close)="close()">
+      </ui-state-success>
         
        
     }
