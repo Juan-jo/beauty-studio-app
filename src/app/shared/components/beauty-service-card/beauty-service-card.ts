@@ -1,13 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Service } from '../../../features/services/models/beauty.models';
-import { DurationPipe } from '../../../core/pipes/duration-pipe';
 import { CurrencyPipe } from '../../../core/pipes/currency-pipe';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'bs-service-card',
   imports: [
-    DurationPipe,
     CurrencyPipe,
     RouterLink
   ],
