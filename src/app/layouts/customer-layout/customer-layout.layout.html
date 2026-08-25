@@ -57,8 +57,11 @@
         }
       </button>
 
-      <!-- Profile Avatar Button -->
-      <button type="button" (click)="uploadPicture()" aria-label="Cambiar foto de perfil"
+      <!-- Profile Avatar Button (click)="uploadPicture()"  -->
+      <button type="button" 
+      
+      routerLink="/customer/profile"
+      aria-label="Cambiar foto de perfil"
         class="relative ml-1 p-0.5 rounded-full hover:ring-2 hover:ring-brand-400/50 active:scale-95 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-brand-500">
 
         @if (user()?.pictureUrl) {
@@ -179,7 +182,8 @@
   </main>
 
   <!--Nagevacion-->
-  <nav
+<!--
+ <nav
     class="fixed bottom-0 inset-x-0 bg-white/90 backdrop-blur-md border-t border-brand-200/60 py-2 px-4 flex justify-around items-center z-40 shadow-xs md:relative md:border-t-0 md:bg-transparent md:justify-start md:gap-2 md:shadow-none">
 
 
@@ -232,5 +236,7 @@
     </a>
 
   </nav>
+
+-->
 
 </div>

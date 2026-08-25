@@ -138,6 +138,12 @@ export const routes: Routes = [
                 loadComponent: () =>
                     import('./features/booking/page/booking/booking').then(c => c.Booking)
             },
+
+            {
+                path: 'inspirations',
+                loadComponent: () =>
+                    import('./features/customer/cus-inspirations-trends/cus-inspirations-trends').then(c => c.CusInspirationsTrends)
+            },
             
         ]
     },

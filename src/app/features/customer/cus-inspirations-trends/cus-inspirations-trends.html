@@ -1,0 +1,137 @@
+<div class="min-h-screen w-full bg-gray-50 flex flex-col font-sans text-gray-800">
+
+
+    <header class="bg-white border-b border-brand-200/60 px-4 py-3 sticky top-0 z-20 shadow-xs">
+      <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
+    
+        <div class="flex items-center gap-3 min-w-0">
+          
+          <button type="button" onclick="history.back()"
+            class="p-2 rounded-xl border border-gray-200/80 hover:bg-brand-50 hover:border-brand-200 text-gray-600 hover:text-brand-700 transition-all cursor-pointer active:scale-95 shrink-0"
+            title="Volver">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+          </button>
+    
+          <div class="flex flex-col min-w-0">
+              <h1 class="text-md md:text-base font-bold text-gray-900 truncate tracking-tight">
+                Catálogo de Diseños
+                </h1>
+            <p class="text-[11px] text-gray-400 font-medium truncate">
+              Explora inspiraciones para tu próxima cita
+            </p>
+          </div>
+        </div>
+    
+    
+      </div>
+    </header>
+ 
+    
+    <!-- Contenido Principal Full Screen -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 flex flex-col justify-between space-y-6">
+  
+      <div class="space-y-6">
+        
+        <!-- Filtros por Categoría -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <button 
+            type="button" 
+            (click)="setCategory('all')"
+            [class]="selectedCategory() === 'all' ? 'bg-gray-900 text-white shadow-xs' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'"
+            class="px-4 py-2 rounded-xl text-xs font-semibold shrink-0 cursor-pointer transition-all">
+            Todos los diseños
+          </button>
+  
+          <button 
+            type="button" 
+            (click)="setCategory('nails')"
+            [class]="selectedCategory() === 'nails' ? 'bg-gray-900 text-white shadow-xs' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'"
+            class="px-4 py-2 rounded-xl text-xs font-semibold shrink-0 cursor-pointer transition-all">
+            Uñas & Nail Art
+          </button>
+  
+          <button 
+            type="button" 
+            (click)="setCategory('hair')"
+            [class]="selectedCategory() === 'hair' ? 'bg-gray-900 text-white shadow-xs' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'"
+            class="px-4 py-2 rounded-xl text-xs font-semibold shrink-0 cursor-pointer transition-all">
+            Cabello & Peinados
+          </button>
+  
+          <button 
+            type="button" 
+            (click)="setCategory('spa')"
+            [class]="selectedCategory() === 'spa' ? 'bg-gray-900 text-white shadow-xs' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'"
+            class="px-4 py-2 rounded-xl text-xs font-semibold shrink-0 cursor-pointer transition-all">
+            Spa & Faciales
+          </button>
+        </div>
+  
+        <!-- Grid de Diseños Expansivo (3 col en móvil, 4 en tablet, 6 en desktop) -->
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 sm:gap-4">
+  
+          <!-- Skeletons durante la Carga -->
+          @if (isLoading()) {
+            @for (item of [1, 2, 3, 4, 5, 6]; track $index) {
+              <div class="aspect-square rounded-2xl bg-gray-200 animate-pulse"></div>
+            }
+          } 
+          
+          <!-- Contenido Cargado -->
+          @else {
+            @for (design of paginatedDesigns(); track design.id) {
+              <div class="relative group aspect-square rounded-2xl overflow-hidden bg-gray-200 cursor-pointer shadow-2xs">
+                <img 
+                  [src]="design.imageUrl" 
+                  [alt]="design.title"
+                  loading="lazy"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 text-white text-xs font-medium">
+                  {{ design.title }}
+                </div>
+              </div>
+            }
+          }
+  
+        </div>
+      </div>
+  
+      <!-- Footer / Paginación Integrada -->
+      @if (!isLoading() && totalPages() > 0) {
+        <footer class="flex items-center justify-between pt-4 border-t border-gray-200/80">
+          <span class="text-xs sm:text-sm text-gray-500 font-medium">
+            Página <span class="text-gray-900 font-semibold">{{ currentPage() }}</span> de <span class="text-gray-900 font-semibold">{{ totalPages() }}</span>
+          </span>
+  
+          <div class="flex items-center gap-2">
+            <button 
+              type="button" 
+              (click)="prevPage()"
+              [disabled]="currentPage() === 1"
+              aria-label="Página anterior"
+              class="p-2 sm:px-3 sm:py-2 rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 active:scale-95 disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer flex items-center gap-1 text-xs font-medium">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              <span class="hidden sm:inline">Anterior</span>
+            </button>
+  
+            <button 
+              type="button" 
+              (click)="nextPage()"
+              [disabled]="currentPage() === totalPages()"
+              aria-label="Página siguiente"
+              class="p-2 sm:px-3 sm:py-2 rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 active:scale-95 disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer flex items-center gap-1 text-xs font-medium">
+              <span class="hidden sm:inline">Siguiente</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </footer>
+      }
+  
+    </main>
+  </div>

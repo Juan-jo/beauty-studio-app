@@ -16,7 +16,7 @@ import { RouterLink } from '@angular/router';
 export class BeautyServiceCard {
 
   @Input({ required: true }) service!: Service
-  @Input({ required: true }) routerLink!: string [] 
+  @Input({ required: true }) navigation!: string [] 
   @Output() closeModal = new EventEmitter<void>();
 
 

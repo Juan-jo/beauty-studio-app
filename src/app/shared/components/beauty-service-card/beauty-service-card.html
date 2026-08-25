@@ -1,5 +1,5 @@
 
-  <article class="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-gray-200/80 shadow-xs transition duration-300 hover:shadow-md hover:-translate-y-0.5 group">
+  <!--<article class="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-gray-200/80 shadow-xs transition duration-300 hover:shadow-md hover:-translate-y-0.5 group">
               
     <div>
       <div class="relative h-40 w-full bg-gray-100 overflow-hidden">
@@ -18,7 +18,7 @@
       </div>
   
       <div class="p-4 pb-2">
-        <h2 class="text-sm md:text-base font-bold text-gray-900 line-clamp-1 group-hover:text-brand-700 transition-colors">
+        <h2 class="text-sm md:text-base font-bold text-gray-900 line-clamp-2 group-hover:text-brand-700 transition-colors">
           {{ service.name }}
         </h2>
   
@@ -36,13 +36,70 @@
         </span>
       </div>
   
-      <button
+      <a
         (click)="closeModal.emit()"
-        [routerLink]="routerLink"
+        [routerLink]="navigation"
         [queryParams]="{services: service.id}"
         class="px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer flex items-center gap-1">
         Reservar
-      </button>
+      </a>
+    </div>
+  
+  </article>-->
+  
+  <article class="flex flex-col h-full overflow-hidden rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-2xl hover:border-transparent transition-all duration-500 ease-in-out group cursor-pointer">
+  
+    <!-- CONTENEDOR DE IMAGEN (Enfoque UI/UX Principal) -->
+    <!-- Usamos aspect-[3/4] para un look vertical moderno tipo 'reels' o 'posts' -->
+    <div class="relative aspect-[3/4] w-full overflow-hidden shrink-0 bg-gray-900">
+      
+      <!-- Imagen con doble efecto hover: Zoom suave + Brillo -->
+      <img
+        [src]="service.pictureUrl"
+        [alt]="service.name"
+        loading="lazy"
+        class="h-full w-full object-cover transition-all duration-700 ease-in-out group-hover:scale-110 group-hover:brightness-110">
+  
+      <!-- Superposición (Overlay) de degradado negro sutil -->
+      <!-- Protege la legibilidad del texto blanco en la parte inferior -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-90 transition-opacity group-hover:opacity-100"></div>
+  
+      <!-- Contenido Flotante SOBRE la imagen (UI Inferior) -->
+      <div class="absolute inset-x-0 bottom-0 p-4.5 flex flex-col gap-3.5">
+        
+        <!-- Badge de Duración: Estilo Neumórfico/Glassmorphism -->
+       
+  
+        <!-- Título del Servicio: Blanco, grande y con sombra para máximo contraste -->
+        <h3 class="text-md font-bold text-white leading-tight tracking-tight drop-shadow-md line-clamp-2 ">
+          {{ service.name }}
+        </h3>
+      </div>
+  
+      <!-- Efecto de borde de luz sutil en el hover (opcional, requiere configuración de color brand) -->
+      <div class="absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10 group-hover:ring-brand-400/50 transition-all duration-500"></div>
+    </div>
+  
+    <!-- FOOTER COMPACTO (Precio y Acción) -->
+    <div class="p-4.5 flex items-center justify-between gap-3 bg-white">
+      <div class="flex flex-col">
+        <!-- Eliminado texto 'Precio', solo el valor resaltado -->
+        <span class="text-md font-extrabold text-gray-950 tracking-tighter">
+          {{ service.price | bscurrency }}
+        </span>
+      </div>
+  
+      <!-- Botón de Acción Semántico (Flecha) -->
+      <a
+        (click)="closeModal.emit()"
+        [routerLink]="navigation"
+        [queryParams]="{services: service.id}"
+        class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 hover:bg-brand-600 text-white shadow-md transition-all duration-300 active:scale-95 group/btn">
+        <svg class="w-5 h-5 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+        </svg>
+        <span class="sr-only">Reservar {{ service.name }}</span>
+      </a>
     </div>
   
   </article>

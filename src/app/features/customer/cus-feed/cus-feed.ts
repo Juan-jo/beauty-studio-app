@@ -6,12 +6,14 @@ import { CustomerService } from '../service/cus-service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActiveEmployees } from '../models/customer.models';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cus-feed',
   imports: [
     BeautyServiceCard,
-    CommonModule
+    CommonModule,
+    RouterLink
 ],
   templateUrl: './cus-feed.html',
   styleUrl: './cus-feed.css',
