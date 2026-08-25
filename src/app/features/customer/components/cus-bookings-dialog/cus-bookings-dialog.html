@@ -23,8 +23,8 @@
         [disabled]="isLoading()"
         (click)="setFilter('active')"
         type="button" 
-        class="py-2.5 px-3 rounded-xl  text-gray-900 shadow-2xs flex items-center justify-center gap-2 transition-all cursor-pointer"
-        [ngClass]="{'bg-brand-700 text-white': viewMode() === 'active'}">
+        class="py-2.5 px-3 rounded-xl text-gray-500 hover:text-gray-900 transition-all flex items-center justify-center gap-2 cursor-pointer"
+        [ngClass]="{'bg-brand-600 text-white': viewMode() === 'active'}">
         <span>Activas</span>
       </button>
 
@@ -34,7 +34,7 @@
         (click)="setFilter('history')"
         type="button" 
         class="py-2.5 px-3 rounded-xl text-gray-500 hover:text-gray-900 transition-all flex items-center justify-center gap-2 cursor-pointer"
-        [ngClass]="{'bg-brand-700 text-white': viewMode() === 'history'}">
+        [ngClass]="{'bg-brand-600 text-white': viewMode() === 'history'}">
         <span>Historial</span>
       </button>
     </div>
@@ -93,15 +93,10 @@
                     <article class="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow space-y-3">
                       
                       <div class="flex items-center justify-between">
-                        <span 
-                          class="text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider"
-                          [ngClass]="{
-                            'bg-amber-50 text-amber-700 border border-amber-200/60': booking.status === 'PENDING',
-                            'bg-emerald-50 text-emerald-700 border border-emerald-200/60': booking.status === 'CONFIRMED',
-                            'bg-rose-50 text-rose-700 border border-rose-200/60': booking.status === 'CANCELLED'
-                          }">
-                          {{ booking.status }}
-                        </span>
+                        <booking-status-badge
+                          [status]="booking.status">
+                        </booking-status-badge>
+
                         <span class="text-base font-extrabold text-gray-900">{{ booking.price | bscurrency }}</span>
                       </div>
                   
@@ -120,7 +115,7 @@
                               />
                             }
                             <p class="text-xs text-gray-600 font-medium">
-                              <span class="text-gray-400">Atendido por</span> {{ booking.professional.name }}
+                              <span class="text-gray-400">Con </span> {{ booking.professional.name }}
                             </p>
                           </div>
                         </div>
@@ -141,6 +136,7 @@
                         </div>
                   
                         <button 
+                          (click)="openBooking(booking)"
                           type="button" 
                           class="px-3 py-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold text-xs transition-colors cursor-pointer active:scale-95">
                           Detalles

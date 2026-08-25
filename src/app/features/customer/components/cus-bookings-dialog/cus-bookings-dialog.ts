@@ -9,6 +9,9 @@ import { CustomerBooking } from '../../models/cus-booking.models';
 import { CurrencyPipe } from '../../../../core/pipes/currency-pipe';
 import { DurationPipe } from '../../../../core/pipes/duration-pipe';
 import { BookingDatePipe } from '../../../../core/pipes/booking-date.pipe';
+import { BookingStatusBadge } from '../../../booking/component/booking-status-badge/booking-status-badge';
+import { OpenDialogService } from '../../../../shared/dialog/open-dialog';
+import { BookingResume } from '../../../booking/component/booking-resume/booking-resume';
 
 @Component({
   selector: 'app-cus-bookings-dialog',
@@ -18,7 +21,8 @@ import { BookingDatePipe } from '../../../../core/pipes/booking-date.pipe';
     MatDialogModule,
     CurrencyPipe,
     DurationPipe,
-    BookingDatePipe
+    BookingDatePipe,
+    BookingStatusBadge
     
   ],
   templateUrl: './cus-bookings-dialog.html',
@@ -28,7 +32,7 @@ export class CusBookingsDialog implements OnInit {
   
 
   private readonly customerBookingService = inject(CustomerBookingService);
-
+  private readonly openDialogService = inject(OpenDialogService);
 
   
   isFullScreen = signal<boolean>(false);
@@ -49,12 +53,12 @@ export class CusBookingsDialog implements OnInit {
 
   ngOnInit(): void {
     
-    this.loadNotifications();
+    this.loadBookings();
 
 
   }
 
-  loadNotifications(): void {
+  loadBookings(): void {
 
     if (this.isLoading() || this.isLastPage()) return;
 
@@ -96,8 +100,17 @@ export class CusBookingsDialog implements OnInit {
     this.isLastPage.set(false);
     this.state.set('loading')
     
-    this.loadNotifications();
+    this.loadBookings();
 
+  }
+
+  openBooking(booking: CustomerBooking) {
+
+    this.openDialogService.open<any, number>(BookingResume, {
+      data: booking.id,
+      updateUrl: false
+    }
+    ).then(response => {});
   }
 
 

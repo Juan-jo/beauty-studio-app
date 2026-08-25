@@ -7,6 +7,7 @@ import { AuthService } from '../../core/services/auth';
 import { PushNotificationService } from '../../core/notifications/push-notification.service';
 import { UserUpdatePictureComponent } from '../../shared/components/user-update-picture/user-update-picture';
 import { CustomerBookingService } from '../../features/customer/service/cus-booking';
+import { CusNotificationsDialog } from '../../features/customer/components/cus-notifications-dialog/cus-notifications-dialog';
 
 @Component({
   selector: 'app-customer-layout',
@@ -51,10 +52,23 @@ export class CustomerLayoutLayout implements OnInit {
 
   openDialogBookings() {
 
-    this.openDialogService.open<null, null>(CusBookingsDialog, {})
+    this.openDialogService.open<null, null>(CusBookingsDialog, {
+      updateUrl: true
+    })
     .then(_ => {});
 
   }
+
+  openNotifications() {
+
+    this.openDialogService.open<null, null>(CusNotificationsDialog, {
+      updateUrl: true
+    })
+    .then(_ => {});
+
+  }
+
+  
 
   uploadPicture() {
 
