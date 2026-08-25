@@ -1,19 +1,26 @@
-import { Component, computed, inject, resource, signal } from '@angular/core';
+import { Component, computed, inject, resource } from '@angular/core';
 import { ServicesService } from '../../services/services/services';
 import { firstValueFrom } from 'rxjs';
 import { BeautyServiceCard } from '../../../shared/components/beauty-service-card/beauty-service-card';
+import { CustomerService } from '../service/cus-service';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
+import { ActiveEmployees } from '../models/customer.models';
 
 @Component({
   selector: 'app-cus-feed',
   imports: [
-    BeautyServiceCard
-  ],
+    BeautyServiceCard,
+    CommonModule
+],
   templateUrl: './cus-feed.html',
   styleUrl: './cus-feed.css',
 })
 export class CusFeed {
 
   private readonly servicesService = inject(ServicesService);
+  private readonly customerService = inject(CustomerService);
+
 
   
   servicesResource = resource({
@@ -23,6 +30,16 @@ export class CusFeed {
   services = computed(() => this.servicesResource.value());
   
   isLoadingServices = this.servicesResource.isLoading;
+
+
+  employees = rxResource<ActiveEmployees[], null>({
+
+    stream: () => {
+
+     return this.customerService.activeEmployees()
+      
+    }
+  });
 
 
 }

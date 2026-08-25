@@ -1,79 +1,10 @@
-<!--<div class="p-4 md:p-6 space-y-6 max-w-4xl mx-auto pb-10">
-
-    @if(isLoadingServices()) {
-      
-      <section>
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="h-3 w-46 bg-gray-200/80 rounded-md"></h2>
-          <span class="h-3 w-28 bg-gray-200/80 rounded-md"></span>
-        </div>
-    
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          
-          @for (item of [1, 2, 3, 4, 5, 6, 7]; track $index) {
-          
-            <article class="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-gray-200/80 shadow-xs transition duration-300 hover:shadow-md hover:-translate-y-0.5 group">
-              
-              <div>
-                <div class=" bg-gray-200/80 relative h-40 w-full bg-gray-100 overflow-hidden">
-                  
-                  
-                </div>
-            
-                <div class="p-4 pb-2">
-                  <h2 class=" h-3 w-28 bg-gray-200/80  text-sm md:text-base font-bold text-gray-900 line-clamp-1 group-hover:text-brand-700 transition-colors"></h2>
-                  <p class="h-6 w-90 bg-gray-200/80 mt-1 text-xs leading-relaxed text-gray-500 line-clamp-2 font-medium"></p>
-                </div>
-              </div>
-            
-              <div class="p-4 pt-2 mt-2 border-t border-gray-100 flex items-center justify-between gap-2">
-                <div class="h-6 w-16 bg-gray-200/80"></div>
-                <div class="px-3.5 py-1.5 rounded-xl h-6 w-26 bg-gray-200/80 shadow-xs transition-all active:scale-95 cursor-pointer flex items-center gap-1"></div>
-              </div>
-            
-            </article>
-
-          }
-        </div>
-      </section>
-
-    }
-    @else {
-
-      <section>
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Servicios Disponibles</h2>
-          <span class="text-xs text-gray-400 font-medium">{{services()?.length}} disponibles</span>
-        </div>
-    
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          
-          @for(data of services(); track data.id) {
-            <bs-service-card
-                [routerLink]="['/customer/booking']"
-                [service]="data">
-            </bs-service-card>
-          }
-
-        </div>
-      </section>
-
-    }
-
-  
-  </div>-->
-
-  
-  
-  <div class="p-4 md:p-6 space-y-7 max-w-4xl mx-auto pb-12">
+<div class="p-4 md:p-6 space-y-7 max-w-4xl mx-auto pb-12">
 
     <!-- 1. GALERÍA DE TRABAJOS / TRENDING DESIGNS -->
     <section class="space-y-2.5">
       <div class="flex items-center justify-between px-0.5">
         <h2 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Inspiración & Trends</h2>
-        <span class="text-xs text-rose-500 font-semibold cursor-pointer hover:underline transition-all">Ver todo</span>
+        <span class="text-xs text-brand-500 font-semibold cursor-pointer hover:underline transition-all">Ver todo</span>
       </div>
   
       <div class="grid grid-cols-3 gap-2 sm:gap-3">
@@ -103,41 +34,64 @@
     <!-- 2. ESPECIALISTAS / NAIL ARTISTS -->
     <section class="space-y-2.5">
       <div class="flex items-center justify-between px-0.5">
-        <h2 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Nuestras Specialists</h2>
+        <h2 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Especialitas</h2>
       </div>
   
       <div class="flex  gap-4 overflow-x-auto pt-1 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar">
         
-        <!-- Artist 1 -->
-        <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer group w-20">
-          <div class="relative">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Valeria R." class="w-16 h-16 rounded-full object-cover border-2 border-white ring-2 ring-transparent group-hover:ring-rose-400 transition-all shadow-xs" />
-            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full shadow-2xs" title="Disponible hoy"></span>
-          </div>
-          <span class="text-xs font-semibold text-gray-800 group-hover:text-rose-500 transition-colors text-center line-clamp-1">Valeria R.</span>
-          <span class="text-[10px] text-gray-400 font-medium text-center line-clamp-1">3D & Acrylics</span>
-        </div>
-  
-        <!-- Artist 2 -->
-        <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer group w-20">
-          <div class="relative">
-            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200" alt="Camila M." class="w-16 h-16 rounded-full object-cover border-2 border-white ring-2 ring-transparent group-hover:ring-rose-400 transition-all shadow-xs" />
-            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full shadow-2xs" title="Disponible hoy"></span>
-          </div>
-          <span class="text-xs font-semibold text-gray-800 group-hover:text-rose-500 transition-colors text-center line-clamp-1">Camila M.</span>
-          <span class="text-[10px] text-gray-400 font-medium text-center line-clamp-1">Soft Gel Spec.</span>
-        </div>
-  
-        <!-- Artist 3 -->
-        <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer group w-20">
-          <div class="relative">
-            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200" alt="Sofía G." class="w-16 h-16 rounded-full object-cover border-2 border-white ring-2 ring-transparent group-hover:ring-rose-400 transition-all shadow-xs" />
-            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-full shadow-2xs" title="Pocos turnos"></span>
-          </div>
-          <span class="text-xs font-semibold text-gray-800 group-hover:text-rose-500 transition-colors text-center line-clamp-1">Sofía G.</span>
-          <span class="text-[10px] text-gray-400 font-medium text-center line-clamp-1">Mani Rusa</span>
-        </div>
-  
+        @if (employees.isLoading()) {
+
+          @for (item of [1, 2, 3, 4]; track $index) {
+            <div class="flex flex-col items-center gap-1.5 flex-shrink-0 w-20 animate-pulse">
+              
+              <!-- Avatar Skeleton -->
+              <div class="w-16 h-16 rounded-full bg-gray-200"></div>
+        
+              <!-- Nombre Skeleton -->
+              <div class="h-3 w-14 bg-gray-200 rounded-md mt-0.5"></div>
+        
+              <!-- Descripción Skeleton -->
+              <div class="h-2.5 w-10 bg-gray-200 rounded-md"></div>
+        
+            </div>
+          }
+        
+        } @else {
+        
+          @for (empl of employees.value(); track $index) {
+            <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer group w-20">
+              
+              <div class="relative">
+                @if (empl.pictureUrl) {
+                  <img 
+                    [src]="empl.pictureUrl" 
+                    [alt]="empl.name" 
+                    class="w-16 h-16 rounded-full object-cover border-2 border-white ring-2 ring-transparent group-hover:ring-rose-400 transition-all shadow-xs" />
+                } @else {
+                  <div class="w-16 h-16 shrink-0 flex items-center justify-center rounded-full bg-brand-50 text-brand-600 font-bold text-sm border-2 border-white shadow-xs">
+                    {{ empl.name | slice:0:2 | uppercase }}
+                  </div>
+                }
+              </div>
+        
+              <span class="text-xs font-semibold text-gray-800 group-hover:text-rose-500 transition-colors text-center line-clamp-1">
+                {{ empl.name }}
+              </span>
+              <span class="text-[10px] text-gray-400 font-medium text-center line-clamp-1">
+                {{ empl.shortDesc }}
+              </span>
+        
+            </div>
+          }
+        
+        }
+
+        <!--
+        https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200
+        https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200
+        https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200
+        -->
+        
   
       </div>
     </section>
@@ -230,83 +184,6 @@
 
     }
     
-    <!--<section class="space-y-3">
-      <div class="flex items-center justify-between px-0.5">
-        <h2 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Servicios Populares</h2>
-        <span class="text-xs text-gray-400 font-medium">4 disponibles</span>
-      </div>
-  
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        
-        <article class="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-gray-200/80 shadow-xs transition duration-300 hover:shadow-md hover:-translate-y-0.5 group cursor-pointer">
-          <div>
-            <div class="relative h-40 sm:h-44 w-full overflow-hidden bg-gray-100">
-              <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=600" alt="Soft Gel Full Set" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-md text-gray-800 text-[11px] font-bold px-2.5 py-1 rounded-full shadow-2xs">
-                ⏱️ 90 min
-              </span>
-            </div>
-  
-            <div class="p-4 pb-2 space-y-1">
-              <div class="flex items-center gap-1.5">
-                <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md uppercase tracking-wider">Popular</span>
-              </div>
-              <h3 class="text-sm md:text-base font-bold text-gray-900 line-clamp-1 group-hover:text-rose-500 transition-colors">
-                Set Completo Soft Gel + Esmaltado
-              </h3>
-              <p class="text-xs leading-relaxed text-gray-500 line-clamp-2 font-medium">
-                Extensión en gel de alta durabilidad con acabado natural. Incluye limpieza profunda de cutícula y esmaltado semipermanente.
-              </p>
-            </div>
-          </div>
-  
-          <div class="px-4 py-3 mt-1 border-t border-gray-100 flex items-center justify-between gap-2">
-            <div>
-              <span class="text-[10px] text-gray-400 block uppercase font-medium">Desde</span>
-              <span class="text-base font-extrabold text-gray-900 leading-none">$45.00</span>
-            </div>
-            <button class="px-4 py-2 rounded-xl bg-gray-900 text-white text-xs font-semibold shadow-2xs transition-all active:scale-95 group-hover:bg-rose-500 flex items-center gap-1">
-              Reservar
-            </button>
-          </div>
-        </article>
-  
-        <article class="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-gray-200/80 shadow-xs transition duration-300 hover:shadow-md hover:-translate-y-0.5 group cursor-pointer">
-          <div>
-            <div class="relative h-40 sm:h-44 w-full overflow-hidden bg-gray-100">
-              <img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=600" alt="Nail Art Ruso" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-md text-gray-800 text-[11px] font-bold px-2.5 py-1 rounded-full shadow-2xs">
-                ⏱️ 120 min
-              </span>
-            </div>
-  
-            <div class="p-4 pb-2 space-y-1">
-              <div class="flex items-center gap-1.5">
-                <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md uppercase tracking-wider">Avanzado</span>
-              </div>
-              <h3 class="text-sm md:text-base font-bold text-gray-900 line-clamp-1 group-hover:text-rose-500 transition-colors">
-                Manicura Rusa Hardware + Nail Art 3D
-              </h3>
-              <p class="text-xs leading-relaxed text-gray-500 line-clamp-2 font-medium">
-                Limpieza perfeccionada con torno, nivelación con base rubber y diseño personalizado en 2 uñas por mano.
-              </p>
-            </div>
-          </div>
-  
-          <div class="px-4 py-3 mt-1 border-t border-gray-100 flex items-center justify-between gap-2">
-            <div>
-              <span class="text-[10px] text-gray-400 block uppercase font-medium">Desde</span>
-              <span class="text-base font-extrabold text-gray-900 leading-none">$60.00</span>
-            </div>
-            <button class="px-4 py-2 rounded-xl bg-gray-900 text-white text-xs font-semibold shadow-2xs transition-all active:scale-95 group-hover:bg-rose-500 flex items-center gap-1">
-              Reservar
-            </button>
-          </div>
-        </article>
-  
-      </div>
-    </section>-->
-  
     <!-- 5. RESEÑAS Y OPINIONES -->
     <section class="bg-rose-50/40 border border-rose-100/70 rounded-2xl p-4.5 space-y-3">
       <div class="flex items-center justify-between">
