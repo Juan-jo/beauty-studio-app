@@ -1,5 +1,5 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, computed, inject, OnInit } from '@angular/core';
+import { RouterOutlet, RouterLink } from '@angular/router';
 
 import { OpenDialogService } from '../../shared/dialog/open-dialog';
 import { CusBookingsDialog } from '../../features/customer/components/cus-bookings-dialog/cus-bookings-dialog';
@@ -13,8 +13,7 @@ import { CusNotificationsDialog } from '../../features/customer/components/cus-n
   selector: 'app-customer-layout',
   imports: [
     RouterOutlet,
-    RouterLink,
-    RouterLinkActive
+    RouterLink
 ],
   templateUrl: './customer-layout.layout.html',
   styles: ``,
@@ -82,6 +81,10 @@ export class CustomerLayoutLayout implements OnInit {
     this.notificationService.fetchUnreadCount();
     this.customerBookingService.fetchCountActiveBookings();
 
+  }
+
+  dismissBookingTooltip() {
+    this.customerBookingService.dismissBookingTooltip();
   }
   
 }
