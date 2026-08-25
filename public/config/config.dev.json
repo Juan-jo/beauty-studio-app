@@ -1,8 +1,8 @@
 {
-    "apiUrl": "",
+    "apiUrl": "http://192.168.101.100:8080/studio",
     "salonSerial": "ECA92",
     "production": false,
     "timezone": "America/Mexico_City",
     "currency": "MXN",
-    "theme": "emerald"
+    "theme": "pink"
 }

@@ -13,6 +13,7 @@ import localeEsMx from '@angular/common/locales/es-MX';
 import { AuthService } from './core/services/auth';
 import { Router } from '@angular/router';
 import { getHomeRouteForRole } from './core/guards/role.guard';
+import { environment } from '../environments/environment';
 
 
 registerLocaleData(localeEsMx);
@@ -41,13 +42,15 @@ export const appConfig: ApplicationConfig = {
 
 
       try {
+
         const config = await firstValueFrom(
           http.get<AppConfig>(
-            `${baseHref}config/config.json`
+            `${baseHref}config/${environment.configFile}`
           )
         );
-
+        
         configService.load(config);
+
 
         await firstValueFrom(authService.refresh())
         .catch((err) => {

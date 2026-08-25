@@ -1,7 +1,7 @@
 {
     "apiUrl": "",
     "salonSerial": "ECA92",
-    "production": false,
+    "production": true,
     "timezone": "America/Mexico_City",
     "currency": "MXN",
     "theme": "emerald"
