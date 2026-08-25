@@ -91,8 +91,8 @@ export class BookingCheckoutDialog implements OnInit {
     
   }
 
-  navigateAgenda() {
-    
+  navigateHome() {
+
     history.back();
     history.back();
     
