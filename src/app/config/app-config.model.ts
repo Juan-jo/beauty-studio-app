@@ -13,4 +13,10 @@ export interface AppConfig {
 
     currency: string,
 
-    theme: string  }
+    theme: string  
+
+    logo: string
+
+    salonName: string 
+
+}

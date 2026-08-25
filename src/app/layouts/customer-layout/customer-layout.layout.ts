@@ -8,6 +8,7 @@ import { PushNotificationService } from '../../core/notifications/push-notificat
 import { UserUpdatePictureComponent } from '../../shared/components/user-update-picture/user-update-picture';
 import { CustomerBookingService } from '../../features/customer/service/cus-booking';
 import { CusNotificationsDialog } from '../../features/customer/components/cus-notifications-dialog/cus-notifications-dialog';
+import { AppConfigService } from '../../config/app-config.service';
 
 @Component({
   selector: 'app-customer-layout',
@@ -22,6 +23,8 @@ export class CustomerLayoutLayout implements OnInit {
 
   protected notificationService = inject(PushNotificationService);
   protected customerBookingService = inject(CustomerBookingService);
+  
+  readonly config = inject(AppConfigService);
 
   
 

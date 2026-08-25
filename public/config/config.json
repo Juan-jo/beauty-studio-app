@@ -4,5 +4,7 @@
     "production": false,
     "timezone": "America/Mexico_City",
     "currency": "MXN",
-    "theme": "emerald"
+    "theme": "emerald",
+    "logo": "/assets/dev-logo.png",
+    "salonName": "Nails Studio"
 }

@@ -1,20 +1,14 @@
-<!-- public-layout.component.html -->
 <div class="min-h-screen flex flex-col bg-slate-50 text-slate-800">
-    <!-- Header Minimalista -->
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 py-6 flex justify-between items-center">
-      <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold">B</div>
-        <span class="font-semibold text-lg tracking-tight">Beauty Studio</span>
-      </div>
-    </header>
-  
-    <!-- Contenido Dinámico -->
-    <main class="flex-1">
-      <router-outlet />
-    </main>
-  
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400">
-      <p>© 2026 BeautyApp. Todos los derechos reservados.</p>
-    </footer>
-  </div>
+  <header
+    class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 py-6 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <img [src]="config.logo" alt="" class="w-9 h-9 rounded-xl  object-cover">
+      <span class="font-semibold text-lg tracking-tight">{{config.salonName}}</span>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <router-outlet />
+  </main>
+
+</div>

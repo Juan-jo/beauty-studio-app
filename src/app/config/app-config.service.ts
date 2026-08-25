@@ -58,6 +58,17 @@ export class AppConfigService {
 
   }
 
+  get logo(): string {
+
+    return this.config.logo;
+  }
+
+  get salonName(): string {
+
+    return this.config.salonName;
+  }
+  
+
   setTheme(theme: string) {
     if (this.config) {
       this.config.theme = theme;

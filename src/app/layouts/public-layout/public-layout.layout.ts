@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { AppConfigService } from '../../config/app-config.service';
 
 @Component({
   selector: 'app-public-layout',
@@ -9,4 +10,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class PublicLayoutLayout {
 
+  readonly config = inject(AppConfigService);
+
+  
 }
