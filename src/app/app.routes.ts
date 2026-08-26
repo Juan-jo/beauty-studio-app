@@ -118,12 +118,8 @@ export const routes: Routes = [
             {
                 path: 'feed',
                 loadComponent: () => import('./features/customer/cus-feed/cus-feed').then(c => c.CusFeed)
-            },
-
-            {
-                path: 'profile',
-                loadComponent: () => import('./features/customer/cus-profile/cus-profile').then(c => c.CusProfile)
             }
+
         ]
     },
 
@@ -132,6 +128,10 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['ROLE_CUSTOMER'] },
         children: [
+            {
+                path: 'profile',
+                loadComponent: () => import('./features/customer/cus-profile/cus-profile').then(c => c.CusProfile)
+            },
             
             {
                 path: 'booking',

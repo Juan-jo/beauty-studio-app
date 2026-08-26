@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { SectionLogout } from '../../../shared/components/section-logout/section-logout';
 import { SectionTheme } from '../../../shared/components/section-theme/section-theme';
+import { AuthService } from '../../../core/services/auth';
+import { OpenDialogService } from '../../../shared/dialog/open-dialog';
+import { UserUpdatePictureComponent } from '../../../shared/components/user-update-picture/user-update-picture';
 
 @Component({
   selector: 'app-cus-profile',
@@ -13,4 +16,35 @@ import { SectionTheme } from '../../../shared/components/section-theme/section-t
 })
 export class CusProfile {
 
+  private readonly authService = inject(AuthService);
+
+  private readonly openDialogService = inject(OpenDialogService);
+
+
+  user = this.authService.currentUser;
+
+
+  userInitials = computed(() => {
+
+    const name = this.user()?.name;
+
+    if (!name) {
+      return '';
+    }
+
+    return name
+      .trim()
+      .split(' ')
+      .slice(0, 1 )
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase();
+
+  });
+
+
+  updatePicture() {
+    this.openDialogService.open<null, null>(UserUpdatePictureComponent, {})
+    .then(response => {});
+  }
 }
