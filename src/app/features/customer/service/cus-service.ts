@@ -17,4 +17,12 @@ export class CustomerService {
     return this.http.get<ActiveEmployeesResponse>(`${this.appConfig.apiUrl}/api/v1/employees/actives`)
   }
 
+
+  meAuthenticated() {
+
+    return this.http.get<any>(`${this.appConfig.apiUrl}/api/v1/customers/profile`)
+  }
+
+
+
 }

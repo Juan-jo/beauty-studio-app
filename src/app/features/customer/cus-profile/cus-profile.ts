@@ -4,12 +4,17 @@ import { SectionTheme } from '../../../shared/components/section-theme/section-t
 import { AuthService } from '../../../core/services/auth';
 import { OpenDialogService } from '../../../shared/dialog/open-dialog';
 import { UserUpdatePictureComponent } from '../../../shared/components/user-update-picture/user-update-picture';
+import { RouterLink } from '@angular/router';
+import { CustomerService } from '../service/cus-service';
+import { Observable } from 'rxjs';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-cus-profile',
   imports: [
     SectionLogout,
-    SectionTheme
+    SectionTheme,
+    RouterLink
   ],
   templateUrl: './cus-profile.html',
   styleUrl: './cus-profile.css',
@@ -17,6 +22,8 @@ import { UserUpdatePictureComponent } from '../../../shared/components/user-upda
 export class CusProfile {
 
   private readonly authService = inject(AuthService);
+  private readonly CustomerService = inject(CustomerService);
+
 
   private readonly openDialogService = inject(OpenDialogService);
 
@@ -42,9 +49,21 @@ export class CusProfile {
 
   });
 
+  meResource = rxResource<CustomerMe, void>({
+    stream: () => this.CustomerService.meAuthenticated()
+  });
+
+
 
   updatePicture() {
     this.openDialogService.open<null, null>(UserUpdatePictureComponent, {})
     .then(response => {});
   }
+}
+
+
+interface CustomerMe {
+  name    : string
+  email   : string
+  phone   : string
 }
