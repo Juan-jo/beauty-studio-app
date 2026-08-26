@@ -39,14 +39,20 @@ export class JwtInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
 
-        if (
-          error.status !== 401 ||
-          isAuthRequest
-        ) {
-          return throwError(() => error);
+        
+        if (error.status === 401 && !isAuthRequest) {
+          return this.handle401Error(req, next);
         }
 
-        return this.handle401Error(req, next);
+        const customError = {
+          status: error.status,
+          code: error.error?.code,
+          violation: error.error?.violation,
+          raw: error
+        };
+  
+        return throwError(() => customError);
+
       })
     );
   }

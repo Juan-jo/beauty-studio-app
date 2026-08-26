@@ -55,6 +55,20 @@ export const routes: Routes = [
                         .then(c => c.Booking)
     },
 
+    // User Authenticated
+    {
+
+        path: 'auth',
+        children: [
+            {
+                path: 'profile',
+                loadComponent: () =>
+                    import('./features/auth/pages/user-profile/user-profile')
+                                .then(c => c.UserProfile)
+            }
+        ]
+    },
+
 
     // Rutas EMPLOYEE
     {

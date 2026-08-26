@@ -105,6 +105,14 @@ export class AuthService {
   updatePicture(data: any) {
     return this.http.patch<{pictureUrl:string}>(`${this.appConfig.apiUrl}/api/v1/auth/me/picture`, data);
   }
+
+  getProfile() {
+    return this.http.get<any>(`${this.appConfig.apiUrl}/api/v1/auth/profile`);
+  }
+
+  updateProfile(data: any) {
+    return this.http.patch<any>(`${this.appConfig.apiUrl}/api/v1/auth/profile`, data);
+  }
   
 
   me(): Observable<UserMe> {
