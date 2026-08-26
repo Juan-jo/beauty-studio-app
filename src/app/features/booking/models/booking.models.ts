@@ -21,6 +21,7 @@ export interface Booking {
   export interface BookingClient {
     name: string;
     phone: string;
+    pictureUrl: string | null;
   }
   
   export interface BookingEmployee {

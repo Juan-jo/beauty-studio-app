@@ -109,9 +109,17 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <!-- Cliente -->
                     <div class="bg-white p-3.5 rounded-2xl border border-slate-200/70 shadow-xs flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
-                            {{ booking.client.name.charAt(0) }}
-                        </div>
+                        @if (booking.client.pictureUrl) {
+                            <img 
+                              [src]="booking.client.pictureUrl" 
+                              [alt]="booking.client.name" 
+                              class="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0" />
+                        } @else {
+                            <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-brand-50 to-brand-100 text-brand-700 font-bold text-base border-2 border-white ring-2 ring-gray-100 group-hover:ring-brand-500 group-hover:scale-105 transition-all duration-300 shadow-sm group-hover:shadow-md">
+                              {{ booking.client.name | slice:0:2 | uppercase }}
+                            </div>
+                        }
+
                         <div class="min-w-0">
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Cliente</span>
                             <p class="text-xs font-bold text-slate-800 truncate">{{ booking.client.name }}</p>
@@ -121,10 +129,16 @@
 
                     <!-- Especialista -->
                     <div class="bg-white p-3.5 rounded-2xl border border-slate-200/70 shadow-xs flex items-center gap-3">
-                        <img
-                            src="http://192.168.101.100:8088/insecure/rs:fit:150:150/q:80/g:sm/plain/http://minio:9000/delicias/9f2057ad-c524-4bd0-8ffe-40f7dab584be.png"
-                            [alt]="booking.employee.name"
-                            class="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0">
+                        @if (booking.employee.pictureUrl) {
+                            <img 
+                              [src]="booking.employee.pictureUrl" 
+                              [alt]="booking.employee.name" 
+                              class="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0" />
+                        } @else {
+                            <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-brand-50 to-brand-100 text-brand-700 font-bold text-base border-2 border-white ring-2 ring-gray-100 group-hover:ring-brand-500 group-hover:scale-105 transition-all duration-300 shadow-sm group-hover:shadow-md">
+                              {{ booking.employee.name | slice:0:2 | uppercase }}
+                            </div>
+                        }
                         <div class="min-w-0">
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Especialista</span>
                             <p class="text-xs font-bold text-slate-800 truncate">{{ booking.employee.name }}</p>
