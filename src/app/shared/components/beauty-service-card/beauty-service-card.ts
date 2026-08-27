@@ -15,7 +15,7 @@ export class BeautyServiceCard {
 
   @Input({ required: true }) service!: Service
   @Input({ required: true }) navigation!: string [] 
-  @Output() closeModal = new EventEmitter<void>();
+  @Output() onSelectService = new EventEmitter<number>();
 
 
 }

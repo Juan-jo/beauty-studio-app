@@ -1,7 +1,10 @@
+<!--
+[routerLink]="navigation" 
+[queryParams]="{services: service.id}"
+-->
 <article 
-  (click)="closeModal.emit()" 
-  [routerLink]="navigation" 
-  [queryParams]="{services: service.id}"
+  (click)="onSelectService.emit(service.id)" 
+  
   class="relative flex flex-col justify-end h-full aspect-[3/4] overflow-hidden rounded-3xl bg-gray-950  shadow-md hover:shadow-2xl hover:border-white/40 transition-all duration-500 group cursor-pointer">
 
   <img [src]="service.pictureUrl" [alt]="service.name" loading="lazy"

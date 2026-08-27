@@ -192,7 +192,8 @@
           @for(data of services(); track data.id) {
             <bs-service-card
                 [navigation]="['/customer/booking']"
-                [service]="data">
+                [service]="data"
+                (onSelectService)="openDetailService($event)">
             </bs-service-card>
           }
 
