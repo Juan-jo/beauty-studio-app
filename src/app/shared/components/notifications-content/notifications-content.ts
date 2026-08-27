@@ -58,41 +58,44 @@ export class NotificationsContent implements OnInit {
     
     if(payload.category === 'BOOKING_ASSIGNED') {
       
-
-      if (payload.category === 'BOOKING_ASSIGNED') {
-        
-        
-
-        if(name == '' && services == '' && startBooking == '') {
-          return null;
-        }
-        
-        
-        const formattedDate = this.datePipe.transform(startBooking) 
-    
-        const startTime = formattedDate 
-          ? ` para  <strong>${formattedDate}</strong>` 
-          : '';
-    
-        return `<strong>${name}</strong> reservó <span class="text-brand-700 font-semibold">${services}</span>${startTime}.`;
+      if(name == '' && services == '' && startBooking == '') {
+        return null;
       }
       
       
+      const formattedDate = this.datePipe.transform(startBooking) 
+  
+      const startTime = formattedDate 
+        ? ` para  <strong>${formattedDate}</strong>` 
+        : '';
+  
+      return `<strong>${name}</strong> reservó <span class="text-brand-700 font-semibold">${services}</span>${startTime}.`;
 
     }
     else if(payload.category === 'CANCELLED') {
 
-      const clientName = payload['name'] ?? '';
-      const services = payload['services'] ?? '';
-
-        if(clientName == '' && services == '') {
+      if(name == '' && services == '') {
           return null;
-        }
-        
+      }
+      
 
+      return `El servicio de <strong>${services}</strong> con <strong>${name}</strong> ha sido cancelada.`;
 
-      return `El servicio de <strong>${services}</strong> con <strong>${clientName}</strong> ha sido cancelada.`;
+    }
+    else if(payload.category === 'CANCELLED_CUSTOMER') {
 
+      if(name == '' && services == '' && startBooking == '') {
+        return null;
+      }
+      
+      
+      const formattedDate = this.datePipe.transform(startBooking) 
+  
+      const startTime = formattedDate 
+        ? ` para  <strong>${formattedDate}</strong>` 
+        : '';
+  
+      return `Tu cita de <span class="text-brand-700 font-semibold">${services}</span> con <strong>${name}</strong>  ${startTime} ha sido cancelada.`;
 
     }
     else if(payload.category === 'CREATED_BOOKING') {
@@ -217,6 +220,7 @@ export class NotificationsContent implements OnInit {
       case 'CANCELLED':
       case 'CREATED_BOOKING':
       case 'CONFIRM_BOOKING':
+      case 'CANCELLED_CUSTOMER':
 
         this.openDialogService.open<any, number>(BookingResume, {
           data: notification.payload.bookingId,
@@ -288,6 +292,7 @@ export class NotificationsContent implements OnInit {
 type NotificationCategory =           'BOOKING_ASSIGNED' 
                                     | 'RESCHEDULED' 
                                     | 'CANCELLED'
+                                    | 'CANCELLED_CUSTOMER'
                                     | 'CREATED_BOOKING'
                                     | 'CONFIRM_BOOKING'
                                     | string
