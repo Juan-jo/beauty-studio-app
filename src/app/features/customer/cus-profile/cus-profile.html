@@ -168,7 +168,8 @@
         </div>
       
         <!-- Opción 2: Cambiar Contraseña -->
-        <div class="group flex items-center justify-between py-2.5 gap-4 cursor-pointer rounded-xl transition-colors hover:bg-slate-50/80 px-2 -mx-2">
+        <div  [routerLink]="['/auth/update-pwd']"
+              class="group flex items-center justify-between py-2.5 gap-4 cursor-pointer rounded-xl transition-colors hover:bg-slate-50/80 px-2 -mx-2">
           <div>
             <p class="text-xs font-semibold text-slate-800 group-hover:text-brand-600 transition-colors">
               Cambiar Contraseña
@@ -183,8 +184,9 @@
           </div>
         </div>
       
-        <!-- Opción 3: Eliminar Cuenta -->
-        <div class="group flex items-center justify-between py-2.5 gap-4 cursor-pointer rounded-xl transition-colors hover:bg-slate-50/80 px-2 -mx-2">
+        <!-- Opción 3: Eliminar Cuenta  -->
+        <div  [routerLink]="['/auth/delete-account']"
+              class="group flex items-center justify-between py-2.5 gap-4 cursor-pointer rounded-xl transition-colors hover:bg-slate-50/80 px-2 -mx-2">
           <div>
             <p class="text-xs font-semibold text-red-600 group-hover:text-red-700 transition-colors">
               Eliminar cuenta

@@ -65,6 +65,18 @@ export const routes: Routes = [
                 loadComponent: () =>
                     import('./features/auth/pages/user-profile/user-profile')
                                 .then(c => c.UserProfile)
+            },
+            {
+                path: 'update-pwd',
+                loadComponent: () =>
+                    import('./features/auth/pages/user-update-pwd/user-update-pwd')
+                                .then(c => c.UserUpdatePwd)
+            },
+            {
+                path: 'delete-account',
+                loadComponent: () =>
+                    import('./features/auth/pages/user-delete-account/user-delete-account')
+                                .then(c => c.UserDeleteAccount)
             }
         ]
     },

@@ -81,9 +81,7 @@ export class AuthService {
     .pipe(
       tap(() => {
         
-        this.accessToken.set(null);
-
-        this.currentRolesSignal.set(['ROLE_PUBLIC']);
+        this.setPublicRole();
         
       })
     )
@@ -112,6 +110,32 @@ export class AuthService {
 
   updateProfile(data: any) {
     return this.http.patch<any>(`${this.appConfig.apiUrl}/api/v1/auth/profile`, data);
+  }
+
+  updatePaswword(data: any) {
+    return this.http.patch<any>(`${this.appConfig.apiUrl}/api/v1/auth/update-pwd`, data);
+  }
+
+  deleteAccount() {
+    return this.http.delete<any>(`${this.appConfig.apiUrl}/api/v1/auth/me`)
+    .pipe(
+      tap(() => {
+        
+        this.setPublicRole();
+        
+      })
+    )
+  }
+
+
+  setPublicRole() {
+
+    localStorage.removeItem('hasSeenBookingTooltip');
+    localStorage.removeItem(TOKEN_STORAGE_KEY)
+
+    this.accessToken.set(null);
+
+    this.currentRolesSignal.set(['ROLE_PUBLIC']);
   }
   
 
