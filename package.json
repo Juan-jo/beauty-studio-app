@@ -27,6 +27,7 @@
     "@capacitor/app": "^8.1.1",
     "@capacitor/core": "^8.5.0",
     "@capacitor/push-notifications": "^8.1.2",
+    "capacitor-native-settings": "^8.2.0",
     "jwt-decode": "^4.0.0",
     "ngx-image-cropper": "^9.1.6",
     "rxjs": "~7.8.0",

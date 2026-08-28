@@ -9,6 +9,7 @@ import { DurationPipe } from '../../../core/pipes/duration-pipe';
 import { HasRoleDirective } from '../../../core/directives/has-role';
 import { OpenDialogService } from '../../../shared/dialog/open-dialog';
 import { UserUpdatePictureComponent } from '../../../shared/components/user-update-picture/user-update-picture';
+import { EnabledPushNotifications } from '../../../shared/components/enabled-push-notifications/enabled-push-notifications';
 
 @Component({
   selector: 'app-empl-profile',
@@ -17,7 +18,8 @@ import { UserUpdatePictureComponent } from '../../../shared/components/user-upda
     SectionTheme,
     RouterLink,
     DurationPipe,
-    HasRoleDirective
+    HasRoleDirective,
+    EnabledPushNotifications
 ],
   templateUrl: './empl-profile.html',
   styleUrl: './empl-profile.css',

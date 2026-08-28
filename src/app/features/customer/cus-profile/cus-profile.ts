@@ -6,15 +6,16 @@ import { OpenDialogService } from '../../../shared/dialog/open-dialog';
 import { UserUpdatePictureComponent } from '../../../shared/components/user-update-picture/user-update-picture';
 import { RouterLink } from '@angular/router';
 import { CustomerService } from '../service/cus-service';
-import { Observable } from 'rxjs';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { EnabledPushNotifications } from '../../../shared/components/enabled-push-notifications/enabled-push-notifications';
 
 @Component({
   selector: 'app-cus-profile',
   imports: [
     SectionLogout,
     SectionTheme,
-    RouterLink
+    RouterLink,
+    EnabledPushNotifications
   ],
   templateUrl: './cus-profile.html',
   styleUrl: './cus-profile.css',

@@ -1,10 +1,11 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, OnInit, signal } from '@angular/core';
 import { PushNotifications, Token, PushNotificationSchema, ActionPerformed } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { TOKEN_STORAGE_KEY } from '../services/auth';
 import { AppConfigService } from '../../config/app-config.service';
+import { App } from '@capacitor/app';
 
 @Injectable({
   providedIn: 'root'
@@ -12,18 +13,30 @@ import { AppConfigService } from '../../config/app-config.service';
 
 export class PushNotificationService {
     
+    
     private isListenersRegistered = false;
     private readonly appConfig = inject(AppConfigService);
     private readonly http = inject(HttpClient);
 
   
     private unreadCountSignal = signal<number>(0);
+    private enabledPushNotificationSignal = signal<boolean>(false);
 
     
     readonly unreadCount = this.unreadCountSignal.asReadonly();
     readonly hasUnread = computed(() => this.unreadCountSignal() > 0);
 
+    readonly isEnabled = this.enabledPushNotificationSignal.asReadonly();
   
+    
+    
+    setEnabledNotification(value: boolean) {
+        this.enabledPushNotificationSignal.set(value)
+
+        if(value) {
+            this.registerPush();
+        }
+    }
     
     public async initPushNotifications(): Promise<void> {
         
@@ -56,6 +69,7 @@ export class PushNotificationService {
             return;
         }
     
+        this.enabledPushNotificationSignal.set(true);
         
         await this.createHighPriorityChannel();
         
