@@ -295,6 +295,7 @@ type NotificationCategory =           'BOOKING_ASSIGNED'
                                     | 'CANCELLED_CUSTOMER'
                                     | 'CREATED_BOOKING'
                                     | 'CONFIRM_BOOKING'
+                                    | 'SECURITY_CHANGE_PWD'
                                     | string
 
 interface Notification {
