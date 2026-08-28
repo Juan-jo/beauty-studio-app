@@ -102,9 +102,6 @@ export class PushNotificationService {
             
         });
     }
-  
-   
-  
     
     private async sendTokenToBackend(token: string): Promise<void> {
 

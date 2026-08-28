@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { AppConfigService } from '../../../config/app-config.service';
 import { ResponseCustommerBooking } from '../models/cus-booking.models';
+import { hasSeenBookingTooltip } from '../../../core/services/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -44,7 +45,7 @@ export class CustomerBookingService {
 
         if(bookingCount > 0) {
 
-          const hasSeenTooltip = localStorage.getItem('hasSeenBookingTooltip');
+          const hasSeenTooltip = localStorage.getItem(hasSeenBookingTooltip);
           
           if (!hasSeenTooltip) {
             
@@ -62,7 +63,7 @@ export class CustomerBookingService {
 
   dismissBookingTooltip() {
     this.bookingTooltipSignal.set(false);
-    localStorage.setItem('hasSeenBookingTooltip', 'true');
+    localStorage.setItem(hasSeenBookingTooltip, 'true');
   }
   
   

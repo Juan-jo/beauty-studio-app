@@ -10,7 +10,7 @@ import { AppConfig } from './config/app-config.model';
 import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 import { registerLocaleData } from '@angular/common';
 import localeEsMx from '@angular/common/locales/es-MX';
-import { AuthService } from './core/services/auth';
+import { AuthService, hasSeenBookingTooltip, TOKEN_STORAGE_KEY } from './core/services/auth';
 import { Router } from '@angular/router';
 import { getHomeRouteForRole } from './core/guards/role.guard';
 import { environment } from '../environments/environment';
@@ -55,6 +55,9 @@ export const appConfig: ApplicationConfig = {
         await firstValueFrom(authService.refresh())
         .catch((err) => {
           
+
+          localStorage.removeItem(hasSeenBookingTooltip);
+          localStorage.removeItem(TOKEN_STORAGE_KEY);
           
 
           router.navigate(

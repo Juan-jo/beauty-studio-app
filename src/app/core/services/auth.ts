@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { AppConfigService } from '../../config/app-config.service';
 import { UserMe } from '../models/auth.models';
 import { Observable, tap } from 'rxjs';
+import { PushNotificationService } from '../notifications/push-notification.service';
 
 export type UserRole =
   | 'ROLE_PUBLIC'
@@ -13,6 +14,7 @@ export type UserRole =
 
 
 export const TOKEN_STORAGE_KEY = 'bs_last_pushed_fcm_token';
+export const hasSeenBookingTooltip = 'hasSeenBookingTooltip';
 
 
 interface JwtPayload {
@@ -31,6 +33,8 @@ export class AuthService {
 
   private readonly http = inject(HttpClient);
   private readonly appConfig = inject(AppConfigService);
+
+  private readonly pushNotificationService = inject(PushNotificationService)
 
 
   public accessToken = signal<string | null>(null);
@@ -122,7 +126,6 @@ export class AuthService {
       tap(() => {
         
         this.setPublicRole();
-        
       })
     )
   }
@@ -130,12 +133,13 @@ export class AuthService {
 
   setPublicRole() {
 
-    localStorage.removeItem('hasSeenBookingTooltip');
+    localStorage.removeItem(hasSeenBookingTooltip);
     localStorage.removeItem(TOKEN_STORAGE_KEY)
 
     this.accessToken.set(null);
 
     this.currentRolesSignal.set(['ROLE_PUBLIC']);
+    
   }
   
 
