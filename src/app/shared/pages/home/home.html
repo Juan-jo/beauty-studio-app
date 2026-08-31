@@ -1,82 +1,93 @@
-<section class="min-h-screen bg-brand-50">
-
-    <div class="mx-auto max-w-7xl px-6 py-10 lg:px-8 lg:py-16">
-
-        <div class="grid items-center gap-10 lg:min-h-[calc(100vh-8rem)] lg:grid-cols-2 lg:gap-16">
-
-            <!-- Información -->
-
-            <div>
-
-                <span
-                    class="inline-flex rounded-full bg-brand-100 px-4 py-2 text-sm font-semibold text-brand-600">
-
-                    Agenda profesional
-
-                </span>
-
-                <h1
-                    class="mt-6 text-4xl font-bold leading-tight text-brand-700 sm:text-5xl lg:text-6xl">
-
-                    Tu salón siempre al alcance
-                    de tus clientes.
-
-                </h1>
-
-                <p
-                    class="mt-6 text-base leading-8 text-gray-600 sm:text-lg">
-
-                    Reserva citas, recibe recordatorios automáticos,
-                    administra horarios y ofrece una experiencia
-                    moderna a tus clientes.
-
-                </p>
-
-                <div
-                    class="mt-8 flex flex-col gap-4 sm:flex-row">
-
-                    <a
-                        routerLink="/public/services"
-                        class="rounded-xl bg-brand-500 px-6 py-4 text-center font-semibold text-white transition hover:bg-brand-600">
-
-                        Reservar cita
-
-                    </a>
-
-                    <a
-                        routerLink="/public/login"
-                        class="rounded-xl border-2 border-brand-500 px-6 py-4 text-center font-semibold text-brand-600 transition hover:bg-brand-100">
-
-                        Iniciar sesión
-
-                    </a>
-
-                </div>
-
-                <div class="mt-8">
-
-                    <app-install-pwa
-                        title="Instala la aplicación"
-                        description="Accede con un toque y recibe recordatorios automáticos."
-                        buttonText="Instalar">
-                    </app-install-pwa>
-
-                </div>
-
-            </div>
-
-            <!-- Imagen -->
-
-            <div class="order-first lg:order-last">
-
-                <img
-                    src="assets/cover.webp"
-                    class="mx-auto w-full max-w-md rounded-3xl object-cover shadow-2xl lg:max-w-lg">
-
-            </div>
-
+<section class="relative min-h-[calc(100vh-9vh)] w-full overflow-hidden bg-slate-50 selection:bg-brand-500 selection:text-white flex items-center justify-center py-8 lg:py-12">
+  
+    <!-- Adornos de fondo / Gradiente sutil -->
+    <div class="pointer-events-none absolute -top-40 -left-40 h-96 w-96 rounded-full bg-brand-400/20 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-brand-600/15 blur-3xl"></div>
+  
+    <div class="relative mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+  
+        <!-- Información y Acciones -->
+        <div class="flex flex-col justify-center">
+  
+          <!-- Badge -->
+          <div>
+            <span class="inline-flex items-center gap-2 rounded-full bg-brand-100/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-700 ring-1 ring-inset ring-brand-500/20">
+              <span class="h-2 w-2 rounded-full bg-brand-500 animate-pulse"></span>
+              Agenda profesional
+            </span>
+          </div>
+  
+          <!-- Título -->
+          <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl lg:leading-[1.15]">
+            Tu salón siempre al alcance de tus <span class="text-brand-600">clientes.</span>
+          </h1>
+  
+          <!-- Descripción -->
+          <p class="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
+            Reserva citas en segundos, recibe recordatorios automáticos, administra horarios y ofrece una experiencia moderna a tus clientes desde cualquier dispositivo.
+          </p>
+  
+          <!-- Botones de Acción / CTAs -->
+          <div class="mt-8 flex flex-col gap-3.5 sm:flex-row sm:items-center">
+            
+            <!-- CTA Principal: Reservar Cita -->
+            <a
+              routerLink="/public/services"
+              class="flex items-center justify-center gap-2 rounded-2xl bg-brand-600 px-6 py-4 text-center text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all duration-200 hover:bg-brand-700 active:scale-[0.98]">
+              <span>Reservar cita</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+  
+            <!-- CTA Secundario: Registrarse -->
+            <a
+              routerLink="/public/register"
+              class="flex items-center justify-center gap-2 rounded-2xl border border-brand-200 bg-white px-6 py-4 text-center text-sm font-semibold text-brand-700 shadow-sm transition-all duration-200 hover:border-brand-300 hover:bg-brand-50/50 active:scale-[0.98]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4 text-brand-600">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+              </svg>
+              <span>Crear cuenta</span>
+            </a>
+  
+          </div>
+  
+          <!-- Acceso para usuarios existentes (Login) -->
+          <div class="mt-4 text-center sm:text-left">
+            <span class="text-xs text-slate-500">¿Ya tienes una cuenta?</span>
+            <a
+              routerLink="/public/login"
+              class="ml-1.5 text-xs font-semibold text-brand-600 transition hover:text-brand-700 hover:underline">
+              Iniciar sesión
+            </a>
+          </div>
+  
+          <!-- Banner PWA -->
+          <div class="mt-8">
+            <app-install-pwa
+              title="Instala la aplicación"
+              description="Accede con un toque y recibe recordatorios automáticos."
+              buttonText="Instalar">
+            </app-install-pwa>
+          </div>
+  
         </div>
-
+  
+        <!-- Imagen Destacada -->
+        <div class="order-first flex justify-center lg:order-last">
+          <div class="relative w-full max-w-md lg:max-w-lg">
+            <!-- Sombra decorativa posterior -->
+            <div class="absolute -inset-1.5 rounded-[2.5rem] bg-gradient-to-tr from-brand-500 to-brand-300 opacity-30 blur-xl"></div>
+            
+            <img
+              src="assets/cover.webp"
+              alt="Ilustración del salón de belleza"
+              class="relative mx-auto w-full rounded-3xl object-cover shadow-2xl ring-1 ring-slate-900/10">
+          </div>
+        </div>
+  
+      </div>
     </div>
-
-</section>
+  
+  </section>

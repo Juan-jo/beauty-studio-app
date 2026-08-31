@@ -70,6 +70,18 @@ export class AuthService {
     );
   }
 
+  register(data: any) {
+    return this.http.post<{token: string}>(`${this.appConfig.apiUrl}/api/v1/auth/register`, data, {withCredentials: true})
+    .pipe(
+      tap((response) => {
+
+        this.setToken(response.token);
+        
+      })
+    );
+
+  }
+
   setToken(token: string) {
 
     const payload = jwtDecode<JwtPayload>(token);

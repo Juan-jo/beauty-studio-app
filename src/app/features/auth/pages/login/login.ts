@@ -2,16 +2,16 @@ import { Component, inject, signal } from '@angular/core';
 import { InstallPwa } from "../../../../shared/components/install-pwa/install-pwa";
 import { AuthService } from '../../../../core/services/auth';
 import { getHomeRouteForRole } from '../../../../core/guards/role.guard';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { PushNotificationService } from '../../../../core/notifications/push-notification.service';
 
 @Component({
   selector: 'app-login',
-  imports: [InstallPwa, ReactiveFormsModule],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  imports: [InstallPwa, ReactiveFormsModule, RouterLink],
+  templateUrl: './login.html'
+ 
 })
 export class Login {
 
@@ -21,7 +21,9 @@ export class Login {
 
   readonly isLoading = signal(false);
 
-  readonly form = new FormGroup({
+  showPassword = signal<boolean>(false);
+
+  form = new FormGroup({
     email: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.email]
@@ -45,10 +47,15 @@ export class Login {
 
     this.isLoading.set(true);
 
+    this.enableControls(false);
+
     this.authService
       .login(this.form.getRawValue())
       .pipe(
-        finalize(() => this.isLoading.set(false))
+        finalize(() => {
+          this.enableControls(true);
+          this.isLoading.set(false);
+        })
       )
       .subscribe({
         next: ({ token }) => {
@@ -98,6 +105,23 @@ export class Login {
 
         }
       });
+
+  }
+
+
+  private enableControls( value: boolean ): void {
+
+    Object.keys(this.form.controls).forEach(controlName => {
+      
+      if(value) {
+        this.form.get(controlName)?.enable();
+        
+      }
+      else {
+        this.form.get(controlName)?.disable();
+      }
+      
+    })
 
   }
 

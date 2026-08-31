@@ -45,6 +45,20 @@ export const routes: Routes = [
                         .then(c => c.Login)
             },
 
+            {
+                path: 'register',
+                loadComponent: () =>
+                    import('./features/auth/pages/register/register')
+                        .then(c => c.Register)
+            },
+
+            {
+                path: 'recovery-pwd',
+                loadComponent: () =>
+                    import('./features/auth/pages/recovery-pwd/recovery-pwd')
+                        .then(c => c.RecoveryPwd)
+            },
+
         ]
     },
 
